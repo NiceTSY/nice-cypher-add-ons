@@ -1,0 +1,12 @@
+{
+	"NICECYPHER.SettingsGMiTitle": "GM intrusion HUD",
+	"NICECYPHER.SettingsGMiHint": "This will have an option on the token HUD to send an intrusion to player.",
+	"NICECYPHER.SettingsObfuscateTitle": "Object auto obfuscate",
+	"NICECYPHER.SettingsObfuscateHint": "This will automatically obfuscate Cypher and Artifact when dragged on a character sheet.",
+	"NICECYPHER.SettingsLevelRollTitle": "Object roll level",
+	"NICECYPHER.SettingsLevelRollHint": "This will automatically roll the level of Cypher and Artifact when dragged on a character sheet.",
+	
+	"NICECYPHER.GMi": "GM intrusion",
+	"NICECYPHER.Intrusion": "Intrusion",
+	"NICECYPHER.DialogIntrusion": "Your GM want to perform an intrusion. Will you accept it?"
+}

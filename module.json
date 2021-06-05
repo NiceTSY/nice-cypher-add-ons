@@ -1,0 +1,37 @@
+{
+	"name": "nice-cypher-add-ons",
+	"title": "Nice(TSY) Cypher System Add-ons",
+	"description": "This module adds some QOL Add-ons in the [Cypher System](https://github.com/mrkwnzl/cyphersystem-foundryvtt) made by Mrkwnzl",
+	"author": "Alec (Nice to see you#6655 / NiceTSY)",
+	
+	"version": "0.1.0",
+	"minimumCoreVersion": "0.8.5",
+	"compatibleCoreVersion": "0.8.6",	
+	"systems": ["cyphersystem"],
+	"languages": [{
+		"lang": "en",
+		"Name": "English",
+		"path": "/lang/en.json"
+	},
+	{
+		"lang": "fr",
+		"Name": "Français",
+		"path": "/lang/fr.json"
+	}],
+	
+	"esmodules": ["/scripts/add-ons.js"],
+	"styles": ["/styles/addons.css"],
+	"socket": true,
+	"packs": [
+		{
+			"name": "useful-macros",
+			"label": "Useful - Macros",
+			"path": "./packs/macros.db",
+			"entity": "Macro"
+		}
+	],
+	
+	"url": "https://github.com/NiceTSY/nice-cypher-add-ons",
+	"manifest": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/module.json",
+	"download": "https://github.com/NiceTSY/nice-cypher-add-ons/releases/latest/download/module.zip"
+}

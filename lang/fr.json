@@ -1,0 +1,12 @@
+{
+	"NICECYPHER.SettingsGMiTitle": "HUD : Intrusion du MJ",
+	"NICECYPHER.SettingsGMiHint": "Cela ajoutera une option sur l'HUD des tokens pour envoyer une intrusion à un des joueurs.",	
+	"NICECYPHER.SettingsObfuscateTitle": "Objet auto obfusqué",
+	"NICECYPHER.SettingsObfuscateHint": "Cela marquera comme non-identifié les cyphers et artefact lorsqu'ils sont glissé sur la feuille d'un personnage.",
+	"NICECYPHER.SettingsLevelRollTitle": "Calculer le niveau des objets",
+	"NICECYPHER.SettingsLevelRollHint": "Cela calculera automatiquem le niveau des cyphers et des artefacts lorsqu'ils sont glissé sur la feuille d'un personnage.",
+	
+	"NICECYPHER.GMi": "Intrusion du MJ",
+	"NICECYPHER.Intrusion": "Intrusion",
+	"NICECYPHER.DialogIntrusion": "Votre MJ vous propose une intrusion. Voulez-vous l'accepter ?"
+}
