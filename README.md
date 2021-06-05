@@ -3,7 +3,7 @@
 ![GitHub Latest Release](https://img.shields.io/github/release/NiceTSY/nice-cypher-add-ons?style=flat-square)
 
 <p align="justify">
-This is module contains some QOL improvements that me and my players have found interesting and/or useful for the [Cypher System](https://github.com/mrkwnzl/cyphersystem-foundryvtt) made by **mrkwnzl**.
+This is module contains some QOL improvements that me and my players have found interesting and/or useful for the <a href="https://github.com/mrkwnzl/cyphersystem-foundryvtt">Cypher System</a> made by **mrkwnzl**.
 Those things could probably be implemented directly inside the system in the future. Nothing more, nothing less.
 </p>
 
@@ -13,7 +13,7 @@ Those things could probably be implemented directly inside the system in the fut
 > <p align="justify"> All my scripts are under the MIT license, so feel free do to whatever you want with them. A little credit is always appreciated. I just ask for you to try to keep the same scope as me.
 > Also, feel free to make a pull request! I will be more than happy to see what are your QOL too! </p>
 
-> <p align="justify"> This module follow the [Fan Use Policy](https://www.montecookgames.com/fan-use-policy/) from Monte Cook Games, and therefore does not contains anything from the books. </p>
+> <p align="justify"> This module follow the <a href="https://www.montecookgames.com/fan-use-policy/">Fan Use Policy</a> from Monte Cook Games, and therefore does not contains anything from the books. </p>
 
 ## Scripts
 
