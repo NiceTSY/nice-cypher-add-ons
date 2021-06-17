@@ -3,7 +3,7 @@
 ![GitHub Latest Release](https://img.shields.io/github/release/NiceTSY/nice-cypher-add-ons?style=flat-square)
 
 <p align="justify">
-This is module contains some QOL improvements that me and my players have found interesting and/or useful for the <a href="https://github.com/mrkwnzl/cyphersystem-foundryvtt">Cypher System</a> made by **mrkwnzl**.
+This is module contains some QOL improvements that me and my players have found interesting and/or useful for the <a href="https://github.com/mrkwnzl/cyphersystem-foundryvtt">Cypher System</a> made by <strong>mrkwnzl</strong>.
 Those things could probably be implemented directly inside the system in the future. Nothing more, nothing less.
 </p>
 
