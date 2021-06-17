@@ -1,5 +1,5 @@
 # Nice(TSY) Cypher System Add-ons
-![](https://img.shields.io/badge/Foundry-v0.8.6-informational?style=flat-square)
+![](https://img.shields.io/badge/Foundry-v0.8.7-informational?style=flat-square)
 ![GitHub Latest Release](https://img.shields.io/github/release/NiceTSY/nice-cypher-add-ons?style=flat-square)
 
 <p align="justify">
@@ -33,7 +33,7 @@ However, everyone has his/her/its/their own way to code and mine is mine, so if 
 
 ### GMi token HUD
 
-This will create a new token HUD component that will send a chat message indicating that you want to perform a GMi.
+This will create a new token HUD component that will send the GMi for the player's token.
 
 ![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/gm_intrusion.png)
 
@@ -44,6 +44,7 @@ Those two options permit to automatically roll/obfuscate the level a numenera ob
 ![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/autorollobject.png)
 
 ### Macros
+
 This module also include the following macro:
 
 1. **Get Random Item(s) from Compendium**: Return as a wisper to the GM, X random item(s) from a selected compendium.

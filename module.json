@@ -4,9 +4,9 @@
 	"description": "This module adds some QOL Add-ons in the [Cypher System](https://github.com/mrkwnzl/cyphersystem-foundryvtt) made by Mrkwnzl",
 	"author": "Alec (Nice to see you#6655 / NiceTSY)",
 	
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"minimumCoreVersion": "0.8.5",
-	"compatibleCoreVersion": "0.8.6",	
+	"compatibleCoreVersion": "0.8.7",	
 	"systems": ["cyphersystem"],
 	"languages": [{
 		"lang": "en",

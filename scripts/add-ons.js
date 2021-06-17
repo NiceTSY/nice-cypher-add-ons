@@ -45,7 +45,7 @@ var settings = {
 	gmintrusion: true,
 	autoobfuscate: true,
 	autoroll: true,
-	changechatcard: true
+	// changechatcard: true
 };
 
 // Hold the name of items which level will be rolled
@@ -153,23 +153,8 @@ async function showHUDGmIntrusion(html, token) {
 	// Push the new HUD option and if clicked send the GMi chat card
 	html.find('div.right').append(gmiDisplay).click((e) => {
 		const gmiButton = e.target.parentElement.classList.contains('gmi-hud-icon');		
-		if (gmiButton) sendGMi(actor);
+		if (gmiButton) game.cyphersystem.proposeIntrusion(actor);
 	});
-};
-
-/** Send to the chat that a GMi was proposed.
- * @param { Object } actor - The actor information.
- */
-async function sendGMi(actor) {
-	let html = await renderTemplate(`${MODULE_PATH}/templates/gmi_chat_card.html`, actor.data);
-	
-	let chatCard = {
-		type: CONST.CHAT_MESSAGE_TYPES.OTHER,
-		content: html,
-		speaker: game.users.entities.filter(u => u.isGM).map(u => u._id)
-	};
-	
-	ChatMessage.create(chatCard);
 };
 
 /** Automatically roll if possible the level or return the default level value.
