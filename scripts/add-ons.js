@@ -175,8 +175,8 @@ function rollLevelofObject(obj) {
 ------------------------------------------------------------------------------------------------*/
 /**
  * Check if a specific string is contained inside a specified array.
- * @param 	{ String } 		s 		- The string to find.
- * @param 	{ Object[] } 	array 	- The array to check.
+ * @param 	{ String }		s		- The string to find.
+ * @param 	{ Object[] }	array	- The array to check.
  * @return 	{ Boolean }
  */
 function doesArrayContains(s, array) {
