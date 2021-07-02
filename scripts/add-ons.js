@@ -34,8 +34,8 @@
 ------------------------------------------------------------------------------------------------*/
 // Hold module name
 const 	MODULE_TITLE = 'Nice(TSY) Cypher System Add-ons',
-		MODULE_NAME = 'nice-cypher-add-ons',
-		MODULE_PATH = '/modules/nice-cypher-add-ons';
+	MODULE_NAME = 'nice-cypher-add-ons',
+	MODULE_PATH = '/modules/nice-cypher-add-ons';
 		
 // Hold world name
 var WORLD_NAME = '';
@@ -59,7 +59,7 @@ const numeneraItems = [
 ------------------------------------------------------------------------------------------------*/
 // Called when the module is initialised
 Hooks.once('init', function () {	
-	CONFIG.debug.hooks = true;
+	// CONFIG.debug.hooks = true;
 	
 	// Get World Name
 	WORLD_NAME = game.world.name;
@@ -94,7 +94,7 @@ Hooks.on('preCreateItem', async (data, item) => {
 /** Register the module settings
  */
 function registerGameSettings() {
-	// Settings for showing a GM intrusion dialog
+	// Settings for showing a GM intrusion dialog (default: true)
 	game.settings.register(MODULE_NAME, 'gmintrusion', {
 		name: game.i18n.localize('NICECYPHER.SettingsGMiTitle'),
 		hint: game.i18n.localize('NICECYPHER.SettingsGMiHint'),
@@ -175,7 +175,7 @@ function rollLevelofObject(obj) {
 ------------------------------------------------------------------------------------------------*/
 /**
  * Check if a specific string is contained inside a specified array.
- * @param 	{ String }		s		- The string to find.
+ * @param 	{ String }	s	- The string to find.
  * @param 	{ Object[] }	array	- The array to check.
  * @return 	{ Boolean }
  */
