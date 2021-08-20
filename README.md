@@ -16,6 +16,8 @@ Those things could probably be implemented directly inside the system in the fut
 
 > <p align="justify"> This module follow the <a href="https://www.montecookgames.com/fan-use-policy/">Fan Use Policy</a> from Monte Cook Games, and therefore does not contains anything from the books. </p>
 
+> <p align="justify"> This module include some icons from Games-Icons, they are provided under the terms of the Creative Commons 3.0 BY license. Available on <a href="https://game-icons.net">https://game-icons.net</a>. 
+
 ## Scripts
 
 <p align="justify">
