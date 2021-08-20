@@ -48,7 +48,7 @@ Those two options permit to automatically roll/obfuscate the level a numenera ob
 
 This will show a new icon on your character sheet, making possible to trade items between player (need to have at least the **OBSERVER** permission).
 
-![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/autorollobject.png)
+![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/tradebetweenplayer.png)
 
 ### Macros
 
