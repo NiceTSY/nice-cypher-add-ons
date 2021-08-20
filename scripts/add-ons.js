@@ -9,9 +9,9 @@
 	has to start somewhere and understanding other code is one way to do so. With this, I aim to
 	keep those different scripts as light as possible.
 	
-	Moreover, all of my scripts are totally free to use, modify, etc. as they are under the MIT license.
-	I just ask for you to try to keep the same scope as me and if possible, a little credit is always
-	appreciated ;)
+	Moreover, all of my scripts are totally free to use, modify, etc. as they are under the BSD-3-Clause
+	license. I just ask for you to try to keep the same scope as me and if possible, a little credit is 
+	always appreciated ;)
 	Also, feel free to make a pull request! I will be more than happy to see what are your QOL too!
 	
 	However, everyone has his/her/its/their own way to code and mine is mine, so if you were not able
@@ -28,15 +28,13 @@
 */
 
 'use strict';
+import {MODULE_TITLE, MODULE_NAME, MODULE_PATH, registerGameSettings} from "./settings.js";
+import {doesArrayContains} from "./utilities.js";
+import {addTradeButton, receiveTrade, endTrade, denyTrade, alreadyTrade} from "./module_trade.js";
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Globale(s) -------------------------------------------
-------------------------------------------------------------------------------------------------*/
-// Hold module name
-const 	MODULE_TITLE = 'Nice(TSY) Cypher System Add-ons',
-	MODULE_NAME = 'nice-cypher-add-ons',
-	MODULE_PATH = '/modules/nice-cypher-add-ons';
-		
+------------------------------------------------------------------------------------------------*/		
 // Hold world name
 var WORLD_NAME = '';
 
@@ -45,7 +43,9 @@ var settings = {
 	gmintrusion: true,
 	autoobfuscate: true,
 	autoroll: true,
-	// changechatcard: true
+	// lightweaponeased: true,	// TODO: Potentially in a new version
+	showtradeonsheet: true,
+	// changechatcard: true		// TODO: Potentially in a new version
 };
 
 // Hold the name of items which level will be rolled
@@ -58,9 +58,7 @@ const numeneraItems = [
 ------------------------------------------- Handler(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/
 // Called when the module is initialised
-Hooks.once('init', function () {	
-	// CONFIG.debug.hooks = true;
-	
+Hooks.once('init', () => {	
 	// Get World Name
 	WORLD_NAME = game.world.name;
 	
@@ -71,64 +69,51 @@ Hooks.once('init', function () {
 	for (let s in settings) settings[s] = game.settings.get(MODULE_NAME, s);
 });
 
+// Called when the module is setup
+Hooks.once('setup', async () => {
+	game.socket.on('module.nice-cypher-add-ons', packet => {
+		let data = packet.data;
+		let type = packet.type;
+		
+		data.receiver = game.actors.get(packet.receiverId);
+		data.trader = game.actors.get(packet.traderId);
+		
+		if (!data.receiver.isOwner) return;
+		if (game.user.data.character == packet.receiverId)
+			if (type === 'requestTrade') receiveTrade(data);
+			
+		if (type === 'acceptTrade') endTrade(data);
+		if (type === 'refuseTrade') denyTrade(data);
+		if (type === 'possessItem') alreadyTrade(data);
+	});
+});
+
 // Called when rendering the token HUD
 Hooks.on('renderTokenHUD', async (hud, html, token) => {
-	if (settings.gmintrusion) {
+	if (settings.gmintrusion)
 		if (game.user.isGM) showHUDGmIntrusion(html, token);
-	};
 });
 
 // Called before a new item is created on charactersheet
-Hooks.on('preCreateItem', async (data, item) => {	
-	if (doesArrayContains(item.type.toLowerCase(), numeneraItems)) {
-		const object = data.data;
-		
-		if (settings.autoobfuscate) object._source.data.identified = false;
-		if (settings.autoroll) object._source.data.level = rollLevelofObject(object.data).toString();
+Hooks.on('preCreateItem', async (data, item) => {
+	const object = data.data._source;
+	
+	if (doesArrayContains(item.type.toLowerCase(), numeneraItems)) {		
+		if (settings.autoobfuscate) object.data.identified = false;
+		if (settings.autoroll) object.data.level = rollLevelOfObject(object.data).toString();
 	};
+});
+
+// Called opening the charactersheet
+Hooks.on('renderCypherActorSheet', (sheet, html) => {
+	if (settings.showtradeonsheet) addTradeButton(html, sheet.actor);
 });
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------ Function(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/
-/** Register the module settings
- */
-function registerGameSettings() {
-	// Settings for showing a GM intrusion dialog (default: true)
-	game.settings.register(MODULE_NAME, 'gmintrusion', {
-		name: game.i18n.localize('NICECYPHER.SettingsGMiTitle'),
-		hint: game.i18n.localize('NICECYPHER.SettingsGMiHint'),
-		scope: 'world',
-		config: true,
-		default: true,
-		type: Boolean,
-		onChange: () => location.reload(),
-	});
-	
-	// Settings for auto obfuscate object (default: true)
-	game.settings.register(MODULE_NAME, 'autoobfuscate', {
-		name: game.i18n.localize('NICECYPHER.SettingsObfuscateTitle'),
-		hint: game.i18n.localize('NICECYPHER.SettingsObfuscateHint'),
-		scope: 'world',
-		config: true,
-		default: true,
-		type: Boolean,
-		onChange: () => location.reload(),
-	});
-	
-	// Settings for auto level roll (default: true)
-	game.settings.register(MODULE_NAME, 'autoroll', {
-		name: game.i18n.localize('NICECYPHER.SettingsLevelRollTitle'),
-		hint: game.i18n.localize('NICECYPHER.SettingsLevelRollHint'),
-		scope: 'world',
-		config: true,
-		default: true,
-		type: Boolean,
-		onChange: () => location.reload(),
-	});
-};
-
-/** Show a new entry on the token HUD for GM intrusion on PC.
+/** 
+ * @description Show a new entry on the token HUD for GM intrusion on PC.
  * @param { Object } html 	- The HTML of the HUD.
  * @param { Object } token 	- The token rendering the HUD.
  */
@@ -136,16 +121,6 @@ async function showHUDGmIntrusion(html, token) {
 	// Check if the token is a PC
 	let actor = game.actors.get(token.actorId);
 	if (!actor || actor.data.type.toLowerCase() != 'pc') return;
-	
-	/* Currently not needed but I have plan to potentially use it
-	
-	// Get Actor Owner
-	let ownerId = Object.entries(actor.data.permission).filter(e => {
-		let [id, perm] = e;
-		return (perm >= CONST.ENTITY_PERMISSIONS.OWNER && id != game.user.id)
-	}).map(usersPermissions => usersPermissions[0]);
-	
-	*/
 	
 	// Get the new HUD button template
 	let gmiDisplay = await renderTemplate(`${MODULE_PATH}/templates/gmi_hud.html`);
@@ -157,28 +132,16 @@ async function showHUDGmIntrusion(html, token) {
 	});
 };
 
-/** Automatically roll if possible the level or return the default level value.
+/** 
+ * @description Automatically roll if possible the level or return the default level value.
  * @param 	{ Object } obj - The object that contains a level to roll.
  * @return 	{ (String / Number) }
  */
-function rollLevelofObject(obj) {
+function rollLevelOfObject(obj) {
 	try {
 		const roll = new Roll(obj.level).evaluate({async: false});
 		if (roll) return roll._total;
 	} catch (e) {
 		return obj.level;
 	};
-};
-
-/*------------------------------------------------------------------------------------------------
------------------------------------------- Utility(ies) ------------------------------------------
-------------------------------------------------------------------------------------------------*/
-/**
- * Check if a specific string is contained inside a specified array.
- * @param 	{ String }	s	- The string to find.
- * @param 	{ Object[] }	array	- The array to check.
- * @return 	{ Boolean }
- */
-function doesArrayContains(s, array) {
-	return (array.indexOf(s) > -1);
 };

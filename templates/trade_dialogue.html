@@ -1,0 +1,14 @@
+<div style='text-align: center'>
+	<label for="playerTrade" style='display: inline-block; text-align: right'><b>Player: </b></label>
+	<select id="playerTrade" style='width: 100px; margin-left: 5px; margin-bottom: 5px;text-align: center'>
+		{{#each actorOptions as |actor|}}
+		<option value="{{ actor._id }}">{{ actor.name }}</option>
+		{{/each}}
+	</select>
+
+	<label style='display: inline-block; width: 98px; margin-left: 5px; text-align: right'>
+		<b>{{ localize "CYPHERSYSTEM.Quantity" }}/{{ localize "CYPHERSYSTEM.Units" }}: </b>
+	</label>
+	<input name='quantity' id='quantity' style='width: 50px; margin-left: 5px; margin-bottom: 5px;text-align: center' type='text' value=1 data-dtype='Number'/>
+	<label style='display: inline-block; margin-left: 5px; text-align: right'>{{ maxQuantityText }}</label>
+</div>
