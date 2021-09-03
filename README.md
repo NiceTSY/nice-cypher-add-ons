@@ -8,10 +8,13 @@ This is module contains some QOL improvements that me and my players have found 
 Those things could probably be implemented directly inside the system in the future. Nothing more, nothing less.
 </p>
 
+<p align="justify">
+If you need to speak about this module or about the Cypher System you can join <strong>mrkwnzl's</strong> [Cypher FVTT Dev Discord](https://discord.gg/C5zGgtyhwa). We will be happy to help!
+</p>
+
 ## Disclaimer
 
-
-> <p align="justify"> All my scripts are under the BSD-3-Clause license, so feel free do to whatever you want with them. A little credit is always appreciated. I just ask for you to try to keep the same scope as me.
+> <p align="justify"> All my scripts are under the <a href="https://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause license</a>, so feel free do to whatever you want with them. A little credit is always appreciated. I just ask for you to try to keep the same scope as me.
 > Also, feel free to make a pull request! I will be more than happy to see what are your QOL too! </p>
 
 > <p align="justify"> This module follow the <a href="https://www.montecookgames.com/fan-use-policy/">Fan Use Policy</a> from Monte Cook Games, and therefore does not contains anything from the books. </p>
@@ -28,6 +31,12 @@ With this, I aim to keep those different scripts as light as possible.
 
 <p align="justify">
 However, everyone has his/her/its/their own way to code and mine is mine, so if you were not able to understand something, please feel free to ask me on Discord.
+</p>
+
+## Future
+
+<p align="justify">
+I am currently looking at expending the trade button to other actor sheet (shuch as NPC).
 </p>
 
 ## How to use

@@ -28,7 +28,7 @@
 */
 
 'use strict';
-import {MODULE_PATH} from './settings.js';
+import {MODULE} from './settings.js';
 import {returnActorByPermission} from './utilities.js';
 
 /*------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ export function addTradeButton(html, actor) {
 		<a class='item-control item-trade' title='Trade Item'>
 			<i class='fas fa-exchange-alt'></i>
 		</a>
-	`).insertAfter(html.find('.tab.items .item-control.item-delete'));
+	`).insertBefore(html.find('.tab.items .item-control.item-edit'));
 
 	html.find('.item-control.item-trade').on('click', tradeItemHandler.bind(actor));
 };
@@ -79,7 +79,7 @@ async function tradeItem(itemId) {
 
 	new Dialog({
 		title: game.i18n.format("CYPHERSYSTEM.MoveItem", {name: item.data.name}),
-		content: await renderTemplate(`${MODULE_PATH}/templates/trade_dialogue.html`, data),
+		content: await renderTemplate(`${MODULE.PATH}/templates/trade_dialogue.html`, data),
 		buttons: buttons(),
 		default: "move",
 		close: () => { }
@@ -125,9 +125,9 @@ async function tradeItem(itemId) {
 
 /**
  * @description Emit the trade through FoundryVTT socket.
- * @param { Object } html			- The previous dialog HTML.
+ * @param { Object } html		- The previous dialog HTML.
  * @param { Object } tradeActor		- The actor who want to trade.
- * @param { Object } item			- The item to trade.
+ * @param { Object } item		- The item to trade.
  * @param { Number } [quantity=1]	- The quantity to trade.
  * @return {*} 
  */
@@ -141,7 +141,7 @@ function emitTrade(html, tradeActor, item, quantity = 1) {
 		return ui.notifications.warn(game.i18n.localize('NICECYPHER.CannotTradeLessThanOneObject'));
 	}
 
-	game.socket.emit('module.nice-cypher-add-ons', {
+	game.socket.emit(`module.${MODULE.NAME}`, {
 		data: {item, quantity},
 		receiverId: receiverId,
 		traderId: traderId,
@@ -268,7 +268,7 @@ function tradeConfirmed(data) {
 		return;
 	
 	const emitType = duplicate ? "possessItem" : "acceptTrade";
-	game.socket.emit('module.nice-cypher-add-ons', {
+	game.socket.emit(`module.${MODULE.NAME}`, {
 		data: {item, quantity},
 		receiverId: data.receiver.id,
 		traderId: data.trader.id,
@@ -284,7 +284,7 @@ function tradeDenied(data) {
 	let item = data.item,
 	quantity = data.quantity;
 
-	game.socket.emit('module.nice-cypher-add-ons', {
+	game.socket.emit(`module.${MODULE.NAME}`, {
 		data: {item, quantity},
 		receiverId: data.receiver.id,
 		traderId: data.trader.id,

@@ -28,16 +28,13 @@
 */
 
 'use strict';
-import {MODULE_TITLE, MODULE_NAME, MODULE_PATH, registerGameSettings} from "./settings.js";
+import {MODULE, registerGameSettings} from "./settings.js";
 import {doesArrayContains} from "./utilities.js";
 import {addTradeButton, receiveTrade, endTrade, denyTrade, alreadyTrade} from "./module_trade.js";
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Globale(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/		
-// Hold world name
-var WORLD_NAME = '';
-
 // Hold the settings value
 var settings = {
 	gmintrusion: true,
@@ -60,18 +57,18 @@ const numeneraItems = [
 // Called when the module is initialised
 Hooks.once('init', () => {	
 	// Get World Name
-	WORLD_NAME = game.world.name;
+	MODULE.WORLD_NAME = game.world.name;
 	
 	// Register settings
 	registerGameSettings();
 		
 	// Get settings value
-	for (let s in settings) settings[s] = game.settings.get(MODULE_NAME, s);
+	for (let s in settings) settings[s] = game.settings.get(MODULE.NAME, s);
 });
 
 // Called when the module is setup
 Hooks.once('setup', async () => {
-	game.socket.on('module.nice-cypher-add-ons', packet => {
+	game.socket.on(`module.${MODULE.NAME}`, packet => {
 		let data = packet.data;
 		let type = packet.type;
 		
@@ -123,7 +120,7 @@ async function showHUDGmIntrusion(html, token) {
 	if (!actor || actor.data.type.toLowerCase() != 'pc') return;
 	
 	// Get the new HUD button template
-	let gmiDisplay = await renderTemplate(`${MODULE_PATH}/templates/gmi_hud.html`);
+	let gmiDisplay = await renderTemplate(`${MODULE.PATH}/templates/gmi_hud.html`);
 	
 	// Push the new HUD option and if clicked send the GMi chat card
 	html.find('div.right').append(gmiDisplay).click((e) => {

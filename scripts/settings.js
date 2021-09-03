@@ -33,11 +33,13 @@
 ------------------------------------------- Globale(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/
 // Hold module name
-const	MODULE_TITLE 	= 'Nice(TSY) Cypher System Add-ons',
-		MODULE_NAME 	= 'nice-cypher-add-ons',
-		MODULE_PATH 	= '/modules/nice-cypher-add-ons';
+var MODULE = {
+	TITLE	: 'Nice(TSY) Cypher System Add-ons',
+	NAME 	: 'nice-cypher-add-ons',
+	PATH 	: '/modules/nice-cypher-add-ons'
+};
 
-export {MODULE_TITLE, MODULE_NAME, MODULE_PATH};
+export {MODULE};
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------ Function(s) -------------------------------------------
@@ -48,7 +50,7 @@ export {MODULE_TITLE, MODULE_NAME, MODULE_PATH};
  */
 export function registerGameSettings() {
 	// Settings for showing a GM intrusion dialog (default: true)
-	game.settings.register(MODULE_NAME, 'gmintrusion', {
+	game.settings.register(MODULE.NAME, 'gmintrusion', {
 		name: game.i18n.localize('NICECYPHER.SettingsGMiTitle'),
 		hint: game.i18n.localize('NICECYPHER.SettingsGMiHint'),
 		scope: 'world',
@@ -59,7 +61,7 @@ export function registerGameSettings() {
 	});
 	
 	// Settings for auto obfuscate object (default: true)
-	game.settings.register(MODULE_NAME, 'autoobfuscate', {
+	game.settings.register(MODULE.NAME, 'autoobfuscate', {
 		name: game.i18n.localize('NICECYPHER.SettingsObfuscateTitle'),
 		hint: game.i18n.localize('NICECYPHER.SettingsObfuscateHint'),
 		scope: 'world',
@@ -70,7 +72,7 @@ export function registerGameSettings() {
 	});
 	
 	// Settings for auto level roll (default: true)
-	game.settings.register(MODULE_NAME, 'autoroll', {
+	game.settings.register(MODULE.NAME, 'autoroll', {
 		name: game.i18n.localize('NICECYPHER.SettingsLevelRollTitle'),
 		hint: game.i18n.localize('NICECYPHER.SettingsLevelRollHint'),
 		scope: 'world',
@@ -81,7 +83,7 @@ export function registerGameSettings() {
 	});
 	
 	// Settings for showing a trade button on actor sheet (default: true)
-	game.settings.register(MODULE_NAME, 'showtradeonsheet', {
+	game.settings.register(MODULE.NAME, 'showtradeonsheet', {
 		name: game.i18n.localize('NICECYPHER.SettingsTradeButtonTitle'),
 		hint: game.i18n.localize('NICECYPHER.SettingsTradeButtonHint'),
 		scope: 'world',

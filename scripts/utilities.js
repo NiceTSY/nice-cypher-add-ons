@@ -33,22 +33,22 @@
 ------------------------------------------ Utility(ies) ------------------------------------------
 ------------------------------------------------------------------------------------------------*/
 /**
- * @description Check if a specific string is contained inside a specified array.
+ * @description Check if something is contained inside a specified array.
  * @export
- * @param 	{ String }		s			- The string to find.
+ * @param 	{*}		a		- The thing to find.
  * @param 	{ Object[] }	array		- The array to check.
  * @return 	{ Boolean }
  */
- export function doesArrayContains(s, array) {
-	return (array.indexOf(s) > -1);
+ export function doesArrayContains(a, array) {
+	return (array.indexOf(a) > -1);
 };
 
 /**
  * @description Return actors according to specified permission.
  * @export
- * @param 	{ String }		permission	- The permission of which actors are needed.
- * @param 	{ Boolean }		withOwned	- If you need the current actor too.
- * @param 	{ Object }		actor		- The actor you do not want.
+ * @param 	{ String }	permission	- The permission of which actors are needed.
+ * @param 	{ Boolean }	withOwned	- If you need the current actor too.
+ * @param 	{ Object }	actor		- The actor you do not want.
  * @return 	{ Object[] }
  */
  export function returnActorByPermission(permission, withOwned = true, actor = null) {

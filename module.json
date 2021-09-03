@@ -4,9 +4,10 @@
 	"description": "This module adds some QOL Add-ons in the [Cypher System](https://github.com/mrkwnzl/cyphersystem-foundryvtt) made by Mrkwnzl",
 	"readme": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/README.md",
 	"license": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/LICENSE.md",
+	"changelog": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/CHANGELOG.md",
 	"author": "Alec (Nice to see you#6655 / NiceTSY)",
 	
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"minimumCoreVersion": "0.8.5",
 	"compatibleCoreVersion": "0.8.9",	
 	"systems": ["cyphersystem"],
