@@ -19,6 +19,7 @@
 	
 	This is my structure:
 	- 'Globales' are var used everywhere in this js and do not need to be re-made each time
+	- 'Classes' are either specific or custom classes used for scripts
 	- 'Handlers' are scripts that handle (or hook) specific events
 	- 'Functions' are functions either called by handlers or anywhere else, they hold most of my scripts
 	- 'Utilities' are scripts to do small calculation across other functions
@@ -28,57 +29,33 @@
 */
 
 'use strict';
-import {MODULE, registerGameSettings} from "./settings.js";
-import {doesArrayContains} from "./utilities.js";
-import {addTradeButton, receiveTrade, endTrade, denyTrade, alreadyTrade} from "./module_trade.js";
-
-/*------------------------------------------------------------------------------------------------
-------------------------------------------- Globale(s) -------------------------------------------
-------------------------------------------------------------------------------------------------*/		
-// Hold the settings value
-var settings = {
-	gmintrusion: true,
-	autoobfuscate: true,
-	autoroll: true,
-	// lightweaponeased: true,	// TODO: Potentially in a new version
-	showtradeonsheet: true,
-	// changechatcard: true		// TODO: Potentially in a new version
-};
-
-// Hold the name of items which level will be rolled
-const numeneraItems = [
-	'cypher',
-	'artifact'
-];
+import { CYPHERADDONS } from "./settings.js";
+import { UTILITIES } from "./utilities.js";
+import { addTradeButton, receiveTrade, endTrade, denyTrade, alreadyTrade } from "./module_trade.js";
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Handler(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/
 // Called when the module is initialised
-Hooks.once('init', () => {	
-	// Get World Name
-	MODULE.WORLD_NAME = game.world.name;
-	
+Hooks.once('init', () => {
 	// Register settings
-	registerGameSettings();
-		
-	// Get settings value
-	for (let s in settings) settings[s] = game.settings.get(MODULE.NAME, s);
+	CYPHERADDONS.init();
+
 });
 
 // Called when the module is setup
 Hooks.once('setup', async () => {
-	game.socket.on(`module.${MODULE.NAME}`, packet => {
+	game.socket.on(`module.${CYPHERADDONS.MODULE.NAME}`, packet => {
 		let data = packet.data;
 		let type = packet.type;
-		
+
 		data.receiver = game.actors.get(packet.receiverId);
 		data.trader = game.actors.get(packet.traderId);
-		
+
 		if (!data.receiver.isOwner) return;
 		if (game.user.data.character == packet.receiverId)
 			if (type === 'requestTrade') receiveTrade(data);
-			
+
 		if (type === 'acceptTrade') endTrade(data);
 		if (type === 'refuseTrade') denyTrade(data);
 		if (type === 'possessItem') alreadyTrade(data);
@@ -87,23 +64,23 @@ Hooks.once('setup', async () => {
 
 // Called when rendering the token HUD
 Hooks.on('renderTokenHUD', async (hud, html, token) => {
-	if (settings.gmintrusion)
+	if (CYPHERADDONS.SETTINGS.GMINTRUSION)
 		if (game.user.isGM) showHUDGmIntrusion(html, token);
 });
 
 // Called before a new item is created on charactersheet
 Hooks.on('preCreateItem', async (data, item) => {
 	const object = data.data._source;
-	
-	if (doesArrayContains(item.type.toLowerCase(), numeneraItems)) {		
-		if (settings.autoobfuscate) object.data.identified = false;
-		if (settings.autoroll) object.data.level = rollLevelOfObject(object.data).toString();
+
+	if (UTILITIES.doesArrayContains(item.type.toLowerCase(), CYPHERADDONS.NUMENERAITEMS)) {
+		if (CYPHERADDONS.SETTINGS.AUTOOBFUSCATE) object.data.identified = false;
+		if (CYPHERADDONS.SETTINGS.AUTOROLL) object.data.level = rollLevelOfObject(object.data).toString();
 	};
 });
 
 // Called opening the charactersheet
 Hooks.on('renderCypherActorSheet', (sheet, html) => {
-	if (settings.showtradeonsheet) addTradeButton(html, sheet.actor);
+	if (CYPHERADDONS.SETTINGS.TRADEBUTTON) addTradeButton(html, sheet.actor);
 });
 
 /*------------------------------------------------------------------------------------------------
@@ -118,13 +95,13 @@ async function showHUDGmIntrusion(html, token) {
 	// Check if the token is a PC
 	let actor = game.actors.get(token.actorId);
 	if (!actor || actor.data.type.toLowerCase() != 'pc') return;
-	
+
 	// Get the new HUD button template
-	let gmiDisplay = await renderTemplate(`${MODULE.PATH}/templates/gmi_hud.html`);
-	
+	let gmiDisplay = await renderTemplate(`${CYPHERADDONS.MODULE.PATH}/templates/gmi_hud.html`);
+
 	// Push the new HUD option and if clicked send the GMi chat card
 	html.find('div.right').append(gmiDisplay).click((e) => {
-		const gmiButton = e.target.parentElement.classList.contains('gmi-hud-icon');		
+		const gmiButton = e.target.parentElement.classList.contains('gmi-hud-icon');
 		if (gmiButton) game.cyphersystem.proposeIntrusion(actor);
 	});
 };
@@ -136,7 +113,7 @@ async function showHUDGmIntrusion(html, token) {
  */
 function rollLevelOfObject(obj) {
 	try {
-		const roll = new Roll(obj.level).evaluate({async: false});
+		const roll = new Roll(obj.level).evaluate({ async: false });
 		if (roll) return roll._total;
 	} catch (e) {
 		return obj.level;

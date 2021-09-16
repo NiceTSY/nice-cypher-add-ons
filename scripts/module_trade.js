@@ -19,6 +19,7 @@
 	
 	This is my structure:
 	- 'Globales' are var used everywhere in this js and do not need to be re-made each time
+	- 'Classes' are either specific or custom classes used for scripts
 	- 'Handlers' are scripts that handle (or hook) specific events
 	- 'Functions' are functions either called by handlers or anywhere else, they hold most of my scripts
 	- 'Utilities' are scripts to do small calculation across other functions
@@ -28,8 +29,17 @@
 */
 
 'use strict';
-import {MODULE} from './settings.js';
-import {returnActorByPermission} from './utilities.js';
+import { CYPHERADDONS } from './settings.js';
+import { UTILITIES } from './utilities.js';
+
+/*------------------------------------------------------------------------------------------------
+------------------------------------------ Global(es) -------------------------------------------
+------------------------------------------------------------------------------------------------*/
+const cypherObjectType = [
+	'artifact',
+	'cypher',
+	'oddity'
+];
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------ Function(s) -------------------------------------------
@@ -45,9 +55,9 @@ export function addTradeButton(html, actor) {
 		<a class='item-control item-trade' title='Trade Item'>
 			<i class='fas fa-exchange-alt'></i>
 		</a>
-	`).insertBefore(html.find('.tab.items .item-control.item-edit'));
+	`).insertBefore($('.tab.items .item-control.item-edit'));
 
-	html.find('.item-control.item-trade').on('click', tradeItemHandler.bind(actor));
+	$('.item-control.item-trade').on('click', tradeItemHandler.bind(actor));
 };
 
 /**
@@ -68,18 +78,18 @@ function tradeItemHandler(e) {
  */
 async function tradeItem(itemId) {
 	const tradeActor = this;
-	const actors = returnActorByPermission(CONST.ENTITY_PERMISSIONS.OBSERVER, false, tradeActor);	
-	const item = tradeActor.items.find(i => i.data._id === itemId);
+	const actors = UTILITIES.returnActorByPermission(CONST.ENTITY_PERMISSIONS.OBSERVER, false, tradeActor);
+	const item = tradeActor.items.find(i => i.data.id === itemId);
 
 	let maxQuantity = item.data.data.quantity;
 	if (maxQuantity <= 0 && maxQuantity != null) return ui.notifications.warn(game.i18n.localize('CYPHERSYSTEM.CannotMoveNotOwnedItem'));
 
 	const maxQuantityText = (maxQuantity != null) ? `${game.i18n.localize('CYPHERSYSTEM.Of')} ${maxQuantity}` : "";
-	const data = { actorOptions : actors, maxQuantityText: maxQuantityText };
+	const data = { actorOptions: actors, maxQuantityText: maxQuantityText };
 
 	new Dialog({
-		title: game.i18n.format("CYPHERSYSTEM.MoveItem", {name: item.data.name}),
-		content: await renderTemplate(`${MODULE.PATH}/templates/trade_dialogue.html`, data),
+		title: game.i18n.format("CYPHERSYSTEM.MoveItem", { name: item.data.name }),
+		content: await renderTemplate(`${CYPHERADDONS.MODULE.PATH}/templates/trade_dialogue.html`, data),
 		buttons: buttons(),
 		default: "move",
 		close: () => { }
@@ -102,7 +112,7 @@ async function tradeItem(itemId) {
 				cancel: {
 					icon: '<i class="fas fa-times"></i>',
 					label: game.i18n.localize('CYPHERSYSTEM.Cancel'),
-					callback: () => {}
+					callback: () => { }
 				}
 			})
 		} else {
@@ -115,7 +125,7 @@ async function tradeItem(itemId) {
 				cancel: {
 					icon: '<i class="fas fa-times"></i>',
 					label: game.i18n.localize('CYPHERSYSTEM.Cancel'),
-					callback: () => {}
+					callback: () => { }
 				}
 			});
 		};
@@ -134,15 +144,15 @@ async function tradeItem(itemId) {
 function emitTrade(html, tradeActor, item, quantity = 1) {
 	const receiverId = html.find(`select#playerTrade`)[0].value;
 	const traderId = tradeActor.id
-	
+
 	quantity = (item.data.data.quantity != null && quantity > item.data.data.quantity) ? item.data.data.quantity : quantity;
-	if (quantity <= 0) {		
+	if (quantity <= 0) {
 		tradeItem(item.id);
 		return ui.notifications.warn(game.i18n.localize('NICECYPHER.CannotTradeLessThanOneObject'));
 	}
 
-	game.socket.emit(`module.${MODULE.NAME}`, {
-		data: {item, quantity},
+	game.socket.emit(`module.${CYPHERADDONS.MODULE.NAME}`, {
+		data: { item, quantity },
 		receiverId: receiverId,
 		traderId: traderId,
 		type: 'requestTrade'
@@ -159,7 +169,7 @@ export function receiveTrade(data) {
 
 	new Dialog({
 		title: game.i18n.localize('NICECYPHER.TradeRequestTitle'),
-		content: game.i18n.format('NICECYPHER.TradeRequestContent', {actorName: trader.name, tradeOffer: `<p><b>x${data.quantity}</b> ${data.item.name}</p>`}),
+		content: game.i18n.format('NICECYPHER.TradeRequestContent', { actorName: trader.name, tradeOffer: `<p><b>x${data.quantity}</b> ${data.item.name}</p>` }),
 		buttons: {
 			accept: {
 				label: game.i18n.localize('CYPHERSYSTEM.Accept'),
@@ -177,15 +187,16 @@ export function receiveTrade(data) {
 
 /**
  * @description Check the receiver item and either increase the quantity or create the object.
+ * @export
  * @param {*} {item, quantity, receiver} - Hold the trade data.
- * @return { Boolean } 
+ * @return { Boolean }
  */
-function receiveItem({item, quantity, receiver}) {
+export async function receiveItem({ item, quantity, receiver }) {
 	const duplicatedItem = duplicate(item);
 	duplicatedItem.data.quantity = quantity;
-	
+
 	const existingItem = receiver.items.find(i => i.data.name === duplicatedItem.name);
-	if (existingItem && (duplicatedItem.type == "artifact" || duplicatedItem.type == "cypher" || duplicatedItem.type == "oddity"))
+	if (existingItem && UTILITIES.doesArrayContains(duplicatedItem.type, cypherObjectType))
 		return true;
 
 	if (existingItem) {
@@ -198,7 +209,8 @@ function receiveItem({item, quantity, receiver}) {
 
 		existingItem.update(updateItem);
 	} else
-		Item.create(duplicatedItem, {parent: receiver});
+		await receiver.createEmbeddedDocuments("Item", [item.toObject()]);
+	// Item.create(duplicatedItem, {parent: receiver});
 
 	return false;
 };
@@ -207,19 +219,24 @@ function receiveItem({item, quantity, receiver}) {
  * @description Check the trader item and either decrease the quantity or delete it.
  * @param {*} {item, quantity, trader} - Hold the trade data.
  */
-function giveItem({item, quantity, trader}) {
-	item = trader.items.get(item._id);
-    let updatedQuantity, updateItem;
+export async function giveItem({ item, quantity, trader }) {
+	item = trader.items.getName(item.name);
 
-    updatedQuantity = parseInt(item.data.data.quantity) - parseInt(quantity);
-    updateItem = {
-        "data.quantity": updatedQuantity
-    };
+	if ("quantity" in item.data.data) {
+		let updatedQuantity, updateItem;
 
-    item.update(updateItem).then(() => {
-        if (parseInt(item.data.data.quantity) <= 0 || (item.data.type == "artifact" || item.data.type == "cypher" || item.data.type == "oddity"))
-            item.delete();
-    });
+		updatedQuantity = parseInt(item.data.data.quantity) - parseInt(quantity);
+		updateItem = {
+			"data.quantity": updatedQuantity
+		};
+
+		item.update(updateItem).then(() => {
+			if (parseInt(item.data.data.quantity) <= 0 || UTILITIES.doesArrayContains(item.data.type, cypherObjectType))
+				item.delete();
+		});
+	} else {
+		item.delete();
+	};
 };
 
 /**
@@ -230,7 +247,7 @@ function giveItem({item, quantity, trader}) {
 export function endTrade(data) {
 	if (!!data.item)
 		giveItem(data);
-	
+
 	ui.notifications.info(`${data.receiver.name} accepted your trade request.`);
 };
 
@@ -248,8 +265,8 @@ export function denyTrade(data) {
  * @export
  * @param { Object } data - Hold the trade data.
  */
- export function alreadyTrade(data) {
-	ui.notifications.warn(game.i18n.format("CYPHERSYSTEM.AlreadyHasThisItem", {actor: data.receiver.name}));
+export function alreadyTrade(data) {
+	ui.notifications.warn(game.i18n.format("CYPHERSYSTEM.AlreadyHasThisItem", { actor: data.receiver.name }));
 };
 
 /**
@@ -258,18 +275,18 @@ export function denyTrade(data) {
  * @return {*} 
  */
 function tradeConfirmed(data) {
-	let item 	= data.item,
-	quantity 	= data.quantity,
-	duplicate 	= false;
+	let item = data.item,
+		quantity = data.quantity,
+		duplicate = false;
 
 	if (!!item)
 		duplicate = receiveItem(data);
 	else
 		return;
-	
+
 	const emitType = duplicate ? "possessItem" : "acceptTrade";
-	game.socket.emit(`module.${MODULE.NAME}`, {
-		data: {item, quantity},
+	game.socket.emit(`module.${CYPHERADDONS.MODULE.NAME}`, {
+		data: { item, quantity },
 		receiverId: data.receiver.id,
 		traderId: data.trader.id,
 		type: emitType
@@ -282,10 +299,10 @@ function tradeConfirmed(data) {
  */
 function tradeDenied(data) {
 	let item = data.item,
-	quantity = data.quantity;
+		quantity = data.quantity;
 
-	game.socket.emit(`module.${MODULE.NAME}`, {
-		data: {item, quantity},
+	game.socket.emit(`module.${CYPHERADDONS.MODULE.NAME}`, {
+		data: { item, quantity },
 		receiverId: data.receiver.id,
 		traderId: data.trader.id,
 		type: "refuseTrade"
