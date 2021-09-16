@@ -36,5 +36,5 @@
 	
 	"url": "https://github.com/NiceTSY/nice-cypher-add-ons",
 	"manifest": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/develop/module.json",
-	"download": "https://github.com/NiceTSY/nice-cypher-add-ons/releases/latest/download/module.zip"
+	"download": "https://github.com/NiceTSY/nice-cypher-add-ons/releases/download/0.3.0-Beta/module.zip"
 }
