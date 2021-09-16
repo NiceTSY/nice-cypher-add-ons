@@ -32,6 +32,7 @@
 import { CYPHERADDONS } from "./settings.js";
 import { UTILITIES } from "./utilities.js";
 import { addTradeButton, receiveTrade, endTrade, denyTrade, alreadyTrade } from "./module_trade.js";
+import { checkJournalType, checkIfLinkedData } from "./module_creation.js"
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Handler(s) -------------------------------------------
@@ -78,9 +79,17 @@ Hooks.on('preCreateItem', async (data, item) => {
 	};
 });
 
+// Called when dropping something on the character sheet
+Hooks.on('dropActorSheetData', async (actor, html, item) => {
+	if (item.type.toLowerCase() === 'journalentry' && actor.data.type === "PC") {
+		if (CYPHERADDONS.SETTINGS.CREATIONTOOLS) checkJournalType(actor, html, item);
+	};
+});
+
 // Called opening the charactersheet
 Hooks.on('renderCypherActorSheet', (sheet, html) => {
 	if (CYPHERADDONS.SETTINGS.TRADEBUTTON) addTradeButton(html, sheet.actor);
+	if (CYPHERADDONS.SETTINGS.CREATIONTOOLS) checkIfLinkedData(html, sheet.actor);
 });
 
 /*------------------------------------------------------------------------------------------------

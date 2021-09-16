@@ -53,6 +53,7 @@ export class CYPHERADDONS {
 		AUTOOBFUSCATE: true,
 		AUTOROLL: true,
 		TRADEBUTTON: true,
+		CREATIONTOOLS: true
 		// lightweaponeased: true,	// TODO: Potentially in a new version
 		// changechatcard: true		// TODO: Potentially in a new version
 	};

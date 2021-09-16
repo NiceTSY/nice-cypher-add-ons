@@ -13,6 +13,8 @@
 	"NICECYPHER.SettingsAUTOROLLHint": "Cela calculera automatiquement le niveau des cyphers et des artefacts lorsqu'ils sont glissé sur la feuille d'un personnage.",
 	"NICECYPHER.SettingsSHOWTRADETitle": "Button d'échange d'objets",
 	"NICECYPHER.SettingsSHOWTRADEHint": "Cela ajoutera une option sur l'HUD des tokens pour permettre au joueur d'échanger ses objets avec les autres joueurs.",
+	"NICECYPHER.SettingsCREATIONTOOLSTitle": "Utiliser la creation avancée",
+	"NICECYPHER.SettingsCREATIONTOOLSHint": "Permets aux joueurs de faire glisser une note de journal pour le Focus/Descriptor/Type/Additionnel sur la fiche d'un personnage.",
 	
 	"NICECYPHER.GMi": "Intrusion du MJ",
 	"NICECYPHER.Intrusion": "Intrusion",
@@ -22,4 +24,5 @@
 	"NICECYPHER.TradeRequestContent": "{actorName} veux t'envoyer : {tradeOffer} Acceptes-tu ?",
 	"NICECYPHER.CannotTradeLessThanOneObject": "Tu ne peux pas mettre une quantité négative.",
 
+	"NICECYPHER.CreationAlreadySentence": "Le personnage possède déjà un {type}"
 }
