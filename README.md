@@ -9,7 +9,7 @@ Those things could probably be implemented directly inside the system in the fut
 </p>
 
 <p align="justify">
-If you need to speak about this module or about the Cypher System you can join <strong>mrkwnzl's</strong> [Cypher FVTT Dev Discord](https://discord.gg/C5zGgtyhwa). We will be happy to help!
+If you need to speak about this module or about the Cypher System you can join <strong>mrkwnzl's</strong> <a href="https://discord.gg/C5zGgtyhwa">Cypher FVTT Dev Discord</a>. We will be happy to help!
 </p>
 
 ## Disclaimer
@@ -19,7 +19,9 @@ If you need to speak about this module or about the Cypher System you can join <
 
 > <p align="justify"> This module follow the <a href="https://www.montecookgames.com/fan-use-policy/">Fan Use Policy</a> from Monte Cook Games, and therefore does not contains anything from the books. </p>
 
-> <p align="justify"> This module include some icons from Games-Icons, they are provided under the terms of the Creative Commons 3.0 BY license. Available on <a href="https://game-icons.net">https://game-icons.net</a>. 
+> <p align="justify"> This module include the following official image 'Numenera Discovery 20 <a href="https://artiglio.artstation.com/">Mirco Paganessi</a>' (also known as <a href="https://www.montecookgames.com/numenera-on-twitch-now-with-more-squicky-creatures/">'Kaliss, a Clever Jack who Works the Back Alleys'</a>), which is included in accordance to the submensionned Fan Use Policy. </p>
+
+> <p align="justify"> This module include some icons from Games-Icons, they are provided under the terms of the Creative Commons 3.0 BY license. Available on <a href="https://game-icons.net">https://game-icons.net</a>. </p>
 
 ## Scripts
 
