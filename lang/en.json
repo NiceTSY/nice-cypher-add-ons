@@ -1,18 +1,25 @@
 {
-	"NICECYPHER.SettingsGMiTitle": "GM intrusion HUD",
-	"NICECYPHER.SettingsGMiHint": "This will have an option on the token HUD to send an intrusion to player.",
-	"NICECYPHER.SettingsObfuscateTitle": "Object auto obfuscate",
-	"NICECYPHER.SettingsObfuscateHint": "This will automatically obfuscate Cypher and Artifact when dragged on a character sheet.",
-	"NICECYPHER.SettingsLevelRollTitle": "Object roll level",
-	"NICECYPHER.SettingsLevelRollHint": "This will automatically roll the level of Cypher and Artifact when dragged on a character sheet.",
-	"NICECYPHER.SettingsTradeButtonTitle": "Show trade button",
-	"NICECYPHER.SettingsTradeButtonHint": "This will have an option on the character sheet to show the trade function between players.",
+	"NICECYPHER.SettingsMenuTitle": "Add-ons menu options",
+	"NICECYPHER.SettingsMenuLabel": "Change current options",
+	"NICECYPHER.SettingsMenuHint": "Select add-on options you want in your World",
+	"NICECYPHER.SettingsSubmit": "Submit",
+	"NICECYPHER.SettingsReset": "Reset",
+
+	"NICECYPHER.SettingsGMINTRUSIONTitle": "GM intrusion HUD",
+	"NICECYPHER.SettingsGMINTRUSIONHint": "This will have an option on the token HUD to send an intrusion to player.",
+	"NICECYPHER.SettingsAUTOOBFUSCATETitle": "Object auto obfuscate",
+	"NICECYPHER.SettingsAUTOOBFUSCATEHint": "This will automatically obfuscate Cypher and Artifact when dragged on a character sheet.",
+	"NICECYPHER.SettingsAUTOROLLTitle": "Object roll level",
+	"NICECYPHER.SettingsAUTOROLLHint": "This will automatically roll the level of Cypher and Artifact when dragged on a character sheet.",
+	"NICECYPHER.SettingsSHOWTRADETitle": "Show trade button",
+	"NICECYPHER.SettingsSHOWTRADEHint": "This will have an option on the character sheet to show the trade function between players.",
 	
 	"NICECYPHER.GMi": "GM intrusion",
 	"NICECYPHER.Intrusion": "Intrusion",
 	
 	"NICECYPHER.Trade": "Trade",
 	"NICECYPHER.TradeRequestTitle": "Trade Request",	
-	"NICECYPHER.TradeRequestContent": "{actorName} is sending you: {tradeOffer} Do you accept?",
-	"NICECYPHER.CannotTradeLessThanOneObject": "You cannot trade negative quantity."
+	"NICECYPHER.TradeRequestContent": "{actorName} is sending you: {tradeOffer}. Do you accept?",
+	"NICECYPHER.CannotTradeLessThanOneObject": "You cannot trade negative quantity.",
+
 }

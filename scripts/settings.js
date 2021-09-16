@@ -19,6 +19,7 @@
 	
 	This is my structure:
 	- 'Globales' are var used everywhere in this js and do not need to be re-made each time
+	- 'Classes' are either specific or custom classes used for scripts
 	- 'Handlers' are scripts that handle (or hook) specific events
 	- 'Functions' are functions either called by handlers or anywhere else, they hold most of my scripts
 	- 'Utilities' are scripts to do small calculation across other functions
@@ -30,66 +31,176 @@
 'use strict';
 
 /*------------------------------------------------------------------------------------------------
-------------------------------------------- Globale(s) -------------------------------------------
+------------------------------------------- Class(es) --------------------------------------------
 ------------------------------------------------------------------------------------------------*/
-// Hold module name
-var MODULE = {
-	TITLE	: 'Nice(TSY) Cypher System Add-ons',
-	NAME 	: 'nice-cypher-add-ons',
-	PATH 	: '/modules/nice-cypher-add-ons'
+/**
+ * @description Hold important data for the module
+ * @export
+ * @class CYPHERADDONS
+ */
+export class CYPHERADDONS {
+	// Module info
+	static MODULE = {
+		TITLE: 'Nice(TSY) Cypher System Add-ons',
+		NAME: 'nice-cypher-add-ons',
+		PATH: '/modules/nice-cypher-add-ons',
+		WORLD: ''
+	};
+
+	// Module settings
+	static SETTINGS = {
+		GMINTRUSION: true,
+		AUTOOBFUSCATE: true,
+		AUTOROLL: true,
+		TRADEBUTTON: true,
+		// lightweaponeased: true,	// TODO: Potentially in a new version
+		// changechatcard: true		// TODO: Potentially in a new version
+	};
+
+	// Name of items which level will be rolled
+	static NUMENERAITEMS = [
+		'cypher',
+		'artifact'
+	];
+
+	// Init the settings
+	static init() {
+		registerModuleSettings();
+
+		CYPHERADDONS.MODULE.WORLD = game.world.name;
+		for (let s in CYPHERADDONS.SETTINGS) CYPHERADDONS.SETTINGS[s] = game.settings.get(CYPHERADDONS.MODULE.NAME, s);
+	}
 };
 
-export {MODULE};
+/**
+ * @description The dialog used to show all the configurable options
+ * @class cypherAddOnsConfigDialog
+ * @extends {FormApplication}
+ */
+class cypherAddOnsConfigDialog extends FormApplication {
+	static get defaultOptions() {
+		const defaults = super.defaultOptions;
+
+		// Using same overrides, to be consistent with the rest of the system, as gonzaPaEst in his Custom Cypher Sheets (https://github.com/gonzaPaEst/cyphersheets)
+		const overrides = {
+			width: 600,
+			height: "auto",
+			id: "cypher-add-ons-config",
+			template: `${CYPHERADDONS.MODULE.PATH}/templates/add_ons_config.html`,
+			title: CYPHERADDONS.MODULE.TITLE,
+			userId: game.userId,
+			closeOnSubmit: true
+		};
+
+		return foundry.utils.mergeObject(defaults, overrides);
+	};
+
+	getData(options) {
+		return this.reset ?
+			{
+				useGmIntrusion: true,
+				useAutoObfuscate: true,
+				useAutoRoll: true,
+				useTradeButton: true,
+				useCREATIONTOOLS: true
+			} :
+			{
+				useGmIntrusion: SettingsForm.getUseGmIntrusion(),
+				useAutoObfuscate: SettingsForm.getUseAutoObfuscate(),
+				useAutoRoll: SettingsForm.getUseAutoRoll(),
+				useTradeButton: SettingsForm.getUseTradeButton(),
+				useCREATIONTOOLS: SettingsForm.getUseCREATIONTOOLS()
+			};
+	};
+
+	// resets values for custom sheet settings
+	activateListeners(html) {
+		super.activateListeners(html);
+		html.find('button[name="reset"]').click(this.onReset.bind(this));
+		this.reset = false;
+	};
+
+	onReset() {
+		this.reset = true;
+		this.render();
+	};
+
+	// gets data from HTML form
+	async _updateObject(e, formData) {
+		SettingsForm.setUseGmIntrusion(formData.useGmIntrusion);
+		SettingsForm.setUseAutoObfuscate(formData.useAutoObfuscate);
+		SettingsForm.setUseAutoRoll(formData.useAutoRoll);
+		SettingsForm.setUseTradeButton(formData.useTradeButton);
+		SettingsForm.setUseCREATIONTOOLS(formData.useCREATIONTOOLS);
+	};
+};
+
+class SettingsForm {
+	static getUseGmIntrusion() {
+		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[0]);
+	};
+	static setUseGmIntrusion(value) {
+		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[0], value);
+	}
+
+	static getUseAutoObfuscate() {
+		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[1]);
+	};
+	static setUseAutoObfuscate(value) {
+		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[1], value);
+	}
+
+	static getUseAutoRoll() {
+		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[2]);
+	};
+	static setUseAutoRoll(value) {
+		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[2], value);
+	}
+
+	static getUseTradeButton() {
+		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[3]);
+	};
+	static setUseTradeButton(value) {
+		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[3], value);
+	}
+
+	static getUseCREATIONTOOLS() {
+		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[4]);
+	};
+	static setUseCREATIONTOOLS(value) {
+		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[4], value);
+	}
+};
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------ Function(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/
 /** 
  * @description Register the module settings
- * @export
  */
-export function registerGameSettings() {
-	// Settings for showing a GM intrusion dialog (default: true)
-	game.settings.register(MODULE.NAME, 'gmintrusion', {
-		name: game.i18n.localize('NICECYPHER.SettingsGMiTitle'),
-		hint: game.i18n.localize('NICECYPHER.SettingsGMiHint'),
-		scope: 'world',
-		config: true,
-		default: true,
-		type: Boolean,
-		onChange: () => location.reload(),
+function registerModuleSettings() {
+	// Settings menu
+	game.settings.registerMenu(CYPHERADDONS.MODULE.NAME, CYPHERADDONS.MODULE.NAME, {
+		name: game.i18n.localize('NICECYPHER.SettingsMenuTitle'),
+		label: game.i18n.localize('NICECYPHER.SettingsMenuLabel'),
+		hint: game.i18n.localize('NICECYPHER.SettingsMenuHint'),
+		icon: "fas fa-user-cog",
+		type: cypherAddOnsConfigDialog,
+		restricted: true
 	});
-	
-	// Settings for auto obfuscate object (default: true)
-	game.settings.register(MODULE.NAME, 'autoobfuscate', {
-		name: game.i18n.localize('NICECYPHER.SettingsObfuscateTitle'),
-		hint: game.i18n.localize('NICECYPHER.SettingsObfuscateHint'),
-		scope: 'world',
-		config: true,
-		default: true,
-		type: Boolean,
-		onChange: () => location.reload(),
-	});
-	
-	// Settings for auto level roll (default: true)
-	game.settings.register(MODULE.NAME, 'autoroll', {
-		name: game.i18n.localize('NICECYPHER.SettingsLevelRollTitle'),
-		hint: game.i18n.localize('NICECYPHER.SettingsLevelRollHint'),
-		scope: 'world',
-		config: true,
-		default: true,
-		type: Boolean,
-		onChange: () => location.reload(),
-	});
-	
-	// Settings for showing a trade button on actor sheet (default: true)
-	game.settings.register(MODULE.NAME, 'showtradeonsheet', {
-		name: game.i18n.localize('NICECYPHER.SettingsTradeButtonTitle'),
-		hint: game.i18n.localize('NICECYPHER.SettingsTradeButtonHint'),
-		scope: 'world',
-		config: true,
-		default: true,
-		type: Boolean,
-		onChange: () => location.reload(),
+
+	// Register all settings
+	Object.keys(CYPHERADDONS.SETTINGS).forEach(k => {
+		game.settings.register(CYPHERADDONS.MODULE.NAME, k, {
+			name: game.i18n.localize(`NICECYPHER.Settings${k}Title`),
+			hint: game.i18n.localize(`NICECYPHER.Settings${k}Hint`),
+			scope: 'world',
+			config: false,
+			default: true,
+			type: Boolean,
+			onChange: () => setTimeout(() => {
+				location.reload();
+			}, 1000)
+		});
 	});
 };

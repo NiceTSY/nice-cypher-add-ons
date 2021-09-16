@@ -1,0 +1,54 @@
+<!-- Taken from gonzaPaEst Cypher Custom Sheet https://github.com/gonzaPaEst/cyphersheets/blob/main/templates/config-dialog.html -->
+<!-- This in order to keep the same visual across system's modules -->
+<form autocomplete="off" class="cypher-sheets-form">
+    <h2>Nice(TSY) Cypher System Add-ons</h2>
+    <section>
+
+        <div class="sheet-checkboxes">
+            <div class="form-group">
+                <input type="checkbox" name="useGmIntrusion" id="useGmIntrusion" data-dtype="Boolean" {{checked useGmIntrusion}}/>
+                <label for="useGmIntrusion">
+                    {{localize "NICECYPHER.SettingsGMINTRUSIONTitle"}}
+                </label>
+                <p class="notes"><i class="fas fa-share"></i> {{localize "NICECYPHER.SettingsGMINTRUSIONHint"}}</p>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" name="useAutoObfuscate" id="useAutoObfuscate" data-dtype="Boolean" {{checked useAutoObfuscate}}/>
+                <label for="useAutoObfuscate">
+                    {{localize "NICECYPHER.SettingsAUTOOBFUSCATETitle"}}
+                </label>
+                <p class="notes"><i class="fas fa-share"></i> {{localize "NICECYPHER.SettingsAUTOOBFUSCATEHint"}}</p>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" name="useAutoRoll" id="useAutoRoll" data-dtype="Boolean" {{checked useAutoRoll}}/>
+                <label for="useAutoRoll">
+                    {{localize "NICECYPHER.SettingsAUTOROLLTitle"}}
+                </label>
+                <p class="notes"><i class="fas fa-share"></i> {{localize "NICECYPHER.SettingsAUTOROLLHint"}}</p>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" name="useTradeButton" id="useTradeButton" data-dtype="Boolean" {{checked useTradeButton}}/>
+                <label for="useTradeButton">
+                    {{localize "NICECYPHER.SettingsSHOWTRADETitle"}}
+                </label>
+                <p class="notes"><i class="fas fa-share"></i> {{localize "NICECYPHER.SettingsSHOWTRADEHint"}}</p>
+            </div>
+        </div>
+
+        <img id="form-img" src="../../../modules/nice-cypher-add-ons/img/Numenera-Kallis-by-Mirco-Paganessi.webp" alt="Kaliss, a Clever Jack who Works the Back Alleys">
+
+    </section>
+
+    <div class="form-group" style="margin: 10px;">
+
+        <button type="submit" name="submit">
+            <i class="fas fa-save"></i> {{localize "NICECYPHER.SettingsSubmit"}}
+        </button>
+
+        <button type="button" name="reset">
+            <i class="fas fa-undo"></i> {{localize "NICECYPHER.SettingsReset"}}
+        </button>
+
+    </div>
+
+</form>
