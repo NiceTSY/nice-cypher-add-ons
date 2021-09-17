@@ -51,8 +51,7 @@ button[data-key="cyphersheets.cyphersheetsconfig"]:hover {
 
 /* Own Css */
 .linkedButton {
-	width: 100%;
-	height: 100%;
+	height: 26px;
 	margin: 0;
 	border: 0.5px solid lightgrey;
 }

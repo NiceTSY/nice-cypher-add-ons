@@ -7,7 +7,7 @@
 	"changelog": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/CHANGELOG.md",
 	"author": "Alec (Nice to see you#6655 / NiceTSY)",
 	
-	"version": "0.3.0-Beta",
+	"version": "0.3.0-Beta-2",
 	"minimumCoreVersion": "0.8.5",
 	"compatibleCoreVersion": "0.8.9",	
 	"systems": ["cyphersystem"],
@@ -36,5 +36,5 @@
 	
 	"url": "https://github.com/NiceTSY/nice-cypher-add-ons",
 	"manifest": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/develop/module.json",
-	"download": "https://github.com/NiceTSY/nice-cypher-add-ons/releases/download/0.3.0-Beta/module.zip"
+	"download": "https://github.com/NiceTSY/nice-cypher-add-ons/releases/download/0.3.0-Beta-2/module.zip"
 }

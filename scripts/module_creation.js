@@ -40,7 +40,8 @@ const typeSentenceCheck = [
 	`${quantifier}descriptor`,
 	`${quantifier}focus`,
 	`${quantifier}type`,
-	`${quantifier}additional`
+	`${quantifier}additional`,
+	`${quantifier}additionalSentence`
 ];
 
 const typeStatCheck = [
@@ -49,7 +50,7 @@ const typeStatCheck = [
 	`${quantifier}intellect`,
 	`${quantifier}additional`,
 	`${quantifier}effort`
-]
+];
 
 const typeItemsCheck = [
 	`${quantifier}skill`,
@@ -62,7 +63,7 @@ const skillLevels = [
 	'Trained',
 	'Practiced',
 	'Inability'
-]
+];
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Class(es) --------------------------------------------
@@ -77,9 +78,11 @@ class creationSentence {
 };
 
 class creationStat {
-	constructor(value = 10, edge = 0) {
-		this.value = value;
-		this.edge = edge;
+	constructor(value = 10, edge = 0, poolModificator = 0, edgeModificator = 0) {
+		this.value = (Number.isInteger(value)) ? value : 10;
+		this.edge = (Number.isInteger(edge)) ? edge : 0;
+		this.poolModificator = poolModificator;
+		this.edgeModificator = edgeModificator;
 	};
 };
 
@@ -125,6 +128,7 @@ class creationData {
 
 		this.tier = 1;
 		this.effort = 0;
+		this.effortModificator = 0;
 
 		this.stats = new creationStats();
 
@@ -143,15 +147,37 @@ class creationData {
 		this.tier = tier;
 	};
 
-	setEffort(effort) {
-		if (!Number.isInteger(effort)) return;
-		this.effort = effort;
+	changeStat(stat, value) {
+		if (stat === 'effort') {
+			console.log(Number.isInteger(value))
+			if (!Number.isInteger(value)) return;
+			this.effort = value;
+		} else {
+			value = Object.assign(new creationStat(), value);
+			if (!stat in this.stats) return;
+			this.stats[stat] = value;
+		};
 	};
 
-	changeStat(type, stat) {
-		stat = Object.assign(new creationStat(), stat);
-		if (!type in this.stats) return;
-		this.stats[type] = stat;
+	addStatModificator(stat, type, modificator) {
+		if (stat === 'effort') {
+			const current = this.effortModificator,
+				mathExpression = current + modificator;
+
+			this.effortModificator = mathExpression;
+		} else if (!stat in this.stats) return;
+
+		if (type === 'pool') {
+			const current = this.stats[stat].poolModificator,
+				mathExpression = current + modificator;
+
+			this.stats[stat].poolModificator = mathExpression;
+		} else if (type === 'edge') {
+			const current = this.stats[stat].edgeModificator,
+				mathExpression = current + modificator;
+
+			this.stats[stat].edgeModificator = mathExpression;
+		};
 	};
 
 	skillExists(idOrName) {
@@ -243,25 +269,25 @@ export async function checkJournalType(actor, html, journal) {
 	let journals = game.journal.filter(j => buttons.includes(j.id));
 	journal = await game.journal.get(journal.id);
 
-	const journalContent = journal.data.content.split('\n');
+	const journalContent = returnArrayOfHtmlContent(journal.data.content);
 	let journalType = journalContent[0].replace(/ .*/, '').toLowerCase();
 
 	for (const j of journals) {
-		const jContent = j.data.content.split('\n'),
-			jType = jContent[0].replace(/ .*/, '').toLowerCase()
+		const jContent = returnArrayOfHtmlContent(j.data.content),
+			jType = jContent[0].replace(/ .*/, '').toLowerCase();
 
 		if (jType === journalType) {
-			journalType = UTILITIES.sanitizeString(UTILITIES.removeTags(journalType))
-			ui.notifications.warn(game.i18n.format('NICECYPHER.CreationAlreadySentence', { type: `${journalType} (${j.name})` }))
+			journalType = UTILITIES.sanitizeString(journalType);
+			ui.notifications.warn(game.i18n.format('NICECYPHER.CreationAlreadySentence', { type: `${journalType} (${j.name})` }));
 			return;
-		}
-	}
+		};
+	};
 
 	journals.push(journal);
-	getContent(journals, actor)
+	getContent(journals, actor);
 };
 
-export function checkIfLinkedData(html, actor) {
+export async function checkIfLinkedData(html, actor) {
 	const nameCheck = [
 		actor.data.data.basic.descriptor,
 		actor.data.data.basic.focus,
@@ -270,23 +296,24 @@ export function checkIfLinkedData(html, actor) {
 	];
 
 	for (const name of nameCheck) {
-		const journal = game.journal.getName(name);
+		if (!name || name === '') continue;
+
+		const id = getJournalIdInName(name),
+			journal = await game.journal.get(id);
 
 		if (journal) {
-			const content = journal.data.content.split('\n');
-			updateActorSheet(html, content[0].replace(/ .*/, '').toLowerCase(), journal)
+			const content = returnArrayOfHtmlContent(journal.data.content);
+			updateActorSheet(html, content[0].replace(/ .*/, '').toLowerCase(), journal);
 		};
-	}
-
-	// updateActorSheet(html, type.substring(1), journal)
+	};
 };
 
 function updateActorSheet(html, toUpdate, data) {
-	toUpdate = UTILITIES.removeTags(toUpdate).substring(1);
+	toUpdate = (toUpdate === `${quantifier}additional`) ? 'additionalSentence' : UTILITIES.sanitizeString(toUpdate);
 	const newNode = (`
 		<button id="${data.id}" name="data.basic.${toUpdate}" class="linkedButton"><i class="fas fa-book-open"></i> ${data.name}</button>
-	`);
-	const oldNode = $(`input[name="data.basic.${toUpdate}"`);
+	`),
+		oldNode = $(`input[name="data.basic.${toUpdate}"`);
 
 	oldNode.replaceWith(newNode);
 	$(`#${data.id}`).click(e => {
@@ -303,12 +330,9 @@ function updateActorSheet(html, toUpdate, data) {
 	});
 };
 
-function isGoodJournalType(journal) {
-	const lines = journal.data.content.split('\n');
-	const checkFirstLine = UTILITIES.removeTags(lines[0].toLowerCase());
-
-	if (!UTILITIES.doesArrayContains(checkFirstLine, typeSentenceCheck)) return false;
-	return checkFirstLine;
+function isGoodJournalType(type) {
+	if (!UTILITIES.doesArrayContains(type, typeSentenceCheck)) return false;
+	return type;
 }
 
 async function getContent(journals, actor, remove = false) {
@@ -321,16 +345,16 @@ async function getContent(journals, actor, remove = false) {
 
 	for (const journal of journals) {
 		const del = (removeJournal == currentJournal) ? true : false,
-			lines = journal.data.content.split('\n'),
-			checkFirstLine = isGoodJournalType(journal);
+			lines = returnArrayOfHtmlContent(journal.data.content),
+			checkFirstLine = isGoodJournalType(lines[0].toLowerCase());
 
 		if (!checkFirstLine) continue;
-		const s = (checkFirstLine === 'additional') ? 'additionalSentence' : UTILITIES.sanitizeString(checkFirstLine);
+		const s = (checkFirstLine === `${quantifier}additional`) ? 'additionalSentence' : UTILITIES.sanitizeString(checkFirstLine);
 
-		creationActor.changeSentence(s, (!del) ? journal.name : '');
+		creationActor.changeSentence(s, (!del) ? `${journal.name} {${journal.id}}` : '');
 
 		for (const line of lines) {
-			const l = UTILITIES.removeTags(line);
+			const l = line;
 
 			if (l === checkFirstLine) continue;
 			if (!l.startsWith(quantifier)) continue;
@@ -345,16 +369,34 @@ async function getContent(journals, actor, remove = false) {
 			// Stats
 			if (UTILITIES.doesArrayContains(type, typeStatCheck)) {
 				const stat = type.substring(1),
-					value = l.match(/\d+/g);
+					value = l.match(/\d+/g),
+					operation = l.match(/[+\-](\.\d+|\d+(\.\d+)?)/g);
 
-				if (stat === 'effort') creationActor.setEffort(value[0])
-				else {
-					const statValue = (!del) ? new creationStat(parseInt(value[0]), parseInt(value[1])) : new creationStat();
-					creationActor.changeStat(stat, statValue);
+				if (stat === 'effort' && !operation) creationActor.changeStat(stat, (!del) ? parseInt(value[0]) : 0);
+				else if (operation) {
+					let op = operation[0];
+
+					if (stat === 'effort') {
+						if (del) op = (op.includes('+')) ? op.replace('+', '-') : op.replace('-', '+');
+						creationActor.addStatModificator(stat, 'effort', op)
+					} else {
+						if (del) op = (op.includes('+')) ? op.replace('+', '-') : op.replace('-', '+');
+						creationActor.addStatModificator(stat, 'pool', op);
+	
+						op = operation[1];
+						if(!op) continue
+						if (del) op = (op.includes('+')) ? op.replace('+', '-') : op.replace('-', '+');
+						creationActor.addStatModificator(stat, 'edge', op);
+					};
+				} else if (Number.isInteger(parseInt(value[0]))) {
+					const statValue = (!del)
+						? new creationStat(parseInt(value[0]), parseInt(value[1]), creationActor.stats[stat].poolModificator, creationActor.stats[stat].edgeModificator)
+						: new creationStat(10, 0, creationActor.stats[stat].poolModificator, creationActor.stats[stat].edgeModificator);
+					creationActor.changeStat((stat === 'additionalPool') ? 'additionalPool' : stat, statValue);
 				};
 			}
-			// Skills, Abilities and Equipment
-			else if (UTILITIES.doesArrayContains(type, typeItemsCheck)) {
+			// Abilities / Skills / Equipments
+			else if (type === `${quantifier}item` || UTILITIES.doesArrayContains(type, typeItemsCheck)) {
 				const id = object.match(/\[(.*?)\]/)[1],
 					compendium = id.split('.');
 
@@ -406,8 +448,6 @@ async function getContent(journals, actor, remove = false) {
 						} else {
 							const oldJournalSkill = allSkills.filter(s => s.skill === duplicatedItem.name);
 
-							console.log(allSkills)
-
 							if (oldJournalSkill.length > 1) {
 								let newLevel = 0;
 								for (const s of oldJournalSkill) if (s.journal != journal.name) newLevel += s.level;
@@ -447,7 +487,6 @@ async function getContent(journals, actor, remove = false) {
 
 					if (del) {
 						const oldJournalItem = allItems.filter(i => i.item === duplicatedItem.name);
-						console.log(duplicatedItem.name)
 
 						if (oldJournalItem.length >= 1) {
 							const oldItem = creationActor.items.find(i => i.name === duplicatedItem.name)
@@ -483,10 +522,17 @@ async function getContent(journals, actor, remove = false) {
  */
 async function updateActorDataV3(actor, data) {
 	let itemsToCreate = [],
-		itemsToDelete = [],
-		updatedData = { [`data.basic.effort`]: data.effort };
+		itemsToDelete = [];
 
 	// Effort
+	const checkEffortModificator = eval(data.effortModificator);
+	if (checkEffortModificator > 0) {
+		const newEffortValue = eval(`${data.effort}+${checkEffortModificator}`);
+		console.log(newEffortValue)
+		data.changeStat('effort', newEffortValue);
+	};
+
+	let updatedData = { [`data.basic.effort`]: data.effort };
 	await actor.update(updatedData);
 
 	// Sentence
@@ -497,6 +543,18 @@ async function updateActorDataV3(actor, data) {
 
 	// Stats
 	for (const s in data.stats) {
+		const checkPoolModificator = eval(data.stats[s].poolModificator),
+		checkEdgeModificator = eval(data.stats[s].edgeModificator);
+
+		if (checkPoolModificator > 0 || checkEdgeModificator > 0) {
+			const newPoolValue = eval(`${data.stats[s].value}+${checkPoolModificator}`),
+			newEdgeValue = eval(`${data.stats[s].edge}+${checkEdgeModificator}`),
+				statValue = new creationStat(parseInt(newPoolValue), parseInt(newEdgeValue));
+
+			data.changeStat(s, statValue);
+		};
+		
+
 		updatedData = [
 			{ [`data.pools.${s}.value`]: data.stats[s].value },
 			{ [`data.pools.${s}.max`]: data.stats[s].value },
@@ -541,6 +599,17 @@ async function updateActorDataV3(actor, data) {
 	if (itemsToCreate.length > 0) await actor.createEmbeddedDocuments('Item', itemsToCreate);
 };
 
+function returnArrayOfHtmlContent(str) {
+	return UTILITIES.removeTags(str).split('\n').filter(n => n);
+};
+
 function getObject(start, str) {
 	return str.substring(start).replace(/ .*/, '');
-}
+};
+
+function getJournalIdInName(str) {
+	return str.substring(
+		str.indexOf("{") + 1,
+		str.lastIndexOf("}")
+	);
+};
