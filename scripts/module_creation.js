@@ -59,7 +59,7 @@ const typeItemsCheck = [
 	`${quantifier}item`
 ];
 
-const skillLevels = [
+let skillLevels = [
 	'Specialized',
 	'Trained',
 	'Practiced',
@@ -265,6 +265,8 @@ class creationData {
 ------------------------------------------ Function(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/
 export async function checkJournalType(actor, html, journal) {
+	pushLocalisationSkillLevel();
+
 	const buttons = Array.from($('.linkedButton')).map(b => b.id);
 	let journals = game.journal.filter(j => buttons.includes(j.id));
 	journal = await game.journal.get(journal.id);
@@ -288,6 +290,8 @@ export async function checkJournalType(actor, html, journal) {
 };
 
 export async function checkIfLinkedData(html, actor) {
+	pushLocalisationSkillLevel();
+
 	const nameCheck = [
 		actor.data.data.basic.descriptor,
 		actor.data.data.basic.focus,
@@ -438,10 +442,14 @@ async function getContent(journals, actor, remove = false) {
 				}
 				// Check skills
 				else if (duplicatedItem.type === 'skill') {
-					const o = (option) ? UTILITIES.capitalizeFirstLetter(option.toLowerCase()) : skillLevels[2],
-						skillLevel = UTILITIES.doesArrayContains(o, skillLevels)
-							? skillLevels.indexOf(o)
-							: 2;
+					const o = (option) ? UTILITIES.capitalizeFirstLetter(option.toLowerCase()) : skillLevels[2];
+					let skillLevel = 2;
+
+					if (UTILITIES.doesArrayContains(o, skillLevels)) {
+						skillLevel = skillLevels.indexOf(o) > 3
+							? skillLevels.indexOf(o) - 4
+							: skillLevels.indexOf(o);
+					};
 
 					let existingSkill = creationActor.skillExists(duplicatedItem._id);
 
@@ -602,6 +610,15 @@ async function updateActorData(actor, data) {
 
 	if (itemsToDelete.length > 0) await actor.deleteEmbeddedDocuments('Item', itemsToDelete);
 	if (itemsToCreate.length > 0) await actor.createEmbeddedDocuments('Item', itemsToCreate);
+};
+
+function pushLocalisationSkillLevel() {
+	if (UTILITIES.doesArrayContains(game.i18n.localize('CYPHERSYSTEM.Specialized'), skillLevels)) return;
+
+	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Specialized'));
+	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Trained'));
+	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Practiced'));
+	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Inability'));
 };
 
 function returnArrayOfHtmlContent(str) {
