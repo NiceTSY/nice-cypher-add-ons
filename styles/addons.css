@@ -1,26 +1,26 @@
 /* Taken from gonzaPaEst Cypher Custom Sheet https://github.com/gonzaPaEst/cyphersheets/blob/4ab788c055ac58a8dcc8bff45622698dd90e2dc6/styles/config-dialog.css */
 /* This in order to keep the same visual across system's modules */
-.cypher-sheets-form p.notes > .fas {
+.cypher-add-ons-form p.notes > .fas {
 	transform: scaleY(-1);
 	margin-left: 12px;
 	padding-top: 1px;
 	color: #63625a;
 }
   
-.cypher-sheets-form input:hover,
-.cypher-sheets-form label:hover,
+.cypher-add-ons-form input:hover,
+.cypher-add-ons-form label:hover,
 button[data-key="cyphersheets.cyphersheetsconfig"] i:hover,
 button[data-key="cyphersheets.cyphersheetsconfig"] label:hover {
 	cursor: pointer;
 }
   
-.cypher-sheets-form button,
+.cypher-add-ons-form button,
 button[data-key="cyphersheets.cyphersheetsconfig"] {
 	transition: color 0.8s, background 1s, border 1s;
 	margin: 0 2px;
 }
 
-.cypher-sheets-form button:hover,
+.cypher-add-ons-form button:hover,
 button[data-key="cyphersheets.cyphersheetsconfig"]:hover {
 	box-shadow: none;
 	color: #d4d3cb;
@@ -29,13 +29,13 @@ button[data-key="cyphersheets.cyphersheetsconfig"]:hover {
 	cursor: pointer;
 }
 
-.cypher-sheets-form section {
+.cypher-add-ons-form section {
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	max-height: fit-content;
 }
 
-.cypher-sheets-form .sheet-checkboxes {
+.cypher-add-ons-form .sheet-checkboxes {
 	grid-column: 1 / 4;
 }
 
@@ -49,9 +49,12 @@ button[data-key="cyphersheets.cyphersheetsconfig"]:hover {
 	height: auto;
 }
 
-/* Own Css */
+/* gonzaPaEst two cents of styling */
 .linkedButton {
-	height: 26px;
-	margin: 0;
-	border: 0.5px solid lightgrey;
+    height: 26px;
+    padding: 1px 3px;
+    margin: 0;
+    border: 1px solid #7a7971;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.05);
 }
