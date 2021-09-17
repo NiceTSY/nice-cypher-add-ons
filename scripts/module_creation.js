@@ -41,7 +41,7 @@ const typeSentenceCheck = [
 	`${quantifier}focus`,
 	`${quantifier}type`,
 	`${quantifier}additional`,
-	`${quantifier}additionalSentence`
+	`${quantifier}additionalsentence`
 ];
 
 const typeStatCheck = [
@@ -49,6 +49,7 @@ const typeStatCheck = [
 	`${quantifier}speed`,
 	`${quantifier}intellect`,
 	`${quantifier}additional`,
+	`${quantifier}additionalpool`,
 	`${quantifier}effort`
 ];
 
@@ -149,7 +150,6 @@ class creationData {
 
 	changeStat(stat, value) {
 		if (stat === 'effort') {
-			console.log(Number.isInteger(value))
 			if (!Number.isInteger(value)) return;
 			this.effort = value;
 		} else {
@@ -309,7 +309,10 @@ export async function checkIfLinkedData(html, actor) {
 };
 
 function updateActorSheet(html, toUpdate, data) {
-	toUpdate = (toUpdate === `${quantifier}additional`) ? 'additionalSentence' : UTILITIES.sanitizeString(toUpdate);
+	toUpdate = (toUpdate === `${quantifier}additional` || toUpdate === `${quantifier}additionalsentence`)
+		? 'additionalSentence'
+		: UTILITIES.sanitizeString(toUpdate);
+
 	const newNode = (`
 		<button id="${data.id}" name="data.basic.${toUpdate}" class="linkedButton"><i class="fas fa-book-open"></i> ${data.name}</button>
 	`),
@@ -349,7 +352,9 @@ async function getContent(journals, actor, remove = false) {
 			checkFirstLine = isGoodJournalType(lines[0].toLowerCase());
 
 		if (!checkFirstLine) continue;
-		const s = (checkFirstLine === `${quantifier}additional`) ? 'additionalSentence' : UTILITIES.sanitizeString(checkFirstLine);
+		const s = (checkFirstLine === `${quantifier}additional` || checkFirstLine === `${quantifier}additionalsentence`)
+			? 'additionalSentence'
+			: UTILITIES.sanitizeString(checkFirstLine);
 
 		creationActor.changeSentence(s, (!del) ? `${journal.name} {${journal.id}}` : '');
 
@@ -382,17 +387,19 @@ async function getContent(journals, actor, remove = false) {
 					} else {
 						if (del) op = (op.includes('+')) ? op.replace('+', '-') : op.replace('-', '+');
 						creationActor.addStatModificator(stat, 'pool', op);
-	
+
 						op = operation[1];
-						if(!op) continue
+						if (!op) continue
 						if (del) op = (op.includes('+')) ? op.replace('+', '-') : op.replace('-', '+');
 						creationActor.addStatModificator(stat, 'edge', op);
 					};
 				} else if (Number.isInteger(parseInt(value[0]))) {
-					const statValue = (!del)
-						? new creationStat(parseInt(value[0]), parseInt(value[1]), creationActor.stats[stat].poolModificator, creationActor.stats[stat].edgeModificator)
-						: new creationStat(10, 0, creationActor.stats[stat].poolModificator, creationActor.stats[stat].edgeModificator);
-					creationActor.changeStat((stat === 'additionalPool') ? 'additionalPool' : stat, statValue);
+					const s = (stat === 'additionalpool') ? 'additional' : stat,
+						statValue = (!del)
+							? new creationStat(parseInt(value[0]), parseInt(value[1]), creationActor.stats[s].poolModificator, creationActor.stats[s].edgeModificator)
+							: new creationStat(10, 0, creationActor.stats[s].poolModificator, creationActor.stats[s].edgeModificator);
+
+					creationActor.changeStat(s, statValue);
 				};
 			}
 			// Abilities / Skills / Equipments
@@ -477,7 +484,6 @@ async function getContent(journals, actor, remove = false) {
 						allAbilities.push({ id: allAbilities.length, journal: journal.name, ability: duplicatedItem.name, tier: tierLevel });
 					} else if (del) {
 						const oldJournalAbility = allAbilities.filter(s => s.ability === duplicatedItem.name);
-
 						if (oldJournalAbility.length == 1) delete creationActor.abilities[oldJournalAbility[0].id];
 					};
 				}
@@ -513,14 +519,15 @@ async function getContent(journals, actor, remove = false) {
 		console.log(creationActor);
 	};
 
-	updateActorDataV3(actor, creationActor)
+	updateActorData(actor, creationActor)
 };
+
 /**
  * @description
  * @param {*} actor
  * @param { creationData } data
  */
-async function updateActorDataV3(actor, data) {
+async function updateActorData(actor, data) {
 	let itemsToCreate = [],
 		itemsToDelete = [];
 
@@ -528,7 +535,6 @@ async function updateActorDataV3(actor, data) {
 	const checkEffortModificator = eval(data.effortModificator);
 	if (checkEffortModificator > 0) {
 		const newEffortValue = eval(`${data.effort}+${checkEffortModificator}`);
-		console.log(newEffortValue)
 		data.changeStat('effort', newEffortValue);
 	};
 
@@ -544,16 +550,15 @@ async function updateActorDataV3(actor, data) {
 	// Stats
 	for (const s in data.stats) {
 		const checkPoolModificator = eval(data.stats[s].poolModificator),
-		checkEdgeModificator = eval(data.stats[s].edgeModificator);
+			checkEdgeModificator = eval(data.stats[s].edgeModificator);
 
 		if (checkPoolModificator > 0 || checkEdgeModificator > 0) {
 			const newPoolValue = eval(`${data.stats[s].value}+${checkPoolModificator}`),
-			newEdgeValue = eval(`${data.stats[s].edge}+${checkEdgeModificator}`),
+				newEdgeValue = eval(`${data.stats[s].edge}+${checkEdgeModificator}`),
 				statValue = new creationStat(parseInt(newPoolValue), parseInt(newEdgeValue));
 
 			data.changeStat(s, statValue);
 		};
-		
 
 		updatedData = [
 			{ [`data.pools.${s}.value`]: data.stats[s].value },
