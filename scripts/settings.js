@@ -124,10 +124,22 @@ class cypherAddOnsConfigDialog extends FormApplication {
 
 	// resets values for custom sheet settings
 	activateListeners(html) {
-		super.activateListeners(html);
-		html.find('button[name="reset"]').click(this.onReset.bind(this));
-		this.reset = false;
-	};
+        super.activateListeners(html);
+        html.find('button[name="reset"]').click(this.onReset.bind(this));
+        this.reset = false;
+        
+        html.find('#mcg-accordion-card').click(function() {
+            let mcgStatement = $('#mcg-accordion-card .card-body');
+            $('#mcg-accordion-card .card-title .fas').toggleClass("arrow-down");
+
+            if(mcgStatement.css('display') == 'block') {
+                mcgStatement.slideUp();
+            } else {
+                $('.card-body').slideUp();
+                mcgStatement.slideDown();
+            }
+        });
+    };
 
 	onReset() {
 		this.reset = true;

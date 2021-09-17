@@ -1,9 +1,16 @@
-<!-- Taken from gonzaPaEst Cypher Custom Sheet https://github.com/gonzaPaEst/cyphersheets/blob/main/templates/config-dialog.html -->
+<!-- Taken from gonzaPaEst Cypher Custom Sheet https://github.com/gonzaPaEst/cypheraddons/blob/main/templates/config-dialog.html -->
 <!-- This in order to keep the same visual across system's modules -->
+<!-- Please read full disclaimer in setting.js -->
 <form autocomplete="off" class="cypher-add-ons-form">
-    <h2>Nice(TSY) Cypher System Add-ons</h2>
-    <section>
-
+    <section id="mcg-accordion-card">
+        <p class="card-title"><i class="fas fa-caret-right"></i> MCG Fan Use Policy - Abbreviated Statement</p>
+        <div class="card-body">
+            <p>Numenera, the Cypher System, No Thank You, Evil!, Invisible Sun, and their respective logos are trademarks of Monte Cook Games, LLC in the U.S.A. and other countries. All Monte Cook Games characters and character names, and the distinctive likenesses thereof, are trademarks of Monte Cook Games, LLC. Content derived from Monte Cook Games publications is © 2013-2021 Monte Cook Games, LLC.</p>
+            <a href="https://www.montecookgames.com/fan-support/fan-use-policy/" target="_blank" rel="noreferrer noopener">MCG Full Disclaimer</a>
+        </div>
+    </section>
+    <h2>Nice(TSY) Add-ons</h2>
+    <section class="sheet-settings">
         <div class="sheet-checkboxes">
             <div class="form-group">
                 <input type="checkbox" name="useGmIntrusion" id="useGmIntrusion" data-dtype="Boolean" {{checked useGmIntrusion}}/>

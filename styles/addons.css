@@ -1,45 +1,48 @@
-/* Taken from gonzaPaEst Cypher Custom Sheet https://github.com/gonzaPaEst/cyphersheets/blob/4ab788c055ac58a8dcc8bff45622698dd90e2dc6/styles/config-dialog.css */
+/* Taken from gonzaPaEst Cypher Custom Sheet https://github.com/gonzaPaEst/cypheraddons/blob/4ab788c055ac58a8dcc8bff45622698dd90e2dc6/styles/config-dialog.css */
 /* This in order to keep the same visual across system's modules */
+/* Please read full disclaimer in setting.js */ 
 .cypher-add-ons-form p.notes > .fas {
 	transform: scaleY(-1);
 	margin-left: 12px;
 	padding-top: 1px;
 	color: #63625a;
-}
+  }
   
-.cypher-add-ons-form input:hover,
-.cypher-add-ons-form label:hover,
-button[data-key="cyphersheets.cyphersheetsconfig"] i:hover,
-button[data-key="cyphersheets.cyphersheetsconfig"] label:hover {
+  .cypher-add-ons-form input:hover,
+  .cypher-add-ons-form label:hover,
+  button[data-key="cypheraddons.cypheraddonsconfig"] i:hover,
+  button[data-key="cypheraddons.cypheraddonsconfig"] label:hover,
+  .cypher-add-ons-form .card-title:hover {
 	cursor: pointer;
-}
+  }
   
-.cypher-add-ons-form button,
-button[data-key="cyphersheets.cyphersheetsconfig"] {
+  .cypher-add-ons-form button,
+  button[data-key="cypheraddons.cypheraddonsconfig"] {
 	transition: color 0.8s, background 1s, border 1s;
 	margin: 0 2px;
-}
-
-.cypher-add-ons-form button:hover,
-button[data-key="cyphersheets.cyphersheetsconfig"]:hover {
+  }
+  
+  .cypher-add-ons-form button:hover,
+  button[data-key="cypheraddons.cypheraddonsconfig"]:hover {
 	box-shadow: none;
 	color: #d4d3cb;
 	background: #343534;
 	border: 2px groove #2c2a2a;
 	cursor: pointer;
-}
-
-.cypher-add-ons-form section {
+  }
+  
+  .cypher-add-ons-form section.sheet-settings {
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	max-height: fit-content;
-}
-
-.cypher-add-ons-form .sheet-checkboxes {
+  }
+  
+  .cypher-add-ons-form .sheet-checkboxes {
 	grid-column: 1 / 4;
-}
-
-#form-img {
+	position: relative;
+  }
+  
+  .cypher-add-ons-form #form-img {
 	grid-column: 4 / 6;
 	margin: 0;
 	box-shadow: none;
@@ -47,7 +50,49 @@ button[data-key="cyphersheets.cyphersheetsconfig"]:hover {
 	border-radius: none;
 	width: 100%;
 	height: auto;
-}
+	align-self: center;
+  }
+  
+  .cypher-add-ons-form #mcg-accordion-card {
+	margin-left: 285px;
+	position: absolute;
+  }
+  
+  .cypher-add-ons-form #mcg-accordion-card .card-title {
+	font-size: 1.05em;
+  }
+  
+  .cypher-add-ons-form label:hover,
+  .cypher-add-ons-form #mcg-accordion-card .card-title:hover {
+	text-shadow: 0 0 8px red;
+  }
+  
+  .cypher-add-ons-form #mcg-accordion-card i {
+	transition: transform 0.5s, margin-right 0.3s;
+	margin-right: -2px;
+  }
+  
+  .cypher-add-ons-form #mcg-accordion-card .arrow-down {
+	transform: rotate(90deg);
+	margin-right: 0;
+  }
+  
+  .cypher-add-ons-form #mcg-accordion-card .card-body {
+	display: none;
+	margin: -6.3px 0 5px;
+	background: #e3dfd7c7;
+	padding: 2px 5px;
+	font-size: 0.8em;
+	border: 1px solid #cbb8ae;
+	border-radius: 3px;
+  }
+  
+  .cypher-add-ons-form #mcg-accordion-card .card-body a {
+	display: block;
+	text-align: right;
+	color: black;
+	margin: -15px 2px 2px;
+  }
 
 /* gonzaPaEst two cents of styling */
 .linkedButton {
