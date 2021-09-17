@@ -407,7 +407,7 @@ async function getContent(journals, actor, remove = false) {
 				};
 			}
 			// Abilities / Skills / Equipments
-			else if (type === `${quantifier}item` || UTILITIES.doesArrayContains(type, typeItemsCheck)) {
+			else if (UTILITIES.doesArrayContains(type, typeItemsCheck)) {
 				const id = object.match(/\[(.*?)\]/)[1],
 					compendium = id.split('.');
 
@@ -416,9 +416,9 @@ async function getContent(journals, actor, remove = false) {
 					const pack = game.packs.find(p => p.metadata.name === compendium[1]),
 						index = pack.index.get(compendium[2]),
 						i = await pack.getDocument(index._id);
-					item = game.items.fromCompendium(i);
+					item = await game.items.fromCompendium(i);
 
-				} else item = game.items.get(id).data;
+				} else item = await game.items.get(id).data;
 
 				const duplicatedItem = duplicate(item),
 					option = (other) ? l.substring(other + getObject(other, l).length + 1).replace(/ .*/, '') : false;
@@ -427,7 +427,7 @@ async function getContent(journals, actor, remove = false) {
 				if ('quantity' in duplicatedItem.data) {
 					const quantity = (option) ? parseInt(option) : 1;
 
-					let existingItem = creationActor.itemExists(duplicatedItem._id);
+					let existingItem = creationActor.itemExists(duplicatedItem.name);
 					if (existingItem) {
 						const newQuantity = (!del)
 							? parseInt(existingItem.quantity) + parseInt(quantity)
@@ -451,7 +451,7 @@ async function getContent(journals, actor, remove = false) {
 							: skillLevels.indexOf(o);
 					};
 
-					let existingSkill = creationActor.skillExists(duplicatedItem._id);
+					let existingSkill = creationActor.skillExists(duplicatedItem.name);
 
 					if (existingSkill) {
 						if (!del) {
@@ -484,8 +484,8 @@ async function getContent(journals, actor, remove = false) {
 					const tierLevel = parseInt((option) ? option : 0),
 						actorTier = actor.data.data.basic.tier;
 
-					let existingAbility = creationActor.abilityExists(duplicatedItem._id);
-					if (!existingAbility) {
+					let existingAbility = creationActor.abilityExists(duplicatedItem.name);
+					if (!existingAbility && !del) {
 						const newAbility = new creationAbility(duplicatedItem._id, duplicatedItem.name, tierLevel, duplicatedItem);
 
 						creationActor.abilities.push(newAbility);
@@ -497,7 +497,7 @@ async function getContent(journals, actor, remove = false) {
 				}
 				// Other
 				else {
-					let existingItem = creationActor.itemExists(duplicatedItem._id);
+					let existingItem = creationActor.itemExists(duplicatedItem.name);
 
 					if (del) {
 						const oldJournalItem = allItems.filter(i => i.item === duplicatedItem.name);
