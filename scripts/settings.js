@@ -28,6 +28,16 @@
 	Nice to see you (NiceTSY)
 */
 
+/*============================================ DISCLAIMER ============================================
+
+	A big part of this script was made by gonzaPaEst (https://github.com/gonzaPaEst/) and I used it
+	as a template. I rewritten part of it and some of the HTML, But the felling	and the original
+	belong to him. If you use it please include him in your credential as well:
+	
+							MIT License - Copyright (c) 2021 gonzaPaEst
+
+====================================================================================================*/
+
 'use strict';
 
 /*------------------------------------------------------------------------------------------------
@@ -70,7 +80,7 @@ export class CYPHERADDONS {
 
 		CYPHERADDONS.MODULE.WORLD = game.world.name;
 		for (let s in CYPHERADDONS.SETTINGS) CYPHERADDONS.SETTINGS[s] = game.settings.get(CYPHERADDONS.MODULE.NAME, s);
-	}
+	};
 };
 
 /**
@@ -80,18 +90,16 @@ export class CYPHERADDONS {
  */
 class cypherAddOnsConfigDialog extends FormApplication {
 	static get defaultOptions() {
-		const defaults = super.defaultOptions;
-
-		// Using same overrides, to be consistent with the rest of the system, as gonzaPaEst in his Custom Cypher Sheets (https://github.com/gonzaPaEst/cyphersheets)
-		const overrides = {
-			width: 600,
-			height: "auto",
-			id: "cypher-add-ons-config",
-			template: `${CYPHERADDONS.MODULE.PATH}/templates/add_ons_config.html`,
-			title: CYPHERADDONS.MODULE.TITLE,
-			userId: game.userId,
-			closeOnSubmit: true
-		};
+		const defaults = super.defaultOptions,
+			overrides = {
+				width: 600,
+				height: "auto",
+				id: "cypher-add-ons-config",
+				template: `${CYPHERADDONS.MODULE.PATH}/templates/add_ons_config.html`,
+				title: CYPHERADDONS.MODULE.TITLE,
+				userId: game.userId,
+				closeOnSubmit: true
+			};
 
 		return foundry.utils.mergeObject(defaults, overrides);
 	};
