@@ -63,7 +63,7 @@ export class CYPHERADDONS {
 		AUTOOBFUSCATE: true,
 		AUTOROLL: true,
 		TRADEBUTTON: true,
-		CREATIONTOOLS: true
+		CREATIONTOOL: true
 		// lightweaponeased: true,	// TODO: Potentially in a new version
 		// changechatcard: true		// TODO: Potentially in a new version
 	};
@@ -111,14 +111,14 @@ class cypherAddOnsConfigDialog extends FormApplication {
 				useAutoObfuscate: true,
 				useAutoRoll: true,
 				useTradeButton: true,
-				useCREATIONTOOLS: true
+				useCreationTool: true
 			} :
 			{
 				useGmIntrusion: SettingsForm.getUseGmIntrusion(),
 				useAutoObfuscate: SettingsForm.getUseAutoObfuscate(),
 				useAutoRoll: SettingsForm.getUseAutoRoll(),
 				useTradeButton: SettingsForm.getUseTradeButton(),
-				useCREATIONTOOLS: SettingsForm.getUseCREATIONTOOLS()
+				useCreationTool: SettingsForm.getuseCreationTool()
 			};
 	};
 
@@ -152,7 +152,7 @@ class cypherAddOnsConfigDialog extends FormApplication {
 		SettingsForm.setUseAutoObfuscate(formData.useAutoObfuscate);
 		SettingsForm.setUseAutoRoll(formData.useAutoRoll);
 		SettingsForm.setUseTradeButton(formData.useTradeButton);
-		SettingsForm.setUseCREATIONTOOLS(formData.useCREATIONTOOLS);
+		SettingsForm.setuseCreationTool(formData.useCreationTool);
 	};
 };
 
@@ -185,10 +185,10 @@ class SettingsForm {
 		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[3], value);
 	}
 
-	static getUseCREATIONTOOLS() {
+	static getuseCreationTool() {
 		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[4]);
 	};
-	static setUseCREATIONTOOLS(value) {
+	static setuseCreationTool(value) {
 		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[4], value);
 	}
 };
