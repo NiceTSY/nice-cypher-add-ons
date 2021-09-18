@@ -452,7 +452,10 @@ function updateActorSheet(html, toUpdate, data) {
 		: UTILITIES.sanitizeString(toUpdate);
 
 	const newNode = (`
-		<button id="${data.id}" name="data.basic.${toUpdate}" class="linkedButton"><i class="fas fa-book-open"></i> ${data.name}</button>
+		<button id="${data.id}" name="data.basic.${toUpdate}" 
+		title="${game.i18n.format('NICECYPHER.CreationButtonHint', {type: UTILITIES.capitalizeFirstLetter(toUpdate)})}" class="linkedButton">
+			<i class="fas fa-book-open"></i> ${data.name}
+		</button>
 	`),
 		oldNode = $(`input[name="data.basic.${toUpdate}"`);
 

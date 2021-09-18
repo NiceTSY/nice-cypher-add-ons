@@ -24,5 +24,6 @@
 	"NICECYPHER.TradeRequestContent": "{actorName} is sending you: {tradeOffer}. Do you accept?",
 	"NICECYPHER.CannotTradeLessThanOneObject": "You cannot trade negative quantity.",
 
-	"NICECYPHER.CreationAlreadySentence": "The character already possess a {type}"
+	"NICECYPHER.CreationAlreadySentence": "The character already possess the following type: {type}",
+	"NICECYPHER.CreationButtonHint" : "Current {type} (alt-click to delete it)"
 }
