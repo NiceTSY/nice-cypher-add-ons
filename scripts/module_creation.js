@@ -54,9 +54,16 @@ const typeStatCheck = [
 ];
 
 const typeItemsCheck = [
+	`${quantifier}item`,
 	`${quantifier}skill`,
 	`${quantifier}ability`,
-	`${quantifier}item`
+	`${quantifier}cypher`,
+	`${quantifier}artifact`,
+	`${quantifier}oddity`,
+	`${quantifier}weapon`,
+	`${quantifier}armor`,
+	`${quantifier}equipment`,
+	`${quantifier}material`
 ];
 
 let skillLevels = [
