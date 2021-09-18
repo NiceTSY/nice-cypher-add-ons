@@ -118,7 +118,7 @@ class cypherAddOnsConfigDialog extends FormApplication {
 				useAutoObfuscate: SettingsForm.getUseAutoObfuscate(),
 				useAutoRoll: SettingsForm.getUseAutoRoll(),
 				useTradeButton: SettingsForm.getUseTradeButton(),
-				useCreationTool: SettingsForm.getuseCreationTool()
+				useCreationTool: SettingsForm.getUseCreationTool()
 			};
 	};
 
@@ -152,7 +152,7 @@ class cypherAddOnsConfigDialog extends FormApplication {
 		SettingsForm.setUseAutoObfuscate(formData.useAutoObfuscate);
 		SettingsForm.setUseAutoRoll(formData.useAutoRoll);
 		SettingsForm.setUseTradeButton(formData.useTradeButton);
-		SettingsForm.setuseCreationTool(formData.useCreationTool);
+		SettingsForm.setUseCreationTool(formData.useCreationTool);
 	};
 };
 
@@ -185,10 +185,10 @@ class SettingsForm {
 		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[3], value);
 	}
 
-	static getuseCreationTool() {
+	static getUseCreationTool() {
 		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[4]);
 	};
-	static setuseCreationTool(value) {
+	static setUseCreationTool(value) {
 		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[4], value);
 	}
 };

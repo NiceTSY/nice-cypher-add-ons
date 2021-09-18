@@ -6,13 +6,13 @@
 	"NICECYPHER.SettingsReset": "Reset",
 
 	"NICECYPHER.SettingsGMINTRUSIONTitle": "HUD : Intrusion du MJ",
-	"NICECYPHER.SettingsGMINTRUSIONHint": "Cela ajoutera une option sur l'HUD des tokens pour envoyer une intrusion à un des joueurs.",	
+	"NICECYPHER.SettingsGMINTRUSIONHint": "Permet d'envoyer une intrusion à un des joueurs via l'HUD du token.",	
 	"NICECYPHER.SettingsAUTOOBFUSCATETitle": "Objet auto obfusqué",
-	"NICECYPHER.SettingsAUTOOBFUSCATEHint": "Cela marquera comme non-identifié les cyphers et artefact lorsqu'ils sont glissé sur la feuille d'un personnage.",
+	"NICECYPHER.SettingsAUTOOBFUSCATEHint": "Marque comme non-identifié les cyphers et artefact lorsqu'ils sont glissés sur la feuille d'un personnage.",
 	"NICECYPHER.SettingsAUTOROLLTitle": "Calculer le niveau des objets",
-	"NICECYPHER.SettingsAUTOROLLHint": "Cela calculera automatiquement le niveau des cyphers et des artefacts lorsqu'ils sont glissé sur la feuille d'un personnage.",
+	"NICECYPHER.SettingsAUTOROLLHint": "Calcul automatiquement le niveau des cyphers et des artefacts lorsqu'ils sont glissés sur la feuille d'un personnage.",
 	"NICECYPHER.SettingsSHOWTRADETitle": "Button d'échange d'objets",
-	"NICECYPHER.SettingsSHOWTRADEHint": "Cela ajoutera une option sur l'HUD des tokens pour permettre au joueur d'échanger ses objets avec les autres joueurs.",
+	"NICECYPHER.SettingsSHOWTRADEHint": "Ajoute une icone sur l'onglet équipement pour permettre au joueur d'échanger ses objets avec les autres joueurs.",
 	"NICECYPHER.SettingsCREATIONTOOLSTitle": "Utiliser la creation avancée",
 	"NICECYPHER.SettingsCREATIONTOOLSHint": "Permets aux joueurs de faire glisser une note de journal pour le Focus/Descriptor/Type/Additionnel sur la fiche d'un personnage.",
 	

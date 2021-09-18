@@ -69,6 +69,10 @@ let skillLevels = [
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Class(es) --------------------------------------------
 ------------------------------------------------------------------------------------------------*/
+/**
+ * @description Class for the creation sentence
+ * @class creationSentence
+ */
 class creationSentence {
 	constructor(descriptor = '', focus = '', type = '', additionalSentence = '') {
 		this.descriptor = descriptor;
@@ -78,6 +82,10 @@ class creationSentence {
 	};
 };
 
+/**
+ * @description Class for the statistics creation
+ * @class creationStat
+ */
 class creationStat {
 	constructor(value = 10, edge = 0, poolModificator = 0, edgeModificator = 0) {
 		this.value = (Number.isInteger(value)) ? value : 10;
@@ -87,6 +95,10 @@ class creationStat {
 	};
 };
 
+/**
+ * @description Class holding the stats
+ * @class creationStats
+ */
 class creationStats {
 	constructor(might = new creationStat(), speed = new creationStat(), intellect = new creationStat(), additional = new creationStat()) {
 		this.might = might;
@@ -96,6 +108,10 @@ class creationStats {
 	};
 };
 
+/**
+ * @description Class holding information about skills
+ * @class creationSkill
+ */
 class creationSkill {
 	constructor(id = '', name = '', level = 2, skill = {}) {
 		this.id = id;
@@ -105,6 +121,10 @@ class creationSkill {
 	};
 };
 
+/**
+ * @description Class holding information about abilities
+ * @class creationAbility
+ */
 class creationAbility {
 	constructor(id = '', name = '', tier = 0, ability = {}) {
 		this.id = id;
@@ -114,6 +134,10 @@ class creationAbility {
 	};
 };
 
+/**
+ * @description Class holding information about items
+ * @class creationItem
+ */
 class creationItem {
 	constructor(id = '', name = '', quantity = 1, item = {}) {
 		this.id = id;
@@ -123,6 +147,10 @@ class creationItem {
 	};
 };
 
+/**
+ * @description Class to hold the data needed for the creation of the character
+ * @class creationData
+ */
 class creationData {
 	constructor() {
 		this.sentence = new creationSentence();
@@ -138,16 +166,36 @@ class creationData {
 		this.items = [];
 	};
 
+	/**
+	 * @description Change the specified type of the sentence
+	 * @param { String } type
+	 * @param { String } sentence
+	 * @return {*} 
+	 * @memberof creationData
+	 */
 	changeSentence(type, sentence) {
 		if (!type in this.sentence) return;
 		this.sentence[type] = sentence;
 	};
 
+	/**
+	 * @description Set the tier of the creation data
+	 * @param { Number } tier
+	 * @return {*} 
+	 * @memberof creationData
+	 */
 	setTier(tier) {
 		if (!Number.isInteger(tier)) return;
 		this.tier = tier;
 	};
 
+	/**
+	 * @description Change a stat value
+	 * @param { String } stat
+	 * @param { Number / creationStat } value
+	 * @return {*} 
+	 * @memberof creationData
+	 */
 	changeStat(stat, value) {
 		if (stat === 'effort') {
 			if (!Number.isInteger(value)) return;
@@ -159,6 +207,14 @@ class creationData {
 		};
 	};
 
+	/**
+	 * @description Add a modificator (either for pool or edge) to a stat
+	 * @param { String } stat
+	 * @param { String } type - pool or edge
+	 * @param { String } modificator
+	 * @return {*} 
+	 * @memberof creationData
+	 */
 	addStatModificator(stat, type, modificator) {
 		if (stat === 'effort') {
 			const current = this.effortModificator,
@@ -180,6 +236,12 @@ class creationData {
 		};
 	};
 
+	/**
+	 * @description Check if a skill exists and return it
+	 * @param { String } idOrName
+	 * @return { Boolean / creationSkill } 
+	 * @memberof creationData
+	 */
 	skillExists(idOrName) {
 		for (const skill of this.skills)
 			if (skill) if (skill.id == idOrName || skill.name === idOrName) return skill;
@@ -187,6 +249,13 @@ class creationData {
 		return false;
 	};
 
+	/**
+	 * @description Set the level (inability, practiced, trained, specialized) of a skill
+	 * @param { String } idOrName
+	 * @param { Number } level
+	 * @return {*} 
+	 * @memberof creationData
+	 */
 	setSkillLevel(idOrName, level) {
 		if (!Number.isInteger(level)) return;
 		for (const skill of this.skills) {
@@ -201,6 +270,12 @@ class creationData {
 		};
 	};
 
+	/**
+	 * @description Get the level of a skill
+	 * @param { String } idOrName
+	 * @return { Boolean / Number } 
+	 * @memberof creationData
+	 */
 	getSkillLevel(idOrName) {
 		for (const skill of this.skills)
 			if (skill) if (skill.id == idOrName || skill.name === idOrName) return skill.level;
@@ -208,6 +283,12 @@ class creationData {
 		return false;
 	};
 
+	/**
+	 * @description Check if an ability exists and return it
+	 * @param { String } idOrName
+	 * @return { Boolean / creationAbility } 
+	 * @memberof creationData
+	 */
 	abilityExists(idOrName) {
 		for (const ability of this.abilities)
 			if (ability) if (ability.id == idOrName || ability.name === idOrName) return ability;
@@ -215,6 +296,13 @@ class creationData {
 		return false;
 	};
 
+	/**
+	 * @description Set the tier of an ability 
+	 * @param { String } idOrName
+	 * @param { Number } tier
+	 * @return {*} 
+	 * @memberof creationData
+	 */
 	setAbilityTier(idOrName, tier) {
 		if (!Number.isInteger(tier)) return;
 		if (parseInt(tier) > 6) return;
@@ -226,6 +314,12 @@ class creationData {
 		};
 	};
 
+	/**
+	 * @description Get the tier of an ability 
+	 * @param { String } idOrName
+	 * @return { Boolean / Number } 
+	 * @memberof creationData
+	 */
 	getAbilityTier(idOrName) {
 		for (const ability of this.abilities)
 			if (ability) if (ability.id == idOrName || ability.name === idOrName) return ability.tier;
@@ -233,6 +327,12 @@ class creationData {
 		return false;
 	};
 
+	/**
+	 * @description Check if an item exists and return it
+	 * @param { String } idOrName
+	 * @return { Boolean / creationItem } 
+	 * @memberof creationData
+	 */
 	itemExists(idOrName) {
 		for (const item of this.items)
 			if (item) if (item.id == idOrName || item.name === idOrName) return item;
@@ -240,6 +340,13 @@ class creationData {
 		return false;
 	};
 
+	/**
+	 * @description Set the quantity of an item 
+	 * @param { String } idOrName
+	 * @param { Number } quantity
+	 * @return {*} 
+	 * @memberof creationData
+	 */
 	setItemQuantity(idOrName, quantity) {
 		if (!Number.isInteger(quantity)) return;
 		for (const item of this.items) {
@@ -253,6 +360,12 @@ class creationData {
 		};
 	};
 
+	/**
+	 * @description Get the quantity of an item 
+	 * @param { String } idOrName
+	 * @return { Boolean / Number } 
+	 * @memberof creationData
+	 */
 	getItemQuantity(idOrName) {
 		for (const item of this.items)
 			if (item) if (item.id == idOrName || item.name === idOrName) return item.quantity;
@@ -264,6 +377,14 @@ class creationData {
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------ Function(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/
+/**
+ * @description Check if the journal is one used for the creation tool
+ * @export
+ * @param { Object } actor
+ * @param { Object } html
+ * @param { Object } journal
+ * @return {*} 
+ */
 export async function checkJournalType(actor, html, journal) {
 	pushLocalisationSkillLevel();
 
@@ -273,6 +394,7 @@ export async function checkJournalType(actor, html, journal) {
 
 	const journalContent = returnArrayOfHtmlContent(journal.data.content);
 	let journalType = journalContent[0].replace(/ .*/, '').toLowerCase();
+	if (!isGoodJournalType(journalType)) return;
 
 	for (const j of journals) {
 		const jContent = returnArrayOfHtmlContent(j.data.content),
@@ -289,6 +411,12 @@ export async function checkJournalType(actor, html, journal) {
 	getContent(journals, actor);
 };
 
+/**
+ * @description Check if the actor possess any linked data (aka journal) for its sentences
+ * @export
+ * @param { Object } html
+ * @param { Object } actor
+ */
 export async function checkIfLinkedData(html, actor) {
 	pushLocalisationSkillLevel();
 
@@ -312,6 +440,12 @@ export async function checkIfLinkedData(html, actor) {
 	};
 };
 
+/**
+ * @description Update the character sheet to show the linked buttons.
+ * @param { Object } html
+ * @param { String } toUpdate
+ * @param { Object } data
+ */
 function updateActorSheet(html, toUpdate, data) {
 	toUpdate = (toUpdate === `${quantifier}additional` || toUpdate === `${quantifier}additionalsentence`)
 		? 'additionalSentence'
@@ -337,11 +471,22 @@ function updateActorSheet(html, toUpdate, data) {
 	});
 };
 
+/**
+ * @description Check if it is really a journal for the creation tool, return the type of the journal if so.
+ * @param { String } type
+ * @return { Boolean / String } 
+ */
 function isGoodJournalType(type) {
 	if (!UTILITIES.doesArrayContains(type, typeSentenceCheck)) return false;
 	return type;
 }
 
+/**
+ * @description Read through all journals passed, and put everything under the creationActor before passing to the next function.
+ * @param { Array<Object> } journals
+ * @param { Object } 		actor
+ * @param { Boolean } [remove=false]
+ */
 async function getContent(journals, actor, remove = false) {
 	let creationActor = new creationData(),
 		allSkills = [],
@@ -421,11 +566,12 @@ async function getContent(journals, actor, remove = false) {
 				} else item = await game.items.get(id).data;
 
 				const duplicatedItem = duplicate(item),
+					optionType = (other) ? getObject(other, l).toLowerCase() : false,
 					option = (other) ? l.substring(other + getObject(other, l).length + 1).replace(/ .*/, '') : false;
 
 				// Check equipment
 				if ('quantity' in duplicatedItem.data) {
-					const quantity = (option) ? parseInt(option) : 1;
+					const quantity = (optionType === `${quantifier}quantity` && option) ? parseInt(option) : 1;
 
 					let existingItem = creationActor.itemExists(duplicatedItem.name);
 					if (existingItem) {
@@ -442,7 +588,7 @@ async function getContent(journals, actor, remove = false) {
 				}
 				// Check skills
 				else if (duplicatedItem.type === 'skill') {
-					const o = (option) ? UTILITIES.capitalizeFirstLetter(option.toLowerCase()) : skillLevels[2];
+					const o = (optionType === `${quantifier}level` && option) ? UTILITIES.capitalizeFirstLetter(option.toLowerCase()) : skillLevels[2];
 					let skillLevel = 2;
 
 					if (UTILITIES.doesArrayContains(o, skillLevels)) {
@@ -481,16 +627,16 @@ async function getContent(journals, actor, remove = false) {
 				}
 				// Check abilities
 				else if (duplicatedItem.type === 'ability') {
-					const tierLevel = parseInt((option) ? option : 0),
+					const tierLevel = parseInt((optionType === `${quantifier}tier` && option) ? option : 0),
 						actorTier = actor.data.data.basic.tier;
 
 					let existingAbility = creationActor.abilityExists(duplicatedItem.name);
-					if (!existingAbility && !del) {
+					if (!existingAbility && tierLevel <= actorTier && !del) {
 						const newAbility = new creationAbility(duplicatedItem._id, duplicatedItem.name, tierLevel, duplicatedItem);
 
 						creationActor.abilities.push(newAbility);
 						allAbilities.push({ id: allAbilities.length, journal: journal.name, ability: duplicatedItem.name, tier: tierLevel });
-					} else if (del) {
+					} else if (tierLevel <= actorTier && del) {
 						const oldJournalAbility = allAbilities.filter(s => s.ability === duplicatedItem.name);
 						if (oldJournalAbility.length == 1) delete creationActor.abilities[oldJournalAbility[0].id];
 					};
@@ -531,8 +677,8 @@ async function getContent(journals, actor, remove = false) {
 };
 
 /**
- * @description
- * @param {*} actor
+ * @description Update the actor data according to the current data sent. It will wip clean the character sheet before doing so.
+ * @param { Object } actor
  * @param { creationData } data
  */
 async function updateActorData(actor, data) {
@@ -612,6 +758,10 @@ async function updateActorData(actor, data) {
 	if (itemsToCreate.length > 0) await actor.createEmbeddedDocuments('Item', itemsToCreate);
 };
 
+/**
+ * @description Push the localisation string of the skill level to the check
+ * @return {*} 
+ */
 function pushLocalisationSkillLevel() {
 	if (UTILITIES.doesArrayContains(game.i18n.localize('CYPHERSYSTEM.Specialized'), skillLevels)) return;
 
@@ -621,14 +771,30 @@ function pushLocalisationSkillLevel() {
 	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Inability'));
 };
 
+/**
+ * @description Return the content of an HTML in an array
+ * @param { String } str
+ * @return { Array<String> } 
+ */
 function returnArrayOfHtmlContent(str) {
 	return UTILITIES.removeTags(str).split('\n').filter(n => n);
 };
 
+/**
+ * @description Return an object for the tag
+ * @param { Number } start
+ * @param { String } str
+ * @return { String } 
+ */
 function getObject(start, str) {
 	return str.substring(start).replace(/ .*/, '');
 };
 
+/**
+ * @description Return the journal ID from its saved name
+ * @param { String } str
+ * @return { String } 
+ */
 function getJournalIdInName(str) {
 	return str.substring(
 		str.indexOf("{") + 1,
