@@ -733,21 +733,10 @@ async function updateActorData(actor, data) {
 	for (const a of existingAbilities) itemsToDelete.push(a.id);
 	for (const a of data.abilities) if (a) itemsToCreate.push(a.ability);
 
-	// Artifacts
-	const existingArtifacts = actor.items.filter(i => i.data.type === 'artifact');
-	for (const a of existingArtifacts) itemsToDelete.push(a.id);
-	for (const i of data.items) if (i) if (i.item.type === 'artifact') itemsToCreate.push(i.item);
-
-	// Cyphers
-	const existingCyphers = actor.items.filter(i => i.data.type === 'cypher');
-	for (const c of existingCyphers) itemsToDelete.push(c.id);
-	for (const i of data.items) if (i) if (i.item.type === 'cypher') itemsToCreate.push(i.item);
-
-	// Items
-	const existingItems = actor.items.filter(i => (i.data.type !== 'skill' && i.data.type !== 'ability' && i.data.type !== 'artifact' && i.data.type !== 'cypher'));
-	for (const i of existingItems) itemsToDelete.push(i.id);
-	for (const i of data.items) if (i)
-		if (i.item.type !== 'skill' && i.item.type !== 'ability' && i.item.type !== 'artifact' && i.item.type !== 'cypher' && i.quantity > 0) itemsToCreate.push(i.item);
+	// Other
+	const existingItems = actor.items.filter(i => (i.data.type !== 'skill' && i.data.type !== 'ability'));
+	for (const a of existingItems) itemsToDelete.push(a.id);
+	for (const i of data.items) if (i) if (i.item.type !== 'skill' && i.item.type !== 'ability' && i.quantity > 0) itemsToCreate.push(i.item);
 
 	// TODO: delete this line
 	console.log(itemsToDelete)
