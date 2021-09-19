@@ -9,7 +9,7 @@ Those things could probably be implemented directly inside the system in the fut
 </p>
 
 <p align="justify">
-If you need to speak about this module or about the Cypher System you can join <strong>mrkwnzl's</strong> [Cypher FVTT Dev Discord](https://discord.gg/C5zGgtyhwa). We will be happy to help!
+If you need to speak about this module or about the Cypher System you can join <strong>mrkwnzl's</strong> <a href="https://discord.gg/C5zGgtyhwa">Cypher FVTT Dev Discord</a>. We will be happy to help!
 </p>
 
 ## Disclaimer
@@ -19,7 +19,15 @@ If you need to speak about this module or about the Cypher System you can join <
 
 > <p align="justify"> This module follow the <a href="https://www.montecookgames.com/fan-use-policy/">Fan Use Policy</a> from Monte Cook Games, and therefore does not contains anything from the books. </p>
 
-> <p align="justify"> This module include some icons from Games-Icons, they are provided under the terms of the Creative Commons 3.0 BY license. Available on <a href="https://game-icons.net">https://game-icons.net</a>. 
+> <p align="justify"> This module include the following official image 'Numenera Discovery 20 <a href="https://artiglio.artstation.com/">Mirco Paganessi</a>' (also known as <a href="https://www.montecookgames.com/numenera-on-twitch-now-with-more-squicky-creatures/">'Kaliss, a Clever Jack who Works the Back Alleys'</a>), which is included in accordance to the submensionned Fan Use Policy. </p>
+
+> <p align="justify"> This module include some icons from Games-Icons, they are provided under the terms of the Creative Commons 3.0 BY license. Available on <a href="https://game-icons.net">https://game-icons.net</a>. </p>
+
+## Installation
+
+Either use Foundry Install Module dialog and look for "**Nice(TSY) Cypher System Add-ons**" or copy the following Manifest URL into it (it can be found on the Setup menu of the Foundry VTT application):
+
+https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/module.json
 
 ## Scripts
 
@@ -43,21 +51,37 @@ I am currently looking at expending the trade button to other actor sheet (shuch
 
 > All are optionnal and can be deactivated in the settings.
 
+### Creation Tool
+
+<p align="justify">
+It make now possible to drag journal entry with specified tag on the character sheet, linking the journal to the corresponding Descriptor / Focus / Type (works with the additional sentence as well). This will also automatically add any tagged Abilities / Skills / Items from the journal on the actor.
+
+To understand how it works please read the <a href="https://github.com/NiceTSY/nice-cypher-add-ons/blob/main/Creation_Tool.md">Creation Tool Documentation</a>.
+</p>
+
+![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/creation_tool.png)
+
 ### GMi token HUD
 
+<p align="justify">
 This will create a new token HUD component that will send the GMi for the player's token.
+</p>
 
 ![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/gm_intrusion.png)
 
 ### Auto obfuscate and level roll an object
 
+<p align="justify">
 Those two options permit to automatically roll/obfuscate the level a numenera object (Cypher and Artifact) when dropped on a character sheet.
+</p>
 
 ![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/autorollobject.png)
 
 ### Trade dialogue
 
+<p align="justify">
 This will show a new icon on your character sheet, making possible to trade items between player (need to have at least the **OBSERVER** permission).
+</p>
 
 ![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/tradebetweenplayer.png)
 
