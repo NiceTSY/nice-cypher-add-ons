@@ -1,13 +1,13 @@
 {
 	"name": "nice-cypher-add-ons",
 	"title": "Nice(TSY) Cypher System Add-ons",
-	"description": "ATTENTION: This is a beta release for testing purpose",
+	"description": "This module adds some QOL Add-ons in the Cypher System made by Mrkwnzl",
 	"readme": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/README.md",
 	"license": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/LICENSE.md",
 	"changelog": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/CHANGELOG.md",
 	"author": "Alec (Nice to see you#6655 / NiceTSY)",
 	
-	"version": "0.3.0-Beta-2",
+	"version": "0.3.0",
 	"minimumCoreVersion": "0.8.5",
 	"compatibleCoreVersion": "0.8.9",	
 	"systems": ["cyphersystem"],
@@ -35,6 +35,6 @@
 	],
 	
 	"url": "https://github.com/NiceTSY/nice-cypher-add-ons",
-	"manifest": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/develop/module.json",
-	"download": "https://github.com/NiceTSY/nice-cypher-add-ons/releases/download/0.3.0-Beta-2/module.zip"
+	"manifest": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/module.json",
+	"download": "https://github.com/NiceTSY/nice-cypher-add-ons/releases/latest/download/module.zip"
 }

@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2021-09-19
+### Note
+This is a big update, with a new big tool: The Creation Tool. This one can be tricky and reading the documentation is needed to understand it fully.
+
+### Added
+- Creation Tool, please read this documentation: https://github.com/NiceTSY/nice-cypher-add-ons/blob/main/Creation_Tool.md
+- New utilities snippets code
+- [Documentation](https://github.com/NiceTSY/nice-cypher-add-ons/blob/main/Creation_Tool.md) for the Creation Tool
+
+### Changed
+- Re-factored the settings to be in-line visually with the [Cypher Sheet Module](https://github.com/gonzaPaEst/cyphersheets) made by **gonzaPaEst** and keep a same visual styling around modules for the Cypher System
+- Re-factored the utilities.js
+
+### Fixed
+- Fixed few bugs
+
 ## [0.2.1] - 2021-09-03
 ### Added
 - Added a [CHANGELOG.md](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/CHANGELOG.md)
