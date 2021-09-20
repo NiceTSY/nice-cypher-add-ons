@@ -1,11 +1,11 @@
 # Creation Tool
 
 <p align="justify">
-It make now possible to drag journal entry with specified tag on the character sheet, linking the journal to the corresponding Descriptor/Focus/Type (works with the additional sentence as well). This will also automatically add any tagged Abilities/Skills/Items from the journal on the actor.
+It now makes possible to drag a journal entry with the specified tag on the character sheet, linking the journal to the corresponding Descriptor/Focus/Type (works with the additional sentence as well). This will also automatically add any tagged Abilities/Skills/Items from the journal on the actor.
 
-The tool does support journal renaming (you will still need to close and open again the sheet as it needs to be re-rendered). However, currently it does not support journal from compendium, they should always come from your world.
+The tool does support journal renaming (you will still need to close and open again the sheet as it needs to be re-rendered). However, currently, it does not support journals from compendiums, they should always come from your world.
 
-<i>Be carefull as the tool will always revert to default the sheet before adding linked journals content.</i>
+<i>Be careful as the tool will always revert to default the sheet before adding linked journals content.</i>
 </p>
 
 ## How To
@@ -19,7 +19,7 @@ Along the documentation, the following terms will be used:
 ### Type of journal
 
 <p align="justify">
-In order for the module to understand the journal you want to drop on your actor is a Linked Journal, it needs to understand the current journal type. Meaning what part of the sentence it needs to be linked to. Example, the journal <b>Glaive</b> shall be linked as a <b>Type</b>.
+In order for the module to understand the journal you want to drop on your actor is a Linked Journal, it needs to understand the current journal type. Meaning what part of the sentence it needs to be linked to. For example, the journal <b>Glaive</b> shall be linked as a <b>Type</b>.
 
 <b> IMPORTANT:</b> the journal type shall always be the first line of the journal, otherwise it will not be recognised.
 </p>
@@ -34,9 +34,9 @@ In order for the module to understand the journal you want to drop on your actor
 ### Stats
 
 <p align="justify">
-Stats are the Pools of your character, corresponding Edges, and its Effort. Each stats shall be preceded by the Flag and followed by its value. An Edge for the Might, Speed and Intellect Pools can be specified on the same line with another number. If the value of the Edge is not specified it will be 0 by default.
+Stats are the Pools of your character, corresponding Edges, and its Effort. Each stat shall be preceded by the Flag and followed by its value. An Edge for the Might, Speed and Intellect Pools can be specified on the same line with another number. If the value of the Edge is not specified it will be 0 by default.
 
-The tool also support modifier for all of the stats, those modifier shall be wrote with either <b>+</b> sign or a <b>-</b> sign. Otherwise, it will be understood as a full value and could erase the one from another journal.
+The tool also supports modifiers for all of the stats, those modifiers shall be wrote with either <b>+</b> sign or a <b>-</b> sign. Otherwise, it will be understood as a full value and could erase the one from another journal.
 </p>
 
 **Supported Tags:**
@@ -59,11 +59,11 @@ The tool also support modifier for all of the stats, those modifier shall be wro
 ### Items
 
 <p align="justify">
-Items are every thing that should be added to the character, either it be skills, abilities, cypher, equipment, etc. The item entity link needs to follow the Tag (something looking like <code>@Item[aTPZaWq1DtjxKaz2]{Torche}</code>) either it be coming from the current world or from a compendium. If the same item is shown across multiple Linked Journals and are quantifiable, the tool will automatically increase the quantity by one. It will also give multiple time the item if it is not quantifiable but for Skills, Abilities and Artifacts.
+Items are everything that should be added to the character, either it is skills, abilities, cypher, equipment, etc. The item entity link needs to follow the Tag (something looking like <code>@Item[aTPZaWq1DtjxKaz2]{Torche}</code>) either it is coming from the current world or from a compendium. If the same item is shown across multiple Linked Journals and is quantifiable, the tool will automatically increase the quantity by one. It will also give multiple times the item if it is not quantifiable but for Skills, Abilities, and Artifacts.
 
 Items support different optional informative Tags but will all works with the main one.
 
-The tool also support options for quantifiable items, skills level (by default they will be shown as Practiced) and abilities tier.
+The tool also supports options for quantifiable items, skills level (by default they will be shown as Practiced) and abilities tier.
 </p>
 
 **Supported Tags:**
@@ -90,7 +90,7 @@ The tool also support options for quantifiable items, skills level (by default t
 #### Option for quantifiable items
 
 <p align="justify">
-Quantifiable items can be followed by the <code>@quantity</code> option. This one will add as many as desired item.
+Quantifiable items can be followed by the <code>@quantity</code> option. This one will add as many as the desired item.
 </p>
 
 **Example:** `@item @Item[aTPZaWq1DtjxKaz2]{Torche} @quantity 4` will add 4 Torches
@@ -98,7 +98,7 @@ Quantifiable items can be followed by the <code>@quantity</code> option. This on
 #### Option for skills
 
 <p align="justify">
-Skills can be followed by the <code>@level</code> option. This one will add the skill to the specified level. It supports the following options (as well as their equivalent in the language of your system - this will only works with language supported by the Cypher System and is not dependant on this module):
+Skills can be followed by the <code>@level</code> option. This one will add the skill to the specified level. It supports the following options (as well as their equivalent in the language of your system - this will only work with language supported by the Cypher System and is not dependant on this module):
 </p>
 
 - Inability
@@ -109,13 +109,13 @@ Skills can be followed by the <code>@level</code> option. This one will add the 
 **Example:** `@item @Item[BLIPYnvITSF9LtPn]{Climbing} @level Trained` will give the climbing skill as trained
 
 <p align="justify">
-If more than one journal add the same skills but from different level. The tool will try to calculate the corresponding level. For example, if the Type journal has <code>@skill @Item[BLIPYnvITSF9LtPn]{Climbing} @level inability</code> and the Descriptor journal has <code>@skill @Item[BLIPYnvITSF9LtPn]{Climbing} @level specialized</code>, the tool will calculate the skill as trained.
+If more than one journal add the same skills, but from different level, the tool will try to calculate the corresponding level. For example, if the Type journal has <code>@skill @Item[BLIPYnvITSF9LtPn]{Climbing} @level inability</code> and the Descriptor journal has <code>@skill @Item[BLIPYnvITSF9LtPn]{Climbing} @level specialized</code>, the tool will calculate the skill as trained.
 </p>
 
 #### Option for abilities
 
 <p align="justify">
-Abilities can be followed by the <code>@tier</code> option. This one will add the ability to the actor only if he is as the same tier as specified.
+Abilities can be followed by the <code>@tier</code> option. This one will add the ability to the actor only if he is in the same tier as specified.
 </p>
 
 **Example:** `@item @Item[sPKU1KJBMTwaSujl]{[Enabler] Trained in Armor} @tier 2` will only give the ability if the actor is tier 2
