@@ -49,17 +49,16 @@ Hooks.once('setup', async () => {
 	game.socket.on(`module.${CYPHERADDONS.MODULE.NAME}`, packet => {
 		let data = packet.data;
 		let type = packet.type;
-
 		data.receiver = game.actors.get(packet.receiverId);
 		data.trader = game.actors.get(packet.traderId);
-
-		if (!data.receiver.isOwner) return;
-		if (game.user.data.character == packet.receiverId)
-			if (type === 'requestTrade') receiveTrade(data);
-
-		if (type === 'acceptTrade') endTrade(data);
-		if (type === 'refuseTrade') denyTrade(data);
-		if (type === 'possessItem') alreadyTrade(data);
+		if (data.receiver.isOwner) {
+			if (game.user.data.character == packet.receiverId && type === 'requestTrade') receiveTrade(data);
+		}
+		else {
+			if (type === 'acceptTrade') endTrade(data);
+			if (type === 'refuseTrade') denyTrade(data);
+			if (type === 'possessItem') alreadyTrade(data);
+		}
 	});
 });
 
