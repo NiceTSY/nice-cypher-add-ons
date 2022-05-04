@@ -81,14 +81,14 @@ Hooks.on('preCreateItem', async (data, item) => {
 // Called when dropping something on the character sheet
 Hooks.on('dropActorSheetData', async (actor, html, item) => {
 	if (item.type.toLowerCase() === 'journalentry' && actor.data.type === "PC") {
-		if (CYPHERADDONS.SETTINGS.CREATIONTOOL) checkJournalType(actor, html, item);
+		if (CYPHERADDONS.SETTINGS.SENTENCELINK) checkJournalType(actor, html, item);
 	};
 });
 
 // Called opening the charactersheet
 Hooks.on('renderCypherActorSheet', (sheet, html) => {
 	if (CYPHERADDONS.SETTINGS.TRADEBUTTON) addTradeButton(html, sheet.actor);
-	if (CYPHERADDONS.SETTINGS.CREATIONTOOL) checkIfLinkedData(html, sheet.actor);
+	if (CYPHERADDONS.SETTINGS.SENTENCELINK) checkIfLinkedData(html, sheet.actor);
 });
 
 /*------------------------------------------------------------------------------------------------

@@ -13,7 +13,9 @@
 	"NICECYPHER.SettingsAUTOROLLHint": "Calcul automatiquement le niveau des cyphers et des artefacts lorsqu'ils sont glissés sur la feuille d'un personnage.",
 	"NICECYPHER.SettingsSHOWTRADETitle": "Button d'échange d'objets",
 	"NICECYPHER.SettingsSHOWTRADEHint": "Ajoute une icone sur l'onglet équipement pour permettre au joueur d'échanger ses objets avec les autres joueurs.",
-	"NICECYPHER.SettingsCREATIONTOOLSTitle": "Utiliser la creation avancée",
+	"NICECYPHER.SettingsSENTENCELINKTitle": "Utiliser la creation avancée 1",
+	"NICECYPHER.SettingsSENTENCELINKHint": "Permets aux joueurs de faire glisser une note de journal pour le Focus/Descriptor/Type/Additionnel sur la fiche d'un personnage.",
+	"NICECYPHER.SettingsCREATIONTOOLSTitle": "Utiliser la creation avancée 2",
 	"NICECYPHER.SettingsCREATIONTOOLSHint": "Permets aux joueurs de faire glisser une note de journal pour le Focus/Descriptor/Type/Additionnel sur la fiche d'un personnage.",
 	
 	"NICECYPHER.GMi": "Intrusion du MJ",

@@ -30,6 +30,7 @@
 
 'use strict';
 import { UTILITIES } from './utilities.js';
+import { CYPHERADDONS } from "./settings.js";
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------ Global(es) -------------------------------------------
@@ -415,7 +416,7 @@ export async function checkJournalType(actor, html, journal) {
 	};
 
 	journals.push(journal);
-	getContent(journals, actor);
+	getContent(journals, actor, false);
 };
 
 /**
@@ -498,6 +499,7 @@ function isGoodJournalType(type) {
  * @param { Boolean } [remove=false]
  */
 async function getContent(journals, actor, remove = false) {
+
 	let creationActor = new creationData(),
 		allSkills = [],
 		allAbilities = [],
@@ -517,6 +519,7 @@ async function getContent(journals, actor, remove = false) {
 
 		creationActor.changeSentence(s, (!del) ? `${journal.name} {${journal.id}}` : '');
 
+		if (CYPHERADDONS.SETTINGS.CREATIONTOOL)
 		for (const line of lines) {
 			const l = line;
 
@@ -680,7 +683,7 @@ async function getContent(journals, actor, remove = false) {
 		currentJournal++;
 
 		// TODO: delete this line
-		console.log(creationActor);
+		//console.log(creationActor);
 	};
 
 	updateActorData(actor, creationActor)
@@ -733,6 +736,8 @@ async function updateActorData(actor, data) {
 		for (const d of updatedData) await actor.update(d)
 	};
 
+	// TODO - only delete items which were added explicitly by this module.
+	
 	// Skills
 	const existingSkills = actor.items.filter(i => i.data.type === 'skill');
 	for (const s of existingSkills) itemsToDelete.push(s.id);
@@ -749,9 +754,9 @@ async function updateActorData(actor, data) {
 	for (const i of data.items) if (i) if (i.item.type !== 'skill' && i.item.type !== 'ability' && i.quantity > 0) itemsToCreate.push(i.item);
 
 	// TODO: delete this line
-	console.log(itemsToDelete)
+	//console.log(itemsToDelete)
 	// TODO: delete this line
-	console.log(itemsToCreate)
+	//console.log(itemsToCreate)
 
 	if (itemsToDelete.length > 0) await actor.deleteEmbeddedDocuments('Item', itemsToDelete);
 	if (itemsToCreate.length > 0) await actor.createEmbeddedDocuments('Item', itemsToCreate);

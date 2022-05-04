@@ -13,8 +13,10 @@
 	"NICECYPHER.SettingsAUTOROLLHint": "Automatically roll the level of Cypher and Artifact when dragged on a character sheet.",
 	"NICECYPHER.SettingsSHOWTRADETitle": "Show trade button",
 	"NICECYPHER.SettingsSHOWTRADEHint": "Add an icon on the character sheet to show the trade function between players.",
+	"NICECYPHER.SettingsSENTENCELINKTitle": "Use the sentence links",
+	"NICECYPHER.SettingsSENTENCELINKHint": "Allow players to directly drag journal note as the Focus/Descriptor/Type/Additional on the character sheet of an actor.",
 	"NICECYPHER.SettingsCREATIONTOOLTitle": "Use the creation tool",
-	"NICECYPHER.SettingsCREATIONTOOLHint": "Allow players to directly drag journal note as the Focus/Descriptor/Type/Additional on the character sheet of an actor.",
+	"NICECYPHER.SettingsCREATIONTOOLHint": "When sent links is enabled, this also replaces all items on the actor with items defined by the links.",
 	
 	"NICECYPHER.GMi": "GM intrusion",
 	"NICECYPHER.Intrusion": "Intrusion",
