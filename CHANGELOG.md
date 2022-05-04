@@ -9,9 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 This is a big update, with a new big tool: The Creation Tool. This one can be tricky and reading the documentation is needed to understand it fully.
 
 ### Added
-- Creation Tool, please read this documentation: https://github.com/NiceTSY/nice-cypher-add-ons/blob/main/Creation_Tool.md
+- Creation Tool, please read this documentation: https://github.com/farling42/nice-cypher-add-ons/blob/main/Creation_Tool.md
 - New utilities snippets code
-- [Documentation](https://github.com/NiceTSY/nice-cypher-add-ons/blob/main/Creation_Tool.md) for the Creation Tool
+- [Documentation](https://github.com/farling42/nice-cypher-add-ons/blob/main/Creation_Tool.md) for the Creation Tool
 
 ### Changed
 - Re-factored the settings to be in-line visually with the [Cypher Sheet Module](https://github.com/gonzaPaEst/cyphersheets) made by **gonzaPaEst** and keep a same visual styling around modules for the Cypher System
@@ -22,7 +22,7 @@ This is a big update, with a new big tool: The Creation Tool. This one can be tr
 
 ## [0.2.1] - 2021-09-03
 ### Added
-- Added a [CHANGELOG.md](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/CHANGELOG.md)
+- Added a [CHANGELOG.md](https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/CHANGELOG.md)
 
 ### Changed
 - Changed the place for the trade button from right to left of the other button

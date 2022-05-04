@@ -1,6 +1,6 @@
 # Nice(TSY) Cypher System Add-ons
 ![](https://img.shields.io/badge/Foundry-v0.8.9-informational?style=flat-square)
-![GitHub Latest Release](https://img.shields.io/github/release/NiceTSY/nice-cypher-add-ons?style=flat-square)
+![GitHub Latest Release](https://img.shields.io/github/release/farling42/nice-cypher-add-ons?style=flat-square)
 ![](https://img.shields.io/badge/license-BSD--3--Clause-green?link=https://opensource.org/licenses/BSD-3-Clause&style=flat-square)
 
 <p align="justify">
@@ -27,7 +27,7 @@ If you need to speak about this module or about the Cypher System you can join <
 
 Either use the Foundry Install-Module dialogue and look for "**Nice(TSY) Cypher System Add-ons**" or copy the following Manifest URL into it (it can be found on the Setup menu of the Foundry VTT application):
 
-https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/module.json
+https://github.com/farling42/nice-cypher-add-ons/releases/latest/download/module.json
 
 ## Scripts
 
@@ -56,10 +56,10 @@ I am currently looking at expending the trade button to other actor sheet (shuch
 <p align="justify">
 It makes now possible to drag a journal entry with specified tags on the character sheet, linking the journal to the corresponding Descriptor / Focus / Type (works with the additional sentence as well). This will also automatically add any tagged Abilities / Skills / Items from the journal on the actor.
 
-To understand how it works please read the <a href="https://github.com/NiceTSY/nice-cypher-add-ons/blob/main/Creation_Tool.md">Creation Tool Documentation</a>.
+To understand how it works please read the <a href="https://github.com/farling42/nice-cypher-add-ons/blob/main/Creation_Tool.md">Creation Tool Documentation</a>.
 </p>
 
-![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/creation_tool.png)
+![](https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/screenshots/creation_tool.png)
 
 ### GMi token HUD
 
@@ -67,7 +67,7 @@ To understand how it works please read the <a href="https://github.com/NiceTSY/n
 This will create a new token HUD component that will send the GMi for the player's token.
 </p>
 
-![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/gm_intrusion.png)
+![](https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/screenshots/gm_intrusion.png)
 
 ### Auto obfuscate and level roll an object
 
@@ -75,7 +75,7 @@ This will create a new token HUD component that will send the GMi for the player
 Those two options permit to automatically roll/obfuscate the level of a numenera object (Cypher and Artifact) when dropped on a character sheet.
 </p>
 
-![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/autorollobject.png)
+![](https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/screenshots/autorollobject.png)
 
 ### Trade dialogue
 
@@ -83,7 +83,7 @@ Those two options permit to automatically roll/obfuscate the level of a numenera
 This will show a new icon on your character sheet, making possible to trade items between player (need to have at least the **OBSERVER** permission).
 </p>
 
-![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/tradebetweenplayer.png)
+![](https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/screenshots/tradebetweenplayer.png)
 
 ### Macros
 
