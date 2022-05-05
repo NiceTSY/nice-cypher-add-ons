@@ -74,6 +74,9 @@ let skillLevels = [
 	'Inability'
 ];
 
+const AUTO_ITEM_FLAG = 'autoItem';
+const MODULE_NAME = 'nice-cypher-add-ons';
+
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Class(es) --------------------------------------------
 ------------------------------------------------------------------------------------------------*/
@@ -126,6 +129,7 @@ class creationSkill {
 		this.name = name;
 		this.level = level;
 		this.skill = skill;
+		this.skill.flags = { [MODULE_NAME] : { [AUTO_ITEM_FLAG] : true }};
 	};
 };
 
@@ -139,6 +143,7 @@ class creationAbility {
 		this.name = name;
 		this.tier = tier;
 		this.ability = ability;
+		this.ability.flags = { [MODULE_NAME] : { [AUTO_ITEM_FLAG] : true }};
 	};
 };
 
@@ -152,6 +157,7 @@ class creationItem {
 		this.name = name;
 		this.quantity = quantity;
 		this.item = item;
+		this.item.flags = { [MODULE_NAME] : { [AUTO_ITEM_FLAG] : true }};
 	};
 };
 
@@ -737,19 +743,21 @@ async function updateActorData(actor, data) {
 	};
 
 	// TODO - only delete items which were added explicitly by this module.
+	const actor_auto_items = actor.items.filter(i => i.data.flags?.[MODULE_NAME]?.[AUTO_ITEM_FLAG]);
+	console.log(actor_auto_items);
 	
 	// Skills
-	const existingSkills = actor.items.filter(i => i.data.type === 'skill');
+	const existingSkills = actor_auto_items.filter(i => i.data.type === 'skill');
 	for (const s of existingSkills) itemsToDelete.push(s.id);
 	for (const s of data.skills) if (s) itemsToCreate.push(s.skill);
 
 	// Abilities
-	const existingAbilities = actor.items.filter(i => i.data.type === 'ability');
+	const existingAbilities = actor_auto_items.filter(i => i.data.type === 'ability');
 	for (const a of existingAbilities) itemsToDelete.push(a.id);
 	for (const a of data.abilities) if (a) itemsToCreate.push(a.ability);
 
 	// Other
-	const existingItems = actor.items.filter(i => (i.data.type !== 'skill' && i.data.type !== 'ability'));
+	const existingItems = actor_auto_items.filter(i => (i.data.type !== 'skill' && i.data.type !== 'ability'));
 	for (const a of existingItems) itemsToDelete.push(a.id);
 	for (const i of data.items) if (i) if (i.item.type !== 'skill' && i.item.type !== 'ability' && i.quantity > 0) itemsToCreate.push(i.item);
 
