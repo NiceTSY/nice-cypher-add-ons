@@ -28,7 +28,7 @@ If you need to speak about this module or about the Cypher System you can join <
 
 ## Installation
 
-Either use the Foundry Install-Module dialogue and look for "**Nice(TSY) Cypher System Add-ons**" or copy the following Manifest URL into it (it can be found on the Setup menu of the Foundry VTT application):
+Copy the following Manifest URL into it (it can be found on the Setup menu of the Foundry VTT application):
 
 https://github.com/farling42/nice-cypher-add-ons/releases/latest/download/module.json
 
