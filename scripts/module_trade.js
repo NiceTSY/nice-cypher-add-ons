@@ -55,7 +55,7 @@ export function addTradeButton(html, actor) {
 		<a class='item-control item-trade' title='Trade Item'>
 			<i class='fas fa-exchange-alt'></i>
 		</a>
-	`).insertBefore($('.tab.items .item-control.item-edit'));
+	`).prependTo($(".tab.items .item:not(.item-header) .item-controls:not(:has('.item-trade'))"));
 
 	$('.item-control.item-trade').on('click', tradeItemHandler.bind(actor));
 };
