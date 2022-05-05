@@ -1,7 +1,10 @@
 # Nice(TSY) Cypher System Add-ons
-![](https://img.shields.io/badge/Foundry-v0.8.9-informational?style=flat-square)
-![GitHub Latest Release](https://img.shields.io/github/release/farling42/nice-cypher-add-ons?style=flat-square)
-![](https://img.shields.io/badge/license-BSD--3--Clause-green?link=https://opensource.org/licenses/BSD-3-Clause&style=flat-square)
+[![ko-fi](https://img.shields.io/badge/Ko--Fi-farling-success)](https://ko-fi.com/farling)
+[![patreon](https://img.shields.io/badge/Patreon-amusingtime-success)](https://patreon.com/amusingtime)
+[![paypal](https://img.shields.io/badge/Paypal-farling-success)](https://paypal.me/farling)
+![GitHub License](https://img.shields.io/github/license/farling42/nice-cypher-add-ons)
+![](https://img.shields.io/badge/Foundry-v9-informational)
+![Latest Release Download Count](https://img.shields.io/github/downloads/farling42/nice-cypher-add-ons/latest/module.zip)
 
 <p align="justify">
 This is module contains some QOL improvements that I and my players have found interesting and/or useful for the <a href="https://github.com/mrkwnzl/cyphersystem-foundryvtt">Cypher System</a> made by <strong>mrkwnzl</strong>.
