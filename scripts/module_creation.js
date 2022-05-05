@@ -578,8 +578,7 @@ async function getContent(journals, actor, remove = false) {
 				let item;
 				if (compendium.length > 1) {
 					const compid = compendium.pop(); // last part of x.x.x
-					compendium.shift();  // remove first entry (why?)
-					const pack = game.packs.find(p => p.metadata.name === compendium.join('.')),
+					const pack = game.packs.get(compendium.join('.')),
 						index = pack.index.get(compid),
 						i = await pack.getDocument(index._id);
 					item = await game.items.fromCompendium(i);
