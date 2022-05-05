@@ -388,6 +388,22 @@ class creationData {
 	};
 }
 
+
+async function getJournal(id) {
+	if (id.includes('.')) {
+		let parts = id.split('.');
+		const compid = parts.pop();
+		const packname = parts.join('.');
+		const pack = game.packs.get(packname);
+		const index = pack.index.get(compid);
+		let journal = await pack.getDocument(index._id);
+		if (journal) journal.packname = packname;
+		return journal;
+	}
+	else
+		return game.journal.get(id);
+}
+
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------ Function(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/
@@ -403,8 +419,17 @@ export async function checkJournalType(actor, html, journal) {
 	pushLocalisationSkillLevel();
 
 	const buttons = Array.from($('.linkedButton')).map(b => b.id);
-	let journals = game.journal.filter(j => buttons.includes(j.id));
-	journal = await game.journal.get(journal.id);
+	let journals = [];
+	for (const b of buttons) journals.push(await getJournal(b));
+
+	if (journal.pack)
+	{
+		const pack = game.packs.get(journal.pack),
+			index = pack.index.get(journal.id);
+		journal = await pack.getDocument(index._id);
+	}
+	else
+		journal = game.journal.get(journal.id);
 
 	const journalContent = returnArrayOfHtmlContent(journal.data.content);
 	let journalType = journalContent[0].replace(/ .*/, '').toLowerCase();
@@ -445,7 +470,7 @@ export async function checkIfLinkedData(html, actor) {
 		if (!name || name === '') continue;
 
 		const id = getJournalIdInName(name),
-			journal = await game.journal.get(id);
+			journal = await getJournal(id);
 
 		if (journal) {
 			const content = returnArrayOfHtmlContent(journal.data.content);
@@ -465,8 +490,9 @@ function updateActorSheet(html, toUpdate, data) {
 		? 'additionalSentence'
 		: UTILITIES.sanitizeString(toUpdate);
 
+	let newid = data.packname ? data.packname + '.' + data.id : data.id;
 	const newNode = (`
-		<button id="${data.id}" name="data.basic.${toUpdate}" 
+		<button id="${newid}" name="data.basic.${toUpdate}" 
 		title="${game.i18n.format('NICECYPHER.CreationButtonHint', {type: UTILITIES.capitalizeFirstLetter(toUpdate)})}" class="linkedButton">
 			<i class="fas fa-book-open"></i> ${data.name}
 		</button>
@@ -474,15 +500,27 @@ function updateActorSheet(html, toUpdate, data) {
 		oldNode = $(`input[name="data.basic.${toUpdate}"`);
 
 	oldNode.replaceWith(newNode);
-	$(`#${data.id}`).click(e => {
-		if (!e.altKey) game.journal.get(e.target.id).sheet.render(true)
-		else {
+	$(`#${newid.replaceAll('.','\\.')}`).click(async (e) => {
+		if (!e.altKey) {
+			const id = e.target.id;
+			if (id.includes('.')) {
+				let parts = id.split('.');
+				const compid = parts.pop();
+				const pack = game.packs.get(parts.join('.'));
+				const index = pack.index.get(compid);
+				pack.getDocument(index._id).then(doc => doc.sheet.render(true));
+			}
+			else
+				game.journal.get(e.target.id).sheet.render(true)
+		} else {
 			const actorId = e.target.offsetParent.id,
 				actor = game.actors.get(actorId.substring(6)),
 				buttons = Array.from($('.linkedButton')).map(b => b.id);
-			let journals = game.journal.filter(j => buttons.includes(j.id));
 
-			journals.push(game.journal.get(e.target.id));
+			let journals = [];
+			for (const b of buttons) journals.push(await getJournal(b));
+
+			journals.push(await getJournal(e.target.id));
 			getContent(journals, actor, true);
 		};
 	});
@@ -523,7 +561,7 @@ async function getContent(journals, actor, remove = false) {
 			? 'additionalSentence'
 			: UTILITIES.sanitizeString(checkFirstLine);
 
-		creationActor.changeSentence(s, (!del) ? `${journal.name} {${journal.id}}` : '');
+		creationActor.changeSentence(s, (!del) ? `${journal.name} {${journal.pack ? journal.pack + '.' + journal.id : journal.id}}` : '');
 
 		if (CYPHERADDONS.SETTINGS.CREATIONTOOL)
 		for (const line of lines) {
