@@ -51,13 +51,17 @@ const cypherObjectType = [
  * @param { Object } actor	- The current actor.
  */
 export function addTradeButton(html, actor) {
+	const node = html.find('[title="Trade Item"]');
+		
+	if(node.length > 0) return;
+		
 	$(`
 		<a class='item-control item-trade' title='Trade Item'>
 			<i class='fas fa-exchange-alt'></i>
 		</a>
-	`).insertBefore($('.tab.items .item-control.item-edit'));
+	`).insertBefore(html.find('.tab.items .item-control.item-edit'));
 
-	$('.item-control.item-trade').on('click', tradeItemHandler.bind(actor));
+	html.find('.item-control.item-trade').on('click', tradeItemHandler.bind(actor));
 };
 
 /**
@@ -79,7 +83,7 @@ function tradeItemHandler(e) {
 async function tradeItem(itemId) {
 	const tradeActor = this;
 	const actors = UTILITIES.returnActorByPermission(CONST.ENTITY_PERMISSIONS.OBSERVER, false, tradeActor);
-	const item = tradeActor.items.find(i => i.data.id === itemId);
+	const item = tradeActor.items.find(i => i.data._id === itemId);
 
 	let maxQuantity = item.data.data.quantity;
 	if (maxQuantity <= 0 && maxQuantity != null) return ui.notifications.warn(game.i18n.localize('CYPHERSYSTEM.CannotMoveNotOwnedItem'));
@@ -208,10 +212,11 @@ export async function receiveItem({ item, quantity, receiver }) {
 		};
 
 		existingItem.update(updateItem);
-	} else
-		await receiver.createEmbeddedDocuments("Item", [item.toObject()]);
-	// Item.create(duplicatedItem, {parent: receiver});
-
+	} else {
+		item.data.quantity = quantity;
+		await receiver.createEmbeddedDocuments("Item", [item]);
+		// Item.create(duplicatedItem, {parent: receiver});
+	}
 	return false;
 };
 
@@ -284,7 +289,7 @@ function tradeConfirmed(data) {
 	else
 		return;
 
-	const emitType = duplicate ? "possessItem" : "acceptTrade";
+	const emitType = duplicate ? "acceptTrade" : "possessItem";	
 	game.socket.emit(`module.${CYPHERADDONS.MODULE.NAME}`, {
 		data: { item, quantity },
 		receiverId: data.receiver.id,
