@@ -32,7 +32,9 @@
 import { CYPHERADDONS } from "./settings.js";
 import { UTILITIES } from "./utilities.js";
 import { addTradeButton, receiveTrade, endTrade, denyTrade, alreadyTrade } from "./module_trade.js";
-import { checkJournalType, checkIfLinkedData } from "./module_creation.js"
+import { checkJournalType, checkIfLinkedData } from "./module_creation.js";
+import { addItemsToActor } from "./actor_add_items.js";
+import { libWrapper } from './libwrapper-shim.js';
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Handler(s) -------------------------------------------
@@ -42,6 +44,18 @@ Hooks.once('init', () => {
 	// Register settings
 	CYPHERADDONS.init();
 
+});
+
+// Called when the world is ready
+Hooks.once('ready', async () => {
+
+	libWrapper.register('nice-cypher-add-ons', 'Actor.prototype._preCreateEmbeddedDocuments',
+		function(wrapped, ...args) {
+			if (CYPHERADDONS.SETTINGS.SORTITEMS) addItemsToActor(this, ...args);
+			let result = wrapped(...args);
+			return result;
+		},
+	'WRAPPER');
 });
 
 // Called when the module is setup

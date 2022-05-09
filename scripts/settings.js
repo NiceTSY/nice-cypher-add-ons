@@ -63,6 +63,7 @@ export class CYPHERADDONS {
 		AUTOOBFUSCATE: true,
 		AUTOROLL: true,
 		TRADEBUTTON: true,
+		SORTITEMS: true,
 		SENTENCELINK: true,
 		CREATIONTOOL: true
 		// lightweaponeased: true,	// TODO: Potentially in a new version
@@ -112,6 +113,7 @@ class cypherAddOnsConfigDialog extends FormApplication {
 				useAutoObfuscate: true,
 				useAutoRoll: true,
 				useTradeButton: true,
+				useSortItems: true,
 				useSentenceLink: true,
 				useCreationTool: true
 			} :
@@ -120,6 +122,7 @@ class cypherAddOnsConfigDialog extends FormApplication {
 				useAutoObfuscate: SettingsForm.getUseAutoObfuscate(),
 				useAutoRoll: SettingsForm.getUseAutoRoll(),
 				useTradeButton: SettingsForm.getUseTradeButton(),
+				useSortItems: SettingsForm.getUseSortItems(),
 				useSentenceLink: SettingsForm.getUseSentenceLink(),
 				useCreationTool: SettingsForm.getUseCreationTool()
 			};
@@ -155,6 +158,7 @@ class cypherAddOnsConfigDialog extends FormApplication {
 		SettingsForm.setUseAutoObfuscate(formData.useAutoObfuscate);
 		SettingsForm.setUseAutoRoll(formData.useAutoRoll);
 		SettingsForm.setUseTradeButton(formData.useTradeButton);
+		SettingsForm.setUseSortItems(formData.useSortItems);
 		SettingsForm.setUseSentenceLink(formData.useSentenceLink);
 		SettingsForm.setUseCreationTool(formData.useCreationTool);
 	};
@@ -189,18 +193,25 @@ class SettingsForm {
 		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[3], value);
 	}
 
-	static getUseSentenceLink() {
+	static getUseSortItems() {
 		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[4]);
 	};
-	static setUseSentenceLink(value) {
+	static setUseSortItems(value) {
 		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[4], value);
 	}
 
-	static getUseCreationTool() {
+	static getUseSentenceLink() {
 		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[5]);
 	};
-	static setUseCreationTool(value) {
+	static setUseSentenceLink(value) {
 		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[5], value);
+	}
+
+	static getUseCreationTool() {
+		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[6]);
+	};
+	static setUseCreationTool(value) {
+		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[6], value);
 	}
 };
 
