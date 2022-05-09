@@ -6,6 +6,11 @@
 ![](https://img.shields.io/badge/Foundry-v9-informational)
 ![Latest Release Download Count](https://img.shields.io/github/downloads/farling42/nice-cypher-add-ons/latest/module.zip)
 
+
+<p align="justify">
+This module is derived from https://github.com/NiceTSY/nice-cypher-add-ons. Most of this Readme comes from the original module, only links have been changed.
+</p>
+
 <p align="justify">
 This is module contains some QOL improvements that I and my players have found interesting and/or useful for the <a href="https://github.com/mrkwnzl/cyphersystem-foundryvtt">Cypher System</a> made by <strong>mrkwnzl</strong>.
 Those things could probably be implemented directly inside the system in the future. Nothing more, nothing less.
