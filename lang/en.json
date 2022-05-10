@@ -18,7 +18,7 @@
 	"NICECYPHER.SettingsSENTENCELINKTitle": "Use the sentence links",
 	"NICECYPHER.SettingsSENTENCELINKHint": "Allow players to directly drag journal note as the Focus/Descriptor/Type/Additional on the character sheet of an actor.",
 	"NICECYPHER.SettingsCREATIONTOOLTitle": "Use the creation tool",
-	"NICECYPHER.SettingsCREATIONTOOLHint": "When sent links is enabled, this also replaces all items on the actor with items defined by the links.",
+	"NICECYPHER.SettingsCREATIONTOOLHint": "When sentence links (above) is enabled, this also replaces all items on the actor with items defined by the links.",
 	
 	"NICECYPHER.GMi": "GM intrusion",
 	"NICECYPHER.Intrusion": "Intrusion",
