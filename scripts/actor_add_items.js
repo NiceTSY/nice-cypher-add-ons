@@ -88,11 +88,13 @@ function findSorting(description)
 export function addItemsToActor(actor, embeddedName, result, options, userId)
 {
     // embeddedName should always be "Item"
+    /*
     console.log(`actor   = '${actor.name}'`)
     console.log(`name    = ${embeddedName}`);
     console.log(`result  = ${result}`);
     console.log(`options = ${options}`);
     console.log(`userId  = ${userId}`);
+    */
 
     // Check each @sorting tag on each item.
     // If the value on the tag matches one of the defined skill or ability categories,

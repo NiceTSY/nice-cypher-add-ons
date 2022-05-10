@@ -6,10 +6,25 @@
 	"license": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/LICENSE.md",
 	"changelog": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/CHANGELOG.md",
 	"author": "Alec (Nice to see you#6655 / NiceTSY)",
+	"contributors": [		
+		{
+			"name": "VeilOfOblivion",
+			"url": "https://github.com/VeilOfOblivion"
+		},
+		{
+			"name": "Farling",
+			"url": "https://github.com/farling42",
+			"email": "foundryvtt@amusingtime.uk",
+			"discord": "Farling#9579",
+			"ko-fi": "https://ko-fi.com/farling",
+			"patreon": "https://www.patreon.com/amusingtime",
+			"twitter": "https://twitter.com/shambles42"
+		}
+	],
 	
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"minimumCoreVersion": "0.8.5",
-	"compatibleCoreVersion": "0.8.9",	
+	"compatibleCoreVersion": "9",	
 	"systems": ["cyphersystem"],
 	"languages": [{
 		"lang": "en",
