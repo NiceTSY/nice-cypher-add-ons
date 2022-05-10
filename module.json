@@ -2,17 +2,14 @@
 	"name": "nice-cypher-add-ons",
 	"title": "Nice(TSY) Cypher System Add-ons",
 	"description": "This module adds some QOL Add-ons in the Cypher System made by Mrkwnzl",
-	"readme": "https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/README.md",
-	"license": "https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/LICENSE.md",
-	"changelog": "https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/CHANGELOG.md",
-	"authors": [
-		"Alec (Nice to see you#6655 / NiceTSY)",
-		"farling42"
-	],
+	"readme": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/README.md",
+	"license": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/LICENSE.md",
+	"changelog": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/CHANGELOG.md",
+	"author": "Alec (Nice to see you#6655 / NiceTSY)",
 	
 	"version": "0.3.0",
 	"minimumCoreVersion": "0.8.5",
-	"compatibleCoreVersion": "9",	
+	"compatibleCoreVersion": "0.8.9",	
 	"systems": ["cyphersystem"],
 	"languages": [{
 		"lang": "en",
@@ -37,7 +34,7 @@
 		}
 	],
 	
-	"url": "https://github.com/farling42/nice-cypher-add-ons",
-	"manifest": "https://github.com/farling42/nice-cypher-add-ons/releases/latest/download/module.json",
-	"download": "https://github.com/farling42/nice-cypher-add-ons/releases/download/0.3.1/module.zip"
+	"url": "https://github.com/NiceTSY/nice-cypher-add-ons",
+	"manifest": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/module.json",
+	"download": "https://github.com/NiceTSY/nice-cypher-add-ons/releases/latest/download/module.zip"
 }

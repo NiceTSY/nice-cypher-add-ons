@@ -126,4 +126,4 @@ This currently, will not auto-update when the character change tier.
 
 ## Journal Example
 
-![](https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/screenshots/creation_tool_example.png)
+![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/creation_tool_example.png)

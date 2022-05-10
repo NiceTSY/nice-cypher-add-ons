@@ -1,15 +1,7 @@
 # Nice(TSY) Cypher System Add-ons
-[![ko-fi](https://img.shields.io/badge/Ko--Fi-farling-success)](https://ko-fi.com/farling)
-[![patreon](https://img.shields.io/badge/Patreon-amusingtime-success)](https://patreon.com/amusingtime)
-[![paypal](https://img.shields.io/badge/Paypal-farling-success)](https://paypal.me/farling)
-![GitHub License](https://img.shields.io/github/license/farling42/nice-cypher-add-ons)
-![](https://img.shields.io/badge/Foundry-v9-informational)
-![Latest Release Download Count](https://img.shields.io/github/downloads/farling42/nice-cypher-add-ons/latest/module.zip)
-
-
-<p align="justify">
-This module is derived from https://github.com/NiceTSY/nice-cypher-add-ons. Most of this Readme comes from the original module, only links have been changed.
-</p>
+![](https://img.shields.io/badge/Foundry-v0.8.9-informational?style=flat-square)
+![GitHub Latest Release](https://img.shields.io/github/release/NiceTSY/nice-cypher-add-ons?style=flat-square)
+![](https://img.shields.io/badge/license-BSD--3--Clause-green?link=https://opensource.org/licenses/BSD-3-Clause&style=flat-square)
 
 <p align="justify">
 This is module contains some QOL improvements that I and my players have found interesting and/or useful for the <a href="https://github.com/mrkwnzl/cyphersystem-foundryvtt">Cypher System</a> made by <strong>mrkwnzl</strong>.
@@ -35,7 +27,7 @@ If you need to speak about this module or about the Cypher System you can join <
 
 Copy the following Manifest URL into it (it can be found on the Setup menu of the Foundry VTT application):
 
-https://github.com/farling42/nice-cypher-add-ons/releases/latest/download/module.json
+https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/module.json
 
 ## Scripts
 
@@ -64,10 +56,10 @@ I am currently looking at expending the trade button to other actor sheet (shuch
 <p align="justify">
 It makes now possible to drag a journal entry with specified tags on the character sheet, linking the journal to the corresponding Descriptor / Focus / Type (works with the additional sentence as well). This will also automatically add any tagged Abilities / Skills / Items from the journal on the actor.
 
-To understand how it works please read the <a href="https://github.com/farling42/nice-cypher-add-ons/blob/main/Creation_Tool.md">Creation Tool Documentation</a>.
+To understand how it works please read the <a href="https://github.com/NiceTSY/nice-cypher-add-ons/blob/main/Creation_Tool.md">Creation Tool Documentation</a>.
 </p>
 
-![](https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/screenshots/creation_tool.png)
+![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/creation_tool.png)
 
 ### GMi token HUD
 
@@ -75,7 +67,7 @@ To understand how it works please read the <a href="https://github.com/farling42
 This will create a new token HUD component that will send the GMi for the player's token.
 </p>
 
-![](https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/screenshots/gm_intrusion.png)
+![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/gm_intrusion.png)
 
 ### Auto obfuscate and level roll an object
 
@@ -83,7 +75,7 @@ This will create a new token HUD component that will send the GMi for the player
 Those two options permit to automatically roll/obfuscate the level of a numenera object (Cypher and Artifact) when dropped on a character sheet.
 </p>
 
-![](https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/screenshots/autorollobject.png)
+![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/autorollobject.png)
 
 ### Trade dialogue
 
@@ -91,7 +83,7 @@ Those two options permit to automatically roll/obfuscate the level of a numenera
 This will show a new icon on your character sheet, making possible to trade items between player (need to have at least the **OBSERVER** permission).
 </p>
 
-![](https://raw.githubusercontent.com/farling42/nice-cypher-add-ons/master/screenshots/tradebetweenplayer.png)
+![](https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/screenshots/tradebetweenplayer.png)
 
 ### Macros
 
