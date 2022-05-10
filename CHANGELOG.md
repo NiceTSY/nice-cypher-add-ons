@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2022-10-05
+- Add a new configuration option to be able to put "@sorting <category>" into the descriptions of Skills and Abilities in order to specify the default category into which that skill/ability should be placed on the Actor sheet. The "<category>" should match the text that was specified in the "Skill Categories" or "Ability Categories" boxes of the Actor's Settings tab.
+
+## [0.5.0] - 2022-05-05
+- Allow the Sentence journal entries to be dragged from Compendiums, not only from the Journal sidebar.
+
+## [0.4.2] - 2022-05-05
+- Change the way that items are read from compendiums to ensure that it works properly with Compendium Folders.
+
+## [0.4.1] - 2022-05-05
+- Prevents duplicate trade buttons appearing against items when multiple actors are opened.
+
+## [0.4.0] - 2022-05-05
+- Update the creation tool so that only items which were added by the creation tool are removed by it.
+- This means that any cyphers, armour, equipment or other abilities which are manually added to an actor will no longer be deleted from the actor when dragging over parts of the sentence.
+- This has NOT been tested with support for Recursions
+
 ## [0.3.0] - 2021-09-19
 ### Note
 This is a big update, with a new big tool: The Creation Tool. This one can be tricky and reading the documentation is needed to understand it fully.

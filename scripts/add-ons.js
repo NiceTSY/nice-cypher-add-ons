@@ -32,7 +32,9 @@
 import { CYPHERADDONS } from "./settings.js";
 import { UTILITIES } from "./utilities.js";
 import { addTradeButton, receiveTrade, endTrade, denyTrade, alreadyTrade } from "./module_trade.js";
-import { checkJournalType, checkIfLinkedData } from "./module_creation.js"
+import { checkJournalType, checkIfLinkedData } from "./module_creation.js";
+import { addItemsToActor } from "./actor_add_items.js";
+import { libWrapper } from './libwrapper-shim.js';
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Handler(s) -------------------------------------------
@@ -42,6 +44,18 @@ Hooks.once('init', () => {
 	// Register settings
 	CYPHERADDONS.init();
 
+});
+
+// Called when the world is ready
+Hooks.once('ready', async () => {
+
+	libWrapper.register('nice-cypher-add-ons', 'Actor.prototype._preCreateEmbeddedDocuments',
+		function(wrapped, ...args) {
+			if (CYPHERADDONS.SETTINGS.SORTITEMS) addItemsToActor(this, ...args);
+			let result = wrapped(...args);
+			return result;
+		},
+	'WRAPPER');
 });
 
 // Called when the module is setup
@@ -81,14 +95,14 @@ Hooks.on('preCreateItem', async (data, item) => {
 // Called when dropping something on the character sheet
 Hooks.on('dropActorSheetData', async (actor, html, item) => {
 	if (item.type.toLowerCase() === 'journalentry' && actor.data.type === "PC") {
-		if (CYPHERADDONS.SETTINGS.CREATIONTOOL) checkJournalType(actor, html, item);
+		if (CYPHERADDONS.SETTINGS.SENTENCELINK) checkJournalType(actor, html, item);
 	};
 });
 
 // Called opening the character sheet
 Hooks.on('renderCypherActorSheet', (sheet, html) => {
 	if (CYPHERADDONS.SETTINGS.TRADEBUTTON) addTradeButton(html, sheet.actor);
-	if (CYPHERADDONS.SETTINGS.CREATIONTOOL) checkIfLinkedData(html, sheet.actor);
+	if (CYPHERADDONS.SETTINGS.SENTENCELINK) checkIfLinkedData(html, sheet.actor);
 });
 
 /*------------------------------------------------------------------------------------------------

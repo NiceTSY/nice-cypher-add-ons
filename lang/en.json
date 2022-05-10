@@ -13,8 +13,12 @@
 	"NICECYPHER.SettingsAUTOROLLHint": "Automatically roll the level of Cypher and Artifact when dragged on a character sheet.",
 	"NICECYPHER.SettingsSHOWTRADETitle": "Show trade button",
 	"NICECYPHER.SettingsSHOWTRADEHint": "Add an icon on the character sheet to show the trade function between players.",
+	"NICECYPHER.SettingsSORTITEMSTitle": "Sort Items by @sorting",
+	"NICECYPHER.SettingsSORTITEMSHint": "When a Skill or Ability is added to an actor, then put that skill/ability into a category specified by: \"@sorting <category>\" appearing in the item's description.",
+	"NICECYPHER.SettingsSENTENCELINKTitle": "Use the sentence links",
+	"NICECYPHER.SettingsSENTENCELINKHint": "Allow players to directly drag journal note as the Focus/Descriptor/Type/Additional on the character sheet of an actor.",
 	"NICECYPHER.SettingsCREATIONTOOLTitle": "Use the creation tool",
-	"NICECYPHER.SettingsCREATIONTOOLHint": "Allow players to directly drag journal note as the Focus/Descriptor/Type/Additional on the character sheet of an actor.",
+	"NICECYPHER.SettingsCREATIONTOOLHint": "When sentence links (above) is enabled, this also replaces all items on the actor with items defined by the links.",
 	
 	"NICECYPHER.GMi": "GM intrusion",
 	"NICECYPHER.Intrusion": "Intrusion",
