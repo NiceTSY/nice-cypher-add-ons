@@ -30,6 +30,7 @@
 
 'use strict';
 import { UTILITIES } from './utilities.js';
+import { CYPHERADDONS } from './settings.js';
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------ Global(es) -------------------------------------------
@@ -72,6 +73,8 @@ let skillLevels = [
 	'Practiced',
 	'Inability'
 ];
+
+let optionsCreationsCheck = [];
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Class(es) --------------------------------------------
@@ -125,6 +128,10 @@ class creationSkill {
 		this.name = name;
 		this.level = level;
 		this.skill = skill;
+		this.skill.flags = { [CYPHERADDONS.MODULE.NAME] : { 
+			[CYPHERADDONS.FLAGS.CREATIONITEM] : true,
+			[CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL] : skillLevels[level]
+		}};
 	};
 };
 
@@ -138,6 +145,7 @@ class creationAbility {
 		this.name = name;
 		this.tier = tier;
 		this.ability = ability;
+		this.ability.flags = { [CYPHERADDONS.MODULE.NAME] : { [CYPHERADDONS.FLAGS.CREATIONITEM] : true }};
 	};
 };
 
@@ -151,6 +159,10 @@ class creationItem {
 		this.name = name;
 		this.quantity = quantity;
 		this.item = item;
+		this.item.flags = { [CYPHERADDONS.MODULE.NAME] : { 
+			[CYPHERADDONS.FLAGS.CREATIONITEM] : true,
+			[CYPHERADDONS.FLAGS.ORIGINALQUANTITY] : 0
+		}};
 	};
 };
 
@@ -385,40 +397,6 @@ class creationData {
 ------------------------------------------ Function(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/
 /**
- * @description Check if the journal is one used for the creation tool
- * @export
- * @param { Object } actor
- * @param { Object } html
- * @param { Object } journal
- * @return {*} 
- */
-export async function checkJournalType(actor, html, journal) {
-	pushLocalisationSkillLevel();
-
-	const buttons = Array.from($('.linkedButton')).map(b => b.id);
-	let journals = game.journal.filter(j => buttons.includes(j.id));
-	journal = await game.journal.get(journal.id);
-
-	const journalContent = returnArrayOfHtmlContent(journal.data.content);
-	let journalType = journalContent[0].replace(/ .*/, '').toLowerCase();
-	if (!isGoodJournalType(journalType)) return;
-
-	for (const j of journals) {
-		const jContent = returnArrayOfHtmlContent(j.data.content),
-			jType = jContent[0].replace(/ .*/, '').toLowerCase();
-
-		if (jType === journalType) {
-			journalType = UTILITIES.sanitizeString(journalType);
-			ui.notifications.warn(game.i18n.format('NICECYPHER.CreationAlreadySentence', { type: `${journalType} (${j.name})` }));
-			return;
-		};
-	};
-
-	journals.push(journal);
-	getContent(journals, actor);
-};
-
-/**
  * @description Check if the actor possess any linked data (aka journal) for its sentences
  * @export
  * @param { Object } html
@@ -438,7 +416,7 @@ export async function checkIfLinkedData(html, actor) {
 		if (!name || name === '') continue;
 
 		const id = getJournalIdInName(name),
-			journal = await game.journal.get(id);
+			journal = await getJournal(id);
 
 		if (journal) {
 			const content = returnArrayOfHtmlContent(journal.data.content);
@@ -458,46 +436,113 @@ function updateActorSheet(html, toUpdate, data) {
 		? 'additionalSentence'
 		: UTILITIES.sanitizeString(toUpdate);
 
-	const newNode = (`
-		<button id="${data.id}" name="data.basic.${toUpdate}" 
-		title="${game.i18n.format('NICECYPHER.CreationButtonHint', {type: UTILITIES.capitalizeFirstLetter(toUpdate)})}" class="linkedButton">
-			<i class="fas fa-book-open"></i> ${data.name}
-		</button>
-	`),
-		oldNode = $(`input[name="data.basic.${toUpdate}"`);
-
+	const id = data.id,
+		newNode = (`
+			<button id="${id}" name="data.basic.${toUpdate}" class="linkedButton" pack="${('pack' in data) ? data.pack : 0}"
+			title="${game.i18n.format('NICECYPHER.CreationButtonHint', { type: UTILITIES.capitalizeFirstLetter(toUpdate) })}">
+				<i class="fas fa-book-open"></i> ${data.name}
+			</button>
+		`),
+		oldNode = html.find(`input[name="data.basic.${toUpdate}"`);
+	
 	oldNode.replaceWith(newNode);
-	$(`#${data.id}`).click(e => {
-		if (!e.altKey) game.journal.get(e.target.id).sheet.render(true)
-		else {
-			const actorId = e.target.offsetParent.id,
-				actor = game.actors.get(actorId.substring(6)),
-				buttons = Array.from($('.linkedButton')).map(b => b.id);
-			let journals = game.journal.filter(j => buttons.includes(j.id));
+	html.find(`#${id}`).click(async (e) => {
+		if (!e.altKey) {
+			const jPack = e.currentTarget.attributes[3].nodeValue,
+				jId = (jPack.includes('.'))
+					? (jPack + '.' + e.currentTarget.id) 
+					: e.currentTarget.id,
+				j = getJournalIdInName(jId),
+				journal = await getJournal(j);
 
-			journals.push(game.journal.get(e.target.id));
-			getContent(journals, actor, true);
+			journal.sheet.render(true);
+		}
+		else {
+			const actorId = e.currentTarget.offsetParent.id,
+				actor = game.actors.get(actorId.substring(6)),
+				jPack = e.currentTarget.attributes[3].nodeValue,
+				jId = (jPack.includes('.')) ? (jPack + '.' + e.currentTarget.id) : e.currentTarget.id,
+				j = getJournalIdInName(jId),
+				journal = await getJournal(j);
+
+			journalsToArray(journal, html, actor, true);
 		};
 	});
 };
 
 /**
- * @description Check if it is really a journal for the creation tool, return the type of the journal if so.
- * @param { String } type
- * @return { Boolean / String } 
+ * @description Check if the journal can be used by the creation tool
+ * @export
+ * @param { Object } actor
+ * @param { Object } html
+ * @param { Object } journal
+ * @return {*} 
  */
-function isGoodJournalType(type) {
-	if (!UTILITIES.doesArrayContains(type, typeSentenceCheck)) return false;
-	return type;
-}
+export async function checkJournalType(actor, html, journalEntity) {
+	pushLocalisationSkillLevel();
+	
+	html = html._element;
+	const buttons = Array.from(html.find('.linkedButton')),
+		journal = ('pack' in journalEntity)
+			? await getDocCompendium(journalEntity.pack, journalEntity.id)
+			: await game.journal.get(journalEntity.id);
+
+	const journalContent = returnArrayOfHtmlContent(journal.data.content),
+		journalType = journalContent[0].replace(/ .*/, '').toLowerCase();
+		
+	if (!isGoodJournalType(journalType)) {
+		ui.notifications.warn(`The journal ${journal.name} is not a recognised journal`);
+		//ui.notifications.warn(game.i18n.format('NICECYPHER.CreationNotGoodTypeOfJournal', 
+		//	{ name: `${journal.name}` }));
+		return;
+	};
+	
+	if (buttons.length > 0) {		
+		for (const b of buttons) {
+			if (b.name === `data.basic.${UTILITIES.sanitizeString(journalType)}`) {
+				ui.notifications.warn(game.i18n.format('NICECYPHER.CreationAlreadySentence',
+					{ type: `${journalType.substring(1)} (${journal.name})` }));
+				return;
+			};
+		};
+	};
+	
+	journalsToArray(journal, html, actor);
+};
 
 /**
- * @description Read through all journals passed, and put everything under the creationActor before passing to the next function.
- * @param { Array<Object> } journals
- * @param { Object } 		actor
+ * @description Put linked journals inside an array for getting through them.
+ * @param { Object }  journal
+ * @param { Object }  html
+ * @param { Object }  actor
  * @param { Boolean } [remove=false]
  */
-async function getContent(journals, actor, remove = false) {
+async function journalsToArray(journal, html, actor, remove = false) {
+	const buttons = Array.from(html.find('.linkedButton'));
+
+	let journals = remove ? [] : [journal];
+	if (buttons.length > 0) {
+		for (const b of buttons) {
+			const bPack = b.attributes[3].nodeValue,
+				bId = (bPack != 'null') ? (bPack + '.' + b.id) : b.id,
+				bJ = getJournalIdInName(bId),
+				bJournal = await getJournal(bJ);
+
+			if (bJournal) journals.push(bJournal);
+		};
+	};
+	if (remove) journals.push(journal);
+
+	await journalsReading(journals, actor, remove);
+};
+
+/**
+ * @description Read journals data to push them after to the Actor.
+ * @param { Array<Object> } journals
+ * @param { Object }  		actor
+ * @param { Boolean } 		[remove=false]
+ */
+async function journalsReading(journals, actor, remove) {
 	let creationActor = new creationData(),
 		allSkills = [],
 		allAbilities = [],
@@ -514,12 +559,23 @@ async function getContent(journals, actor, remove = false) {
 		const s = (checkFirstLine === `${quantifier}additional` || checkFirstLine === `${quantifier}additionalsentence`)
 			? 'additionalSentence'
 			: UTILITIES.sanitizeString(checkFirstLine);
-
-		creationActor.changeSentence(s, (!del) ? `${journal.name} {${journal.id}}` : '');
+		creationActor.changeSentence(s, (!del)
+			? `${journal.name} {${(journal.pack)
+				? (journal.pack + '.' + journal.id)
+				: journal.id}}`
+			: '');
 
 		for (const line of lines) {
 			const l = line;
 
+			// TODO: get a better way to handle for options
+			/**
+			const l = (line.startsWith(`${quantifier}option`))
+				? await askForOptions(line, lines)
+				: line;
+			 */
+
+			if (!l) continue;
 			if (l === checkFirstLine) continue;
 			if (!l.startsWith(quantifier)) continue;
 
@@ -578,7 +634,7 @@ async function getContent(journals, actor, remove = false) {
 				const duplicatedItem = duplicate(item),
 					optionType = (other) ? getObject(other, l).toLowerCase() : false,
 					option = (other) ? l.substring(other + getObject(other, l).length + 1).replace(/ .*/, '') : false;
-
+				
 				// Check equipment
 				if ('quantity' in duplicatedItem.data) {
 					const quantity = (optionType === `${quantifier}quantity` && option) ? parseInt(option) : 1;
@@ -588,12 +644,11 @@ async function getContent(journals, actor, remove = false) {
 						const newQuantity = (!del)
 							? parseInt(existingItem.quantity) + parseInt(quantity)
 							: parseInt(existingItem.quantity) - parseInt(quantity);
-
-						creationActor.setItemQuantity(existingItem.id, newQuantity);
+						
+						await creationActor.setItemQuantity(existingItem.name, newQuantity);
 					} else {
-						const newItem = new creationItem(duplicatedItem._id, duplicatedItem.name, quantity, duplicatedItem)
+						const newItem = new creationItem(duplicatedItem._id, duplicatedItem.name, quantity, duplicatedItem);
 						creationActor.items.push(newItem);
-						creationActor.setItemQuantity(duplicatedItem._id, quantity);
 					};
 				}
 				// Check skills
@@ -678,22 +733,53 @@ async function getContent(journals, actor, remove = false) {
 		};
 
 		currentJournal++;
-
-		// TODO: delete this line
-		console.log(creationActor);
 	};
 
 	updateActorData(actor, creationActor)
 };
 
 /**
- * @description Update the actor data according to the current data sent. It will wip clean the character sheet before doing so.
+ * @description Update the actor data according to the data sent. It will wip clean the character sheet before doing so.
+ * @param { String } 		line
+ * @param { Array<String> } lines
+ */
+async function askForOptions(line, lines) {
+	if (optionsCreationsCheck.length > 0)
+		if (UTILITIES.doesArrayContains(line, optionsCreationsCheck))
+			return false;
+	
+	optionsCreationsCheck = [line];
+	let check = true
+		startIndex = line.indexOf(line),
+		i = 1;
+
+	while (check) {
+		let l = lines[startIndex + i];
+		if (!l.startsWith(`${quantifier}option`)) check = false;
+		
+		
+	};
+
+	return l;
+};
+
+/**
+ * @description Update the actor data according to the data sent. It will wip clean the character sheet before doing so.
  * @param { Object } actor
  * @param { creationData } data
  */
-async function updateActorData(actor, data) {
+ async function updateActorData(actor, data) {
 	let itemsToCreate = [],
-		itemsToDelete = [];
+		itemsToDelete = [],
+		itemsToUpdate = [],
+		itemsToDeleteCheck = [],
+		updatedData;
+
+	// Sentence
+	for (const s in data.sentence) {
+		updatedData = { [`data.basic.${s}`]: data.sentence[s] };
+		await actor.update(updatedData);
+	};
 
 	// Effort
 	const checkEffortModificator = eval(data.effortModificator);
@@ -702,14 +788,8 @@ async function updateActorData(actor, data) {
 		data.changeStat('effort', newEffortValue);
 	};
 
-	let updatedData = { [`data.basic.effort`]: data.effort };
+	updatedData = { [`data.basic.effort`]: data.effort };
 	await actor.update(updatedData);
-
-	// Sentence
-	for (const s in data.sentence) {
-		updatedData = { [`data.basic.${s}`]: data.sentence[s] };
-		await actor.update(updatedData);
-	};
 
 	// Stats
 	for (const s in data.stats) {
@@ -734,27 +814,70 @@ async function updateActorData(actor, data) {
 	};
 
 	// Skills
-	const existingSkills = actor.items.filter(i => i.data.type === 'skill');
-	for (const s of existingSkills) itemsToDelete.push(s.id);
-	for (const s of data.skills) if (s) itemsToCreate.push(s.skill);
+	const actor_auto_skills = actor.items.filter(i => 
+		(i.data.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.CREATIONITEM] && i.data.type === 'skill')),
+		existingSkills = actor.items.filter(i => i.data.type === 'skill');
+	for (const s of actor_auto_skills) if (s.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL] !== "") {
+		let skill = existingSkills.find(sk => sk.name === s.name).data;
+
+		skill = setSkillLevel(skill, skill.flags[CYPHERADDONS.MODULE.NAME][CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL], true);
+		itemsToUpdate.push({_id: skill._id, flags: skill.flags});
+		itemsToUpdate.push({_id: skill._id, data: skill.data});
+
+	} else itemsToDelete.push(s.id);
+	for (const s of data.skills) 
+		if (s) 
+			if (existingSkills.find(sk => sk.name === s.name)) {
+				let skill = existingSkills.find(sk => sk.name === s.name).data;
+
+				skill = setSkillLevel(skill, s.skill.data.skillLevel);
+				itemsToUpdate.push({_id: skill._id, flags: skill.flags});
+				itemsToUpdate.push({_id: skill._id, data: skill.data});
+			} else itemsToCreate.push(s.skill);
 
 	// Abilities
-	const existingAbilities = actor.items.filter(i => i.data.type === 'ability');
-	for (const a of existingAbilities) itemsToDelete.push(a.id);
-	for (const a of data.abilities) if (a) itemsToCreate.push(a.ability);
+	const actor_auto_abilities = actor.items.filter(i => 
+		(i.data.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.CREATIONITEM] && i.data.type === 'ability')),
+		existingAbilities = actor.items.filter(i => i.data.type === 'ability');
+	for (const a of actor_auto_abilities) itemsToDelete.push(a.id);
+	for (const a of data.abilities) if (a) if (!existingAbilities.includes(a)) itemsToCreate.push(a.ability);
 
 	// Other
-	const existingItems = actor.items.filter(i => (i.data.type !== 'skill' && i.data.type !== 'ability'));
-	for (const a of existingItems) itemsToDelete.push(a.id);
-	for (const i of data.items) if (i) if (i.item.type !== 'skill' && i.item.type !== 'ability' && i.quantity > 0) itemsToCreate.push(i.item);
+	const actor_auto_items = actor.items.filter(i => 
+		(i.data.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.CREATIONITEM] && (i.data.type !== 'skill' && i.data.type !== 'ability'))),
+		existingItems = actor.items.filter(i => (i.data.type !== 'skill' && i.data.type !== 'ability'));
+	for (const i of actor_auto_items) {
+		itemsToDelete.push(i.id);
+		itemsToDeleteCheck.push(i.name);
+	};
+	for (const i of data.items) 
+		if (i) 
+			if (i.item.type !== 'skill' && i.item.type !== 'ability') {
+				if (existingItems.find(it => it.data.name === i.name) && !itemsToDeleteCheck.includes(i.name)) {
+					let item = existingItems.find(it => it.name === i.name);
+					let q = existingItems.find(it => it.name === i.name).data.data.quantity;
+					let oq = existingItems.find(it => it.name === i.name).data.data.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.ORIGINALQUANTITY];
+					oq = oq ? oq : 0;
 
-	// TODO: delete this line
-	console.log(itemsToDelete)
-	// TODO: delete this line
-	console.log(itemsToCreate)
+					if (oq > 0) {
+						setProperty(item, `data.data.flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALQUANTITY}`, 0);
+						setProperty(item, 'data.data.quantity', oq);
+					} else {
+						setProperty(item, `data.data.flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALQUANTITY}`, q);
+						setProperty(item, 'data.data.quantity', q + i.quantity);
+					};
+					
+					itemsToUpdate.push({_id: item.id, data: item.data.data});
+				} else if (i.quantity > 0) {
+					i.item.data.quantity = i.quantity;
+					itemsToCreate.push(i.item);
+				};
+			};
 
+	// Update the actor
 	if (itemsToDelete.length > 0) await actor.deleteEmbeddedDocuments('Item', itemsToDelete);
 	if (itemsToCreate.length > 0) await actor.createEmbeddedDocuments('Item', itemsToCreate);
+	if (itemsToUpdate.length > 0) await actor.updateEmbeddedDocuments('Item', itemsToUpdate);
 };
 
 /**
@@ -780,6 +903,60 @@ function returnArrayOfHtmlContent(str) {
 };
 
 /**
+ * @description Check if it is really a journal for the creation tool, return the type of the journal if so.
+ * @param { String } type
+ * @return { Boolean / String } 
+ */
+function isGoodJournalType(type) {
+	if (!UTILITIES.doesArrayContains(type, typeSentenceCheck)) return false;
+	return type;
+};
+
+/**
+ * @description Return the journal ID from its saved name
+ * @param { String } str
+ * @return { String } 
+ */
+function getJournalIdInName(str) {
+	const id = (str.includes('{'))
+		? str.substring(str.indexOf("{") + 1, str.lastIndexOf("}"))
+		: str;
+
+	if (id.includes('.')) {
+		let occurrences = [];
+		for (var i = id.length; i--;) if (id[i] == '.') occurrences.push(i);
+
+		if (occurrences.length > 1)
+			return { compendium: id.substring(0, occurrences[0]), journal: id.substring(occurrences[0] + 1) };
+	};
+
+	return id;
+};
+
+/**
+ * @description
+ * @param {*} id
+ * @return {*} 
+ */
+async function getJournal(id) {
+	return (typeof id !== 'string')
+		? await getDocCompendium(id.compendium, id.journal)
+		: await game.journal.get(id);
+};
+
+/**
+ * @description
+ * @param {*} pName
+ * @param {*} id
+ * @return {*} 
+ */
+async function getDocCompendium(pName, id) {
+	const pack = game.packs.get(pName),
+		index = pack.index.get(id);
+	return await pack.getDocument(index._id);
+};
+
+/**
  * @description Return an object for the tag
  * @param { Number } start
  * @param { String } str
@@ -790,13 +967,23 @@ function getObject(start, str) {
 };
 
 /**
- * @description Return the journal ID from its saved name
- * @param { String } str
- * @return { String } 
+ * @description Get the right skill level to the actor
+ * @param { Object } skill
+ * @param { String } level
+ * @param { Boolean } [rollBack=false]
  */
-function getJournalIdInName(str) {
-	return str.substring(
-		str.indexOf("{") + 1,
-		str.lastIndexOf("}")
-	);
+function setSkillLevel(skill, level, rollBack = false) {
+	
+	if (rollBack) {		
+		setProperty(skill, `flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.CREATIONITEM}`, false);
+		setProperty(skill, `flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL}`, "");
+	} else {		
+		setProperty(skill, `flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.CREATIONITEM}`, true);
+		setProperty(skill, `flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL}`, skill.data.skillLevel);
+	};
+	
+	setProperty(skill, 'data.skillLevel', level);
+	setProperty(skill, 'data.rollButton.skill', level);
+
+	return skill;
 };
