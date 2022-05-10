@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [0.4.0] - 2022-05-10
 ### Note
 This release was not tested with recursions.
+Compatible with Foundry 0.9.
 
 ### Fixed
 - Refactored the way from how the Creation Tool work, allowing non destructive Drag & Drop
