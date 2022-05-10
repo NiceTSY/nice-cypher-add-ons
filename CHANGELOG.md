@@ -23,6 +23,9 @@ This release was not tested with recursions.
 
 <span style="color:yellow">[0.4.2-farling] - 2022-05-05</span>
 - Change the way that items are read from compendiums to ensure that it works properly with Compendium Folders.
+  
+<span style="color:yellow">[0.4.0-farling] - 2022-05-05</span>
+- Ability to have links in the actor sentence without using the full creation tool adding/removing of items.
 
 ## [0.3.0] - 2021-09-19
 ### Note
