@@ -25,5 +25,7 @@
 	"NICECYPHER.CannotTradeLessThanOneObject": "You cannot trade negative quantity.",
 
 	"NICECYPHER.CreationAlreadySentence": "The character already possess the following type: {type}",
-	"NICECYPHER.CreationButtonHint" : "Current {type} (alt-click to delete it)"
+	"NICECYPHER.CreationButtonHint": "Current {type} (alt-click to delete it)",
+
+	"NICECYPHER.CreationNotGoodTypeOfJournal": "The journal {name} is recognised by the Creation Tool."
 }

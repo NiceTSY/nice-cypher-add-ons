@@ -68,7 +68,7 @@ Hooks.on('renderTokenHUD', async (hud, html, token) => {
 		if (game.user.isGM) showHUDGmIntrusion(html, token);
 });
 
-// Called before a new item is created on charactersheet
+// Called before a new item is created on character sheet
 Hooks.on('preCreateItem', async (data, item) => {
 	const object = data.data._source;
 
@@ -85,7 +85,7 @@ Hooks.on('dropActorSheetData', async (actor, html, item) => {
 	};
 });
 
-// Called opening the charactersheet
+// Called opening the character sheet
 Hooks.on('renderCypherActorSheet', (sheet, html) => {
 	if (CYPHERADDONS.SETTINGS.TRADEBUTTON) addTradeButton(html, sheet.actor);
 	if (CYPHERADDONS.SETTINGS.CREATIONTOOL) checkIfLinkedData(html, sheet.actor);

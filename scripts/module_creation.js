@@ -316,7 +316,7 @@ class creationData {
 	};
 
 	/**
-	 * @description Set the tier of an ability 
+	 * @description Set the tier of an ability
 	 * @param { String } idOrName
 	 * @param { Number } tier
 	 * @return {*} 
@@ -334,7 +334,7 @@ class creationData {
 	};
 
 	/**
-	 * @description Get the tier of an ability 
+	 * @description Get the tier of an ability
 	 * @param { String } idOrName
 	 * @return { Boolean / Number } 
 	 * @memberof creationData
@@ -491,13 +491,12 @@ export async function checkJournalType(actor, html, journalEntity) {
 		journalType = journalContent[0].replace(/ .*/, '').toLowerCase();
 		
 	if (!isGoodJournalType(journalType)) {
-		ui.notifications.warn(`The journal ${journal.name} is not a recognised journal`);
-		//ui.notifications.warn(game.i18n.format('NICECYPHER.CreationNotGoodTypeOfJournal', 
-		//	{ name: `${journal.name}` }));
+		ui.notifications.warn(game.i18n.format('NICECYPHER.CreationNotGoodTypeOfJournal', 
+			{ name: `${journal.name}` }));
 		return;
 	};
 	
-	if (buttons.length > 0) {		
+	if (buttons.length > 0) {
 		for (const b of buttons) {
 			if (b.name === `data.basic.${UTILITIES.sanitizeString(journalType)}`) {
 				ui.notifications.warn(game.i18n.format('NICECYPHER.CreationAlreadySentence',
