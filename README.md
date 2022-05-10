@@ -1,6 +1,7 @@
 # Nice(TSY) Cypher System Add-ons
-![](https://img.shields.io/badge/Foundry-v0.8.9-informational?style=flat-square)
+![](https://img.shields.io/badge/Foundry-v0.9-informational?style=flat-square)
 ![GitHub Latest Release](https://img.shields.io/github/release/NiceTSY/nice-cypher-add-ons?style=flat-square)
+![Latest Release Download Count](https://img.shields.io/github/downloads/NiceTSY/nice-cypher-add-ons/latest/module.zip)
 ![](https://img.shields.io/badge/license-BSD--3--Clause-green?link=https://opensource.org/licenses/BSD-3-Clause&style=flat-square)
 
 <p align="justify">
@@ -29,6 +30,14 @@ Either use the Foundry Install-Module dialogue and look for "**Nice(TSY) Cypher 
 
 https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/module.json
 
+## Contributors
+
+<a href="https://github.com/NiceTSY/nice-cypher-add-ons/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=NiceTSY/nice-cypher-add-ons" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
 ## Scripts
 
 <p align="justify">
@@ -39,12 +48,6 @@ With this, I aim to keep those different scripts as light as possible.
 
 <p align="justify">
 However, everyone has his/her/its/their own way to code and mine is mine, so if you were not able to understand something, please feel free to ask me on Discord.
-</p>
-
-## Future
-
-<p align="justify">
-I am currently looking at expending the trade button to other actor sheet (shuch as NPC).
 </p>
 
 ## How to use
