@@ -25,7 +25,7 @@ If you need to speak about this module or about the Cypher System you can join <
 
 ## Installation
 
-Copy the following Manifest URL into it (it can be found on the Setup menu of the Foundry VTT application):
+Either use the Foundry Install-Module dialogue and look for "**Nice(TSY) Cypher System Add-ons**" or copy the following Manifest URL into it (it can be found on the Setup menu of the Foundry VTT application):
 
 https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/module.json
 
@@ -88,5 +88,3 @@ This will show a new icon on your character sheet, making possible to trade item
 ### Macros
 
 This module also includes the following macro:
-
-1. **Get-Random Item(s) from Compendium**: Return as a whisper to the GM, X random item(s) from a selected compendium.
