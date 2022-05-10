@@ -2,11 +2,17 @@
 	"name": "nice-cypher-add-ons",
 	"title": "Nice(TSY) Cypher System Add-ons",
 	"description": "This module adds some QOL Add-ons in the Cypher System made by Mrkwnzl",
+	"manifestPlusVersion": "1.2.0",
 	"readme": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/README.md",
 	"license": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/LICENSE.md",
 	"changelog": "https://raw.githubusercontent.com/NiceTSY/nice-cypher-add-ons/master/CHANGELOG.md",
 	"author": "Alec (Nice to see you#6655 / NiceTSY)",
-	"contributors": [		
+	"authors": [
+		{
+			"name": "Alec (Nice to see you / NiceTSY)",
+			"url": "https://github.com/NiceTSY",
+			"discord": "Nice to see you#6655"
+		},	
 		{
 			"name": "VeilOfOblivion",
 			"url": "https://github.com/VeilOfOblivion"
@@ -16,9 +22,9 @@
 			"url": "https://github.com/farling42",
 			"email": "foundryvtt@amusingtime.uk",
 			"discord": "Farling#9579",
-			"ko-fi": "https://ko-fi.com/farling",
-			"patreon": "https://www.patreon.com/amusingtime",
-			"twitter": "https://twitter.com/shambles42"
+			"ko-fi": "farling",
+			"patreon": "amusingtime",
+			"twitter": "@shambles42"
 		}
 	],
 	
