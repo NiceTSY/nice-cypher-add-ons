@@ -88,3 +88,5 @@ This will show a new icon on your character sheet, making possible to trade item
 ### Macros
 
 This module also includes the following macro:
+
+1. **Get-Random Item(s) from Compendium**: Return as a whisper to the GM, X random item(s) from a selected compendium.
