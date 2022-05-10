@@ -51,13 +51,17 @@ const cypherObjectType = [
  * @param { Object } actor	- The current actor.
  */
 export function addTradeButton(html, actor) {
+	const node = html.find('[title="Trade Item"]');
+		
+	if(node.length > 0) return;
+		
 	$(`
 		<a class='item-control item-trade' title='Trade Item'>
 			<i class='fas fa-exchange-alt'></i>
 		</a>
-	`).insertBefore($('.tab.items .item-control.item-edit'));
+	`).insertBefore(html.find('.tab.items .item-control.item-edit'));
 
-	$('.item-control.item-trade').on('click', tradeItemHandler.bind(actor));
+	html.find('.item-control.item-trade').on('click', tradeItemHandler.bind(actor));
 };
 
 /**
