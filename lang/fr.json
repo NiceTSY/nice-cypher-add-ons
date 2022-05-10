@@ -28,7 +28,8 @@
 	"NICECYPHER.TradeRequestContent": "{actorName} veux t'envoyer : {tradeOffer} Acceptes-tu ?",
 	"NICECYPHER.CannotTradeLessThanOneObject": "Tu ne peux pas mettre une quantité négative.",
 
-
 	"NICECYPHER.CreationAlreadySentence": "Le personnage possède déjà un {type}",
-	"NICECYPHER.CreationButtonHint" : "{type} actuel (alt-click pour supprimer)"
+	"NICECYPHER.CreationButtonHint" : "{type} actuel (alt-click pour supprimer)",
+
+	"NICECYPHER.CreationNotGoodTypeOfJournal": "Le journal {name} n'est pas reconnu par le Creation Tool."
 }

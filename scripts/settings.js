@@ -76,6 +76,13 @@ export class CYPHERADDONS {
 		'artifact'
 	];
 
+	// Flags used by some modules
+	static FLAGS = {
+		CREATIONITEM: 'creation-item',
+		ORIGINALSKILLLEVEL: 'original-skill-level',
+		ORIGINALQUANTITY: 'original-quantity'
+	};
+
 	// Init the settings
 	static init() {
 		registerModuleSettings();
