@@ -564,6 +564,7 @@ async function journalsReading(journals, actor, remove) {
 				: journal.id}}`
 			: '');
 
+		if (CYPHERADDONS.SETTINGS.CREATIONTOOL)			
 		for (const line of lines) {
 			const l = line;
 
