@@ -108,21 +108,9 @@
 			"entity": "JournalEntry"
 		},
 		{
-			"name": "ptolus-descriptors",
-			"label": "Ptolus: Descriptors",
-			"path": "./packs/ptolus-descriptors.db",
-			"entity": "JournalEntry"
-		},
-		{
 			"name": "ptolus-foci",
 			"label": "Ptolus: Foci",
 			"path": "./packs/ptolus-foci.db",
-			"entity": "JournalEntry"
-		},
-		{
-			"name": "ptolus-types",
-			"label": "Ptolus: Types",
-			"path": "./packs/ptolus-types.db",
 			"entity": "JournalEntry"
 		},
 		{
