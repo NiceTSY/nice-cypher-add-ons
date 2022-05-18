@@ -14,6 +14,10 @@ Add compendiums containing template entries with creation flags for type, descri
 - Stay Alive (no new entries)
 - We Are All Mad Here (no new entries)
 
+## [0.4.1] - 2022-05-12
+### Fixed
+- Fix the error "TypeError: Cannot read properties of undefined (reading 'descriptor')" when opening a Companion Sheet
+
 ## [0.4.0] - 2022-05-10
 ### Note
 This release was not tested with recursions.
