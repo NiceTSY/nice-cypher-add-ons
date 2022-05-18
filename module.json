@@ -66,6 +66,12 @@
 			"entity": "JournalEntry"
 		},
 		{
+			"name": "cyphersystem-flavors",
+			"label": "Cypher System: Flavors",
+			"path": "./packs/cyphersystem-flavors.db",
+			"entity": "JournalEntry"
+		},
+		{
 			"name": "claimthesky-descriptors",
 			"label": "Claim the Sky: Descriptors",
 			"path": "./packs/claimthesky-descriptors.db",
