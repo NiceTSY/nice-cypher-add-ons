@@ -78,18 +78,6 @@
 			"entity": "JournalEntry"
 		},
 		{
-			"name": "claimthesky-types",
-			"label": "Claim the Sky: Types",
-			"path": "./packs/claimthesky-types.db",
-			"entity": "JournalEntry"
-		},
-		{
-			"name": "firstresponders-descriptors",
-			"label": "First Responders: Descriptors",
-			"path": "./packs/firstresponders-descriptors.db",
-			"entity": "JournalEntry"
-		},
-		{
 			"name": "firstresponders-foci",
 			"label": "First Responders: Foci",
 			"path": "./packs/firstresponders-foci.db",
@@ -138,24 +126,6 @@
 			"entity": "JournalEntry"
 		},
 		{
-			"name": "stayalive-descriptors",
-			"label": "Stay Alive: Descriptors",
-			"path": "./packs/stayalive-descriptors.db",
-			"entity": "JournalEntry"
-		},
-		{
-			"name": "stayalive-foci",
-			"label": "Stay Alive: Foci",
-			"path": "./packs/stayalive-foci.db",
-			"entity": "JournalEntry"
-		},
-		{
-			"name": "stayalive-types",
-			"label": "Stay Alive: Types",
-			"path": "./packs/stayalive-types.db",
-			"entity": "JournalEntry"
-		},
-		{
 			"name": "theorigin-descriptors",
 			"label": "The Origin: Descriptors",
 			"path": "./packs/theorigin-descriptors.db",
@@ -177,36 +147,6 @@
 			"name": "thestarsarefire-descriptors",
 			"label": "The Stars Are Fire: Descriptors",
 			"path": "./packs/thestarsarefire-descriptors.db",
-			"entity": "JournalEntry"
-		},
-		{
-			"name": "thestarsarefire-foci",
-			"label": "The Stars Are Fire: Foci",
-			"path": "./packs/thestarsarefire-foci.db",
-			"entity": "JournalEntry"
-		},
-		{
-			"name": "thestarsarefire-types",
-			"label": "The Stars Are Fire: Types",
-			"path": "./packs/thestarsarefire-types.db",
-			"entity": "JournalEntry"
-		},
-		{
-			"name": "weareallmadhere-descriptors",
-			"label": "We Are All Mad Here: Descriptors",
-			"path": "./packs/weareallmadhere-descriptors.db",
-			"entity": "JournalEntry"
-		},
-		{
-			"name": "weareallmadhere-foci",
-			"label": "We Are All Mad Here: Foci",
-			"path": "./packs/weareallmadhere-foci.db",
-			"entity": "JournalEntry"
-		},
-		{
-			"name": "weareallmadhere-types",
-			"label": "We Are All Mad Here: Types",
-			"path": "./packs/weareallmadhere-types.db",
 			"entity": "JournalEntry"
 		},
 		{
