@@ -18,6 +18,8 @@ Add compendiums containing template entries with creation flags for type, descri
 Not done yet:
 - The Origin
 
+Move module settings into the main FVTT Module Settings window.
+
 ## [0.4.1] - 2022-05-12
 ### Fixed
 - Fix the error "TypeError: Cannot read properties of undefined (reading 'descriptor')" when opening a Companion Sheet
