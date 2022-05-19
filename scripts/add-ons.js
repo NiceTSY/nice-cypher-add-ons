@@ -78,6 +78,7 @@ Hooks.once('setup', async () => {
 
 // Called when rendering the token HUD
 Hooks.on('renderTokenHUD', async (hud, html, token) => {
+	CYPHERADDONS.getSettings();
 	if (CYPHERADDONS.SETTINGS.GMINTRUSION)
 		if (game.user.isGM) showHUDGmIntrusion(html, token);
 });
@@ -86,6 +87,7 @@ Hooks.on('renderTokenHUD', async (hud, html, token) => {
 Hooks.on('preCreateItem', async (data, item) => {
 	const object = data.data._source;
 
+	CYPHERADDONS.getSettings();
 	if (UTILITIES.doesArrayContains(item.type.toLowerCase(), CYPHERADDONS.NUMENERAITEMS)) {
 		if (CYPHERADDONS.SETTINGS.AUTOOBFUSCATE) object.data.identified = false;
 		if (CYPHERADDONS.SETTINGS.AUTOROLL) object.data.level = rollLevelOfObject(object.data).toString();
@@ -94,13 +96,15 @@ Hooks.on('preCreateItem', async (data, item) => {
 
 // Called when dropping something on the character sheet
 Hooks.on('dropActorSheetData', async (actor, html, item) => {
+	CYPHERADDONS.getSettings();
 	if (item.type.toLowerCase() === 'journalentry' && actor.data.type === "PC")
 		if (CYPHERADDONS.SETTINGS.SENTENCELINK) checkJournalType(actor, html, item);
 });
 
 // Called opening the character sheet
 Hooks.on('renderCypherActorSheet', (sheet, html) => {
-	if (CYPHERADDONS.SETTINGS.TRADEBUTTON) addTradeButton(html, sheet.actor);
+	CYPHERADDONS.getSettings();
+	if (CYPHERADDONS.SETTINGS.SHOWTRADE) addTradeButton(html, sheet.actor);
 	if (sheet.actor.data.type === "PC")
 		if (CYPHERADDONS.SETTINGS.SENTENCELINK) checkIfLinkedData(html, sheet.actor);
 });
