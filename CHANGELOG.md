@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - whenever
+Add compendiums containing template entries with creation flags for type, descriptor for focus from the following books:
+- Cypher System Rulebook
+- Claim The Sky (no new types)
+- First Responders (no new descriptors)
+- Godforsaken
+- The Stars Are Fire (one new descriptor)
+- Stay Alive (no new entries)
+- We Are All Mad Here (no new entries)
+- Ptolus (three new foci)
+
+Not done yet:
+- The Origin
+
 ## [0.4.1] - 2022-05-12
 ### Fixed
 - Fix the error "TypeError: Cannot read properties of undefined (reading 'descriptor')" when opening a Companion Sheet
