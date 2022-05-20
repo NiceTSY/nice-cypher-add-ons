@@ -781,6 +781,9 @@ async function askForOptions(line, lines) {
 		await actor.update(updatedData);
 	};
 
+	// Finish now if full creation tool not required
+	if (!CYPHERADDONS.SETTINGS.CREATIONTOOL) return;
+
 	// Effort
 	const checkEffortModificator = eval(data.effortModificator);
 	if (checkEffortModificator > 0) {
