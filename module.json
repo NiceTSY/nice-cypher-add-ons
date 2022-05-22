@@ -120,24 +120,6 @@
 			"entity": "JournalEntry"
 		},
 		{
-			"name": "theorigin-descriptors",
-			"label": "The Origin: Descriptors",
-			"path": "./packs/theorigin-descriptors.db",
-			"entity": "JournalEntry"
-		},
-		{
-			"name": "theorigin-foci",
-			"label": "The Origin: Foci",
-			"path": "./packs/theorigin-foci.db",
-			"entity": "JournalEntry"
-		},
-		{
-			"name": "theorigin-types",
-			"label": "The Origin: Types",
-			"path": "./packs/theorigin-types.db",
-			"entity": "JournalEntry"
-		},
-		{
 			"name": "thestarsarefire-descriptors",
 			"label": "The Stars Are Fire: Descriptors",
 			"path": "./packs/thestarsarefire-descriptors.db",
