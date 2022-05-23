@@ -62,7 +62,7 @@ export class CYPHERADDONS {
 		GMINTRUSION: true,
 		AUTOOBFUSCATE: true,
 		AUTOROLL: true,
-		TRADEBUTTON: true,
+		SHOWTRADE: true,
 		SORTITEMS: true,
 		SENTENCELINK: true,
 		CREATIONTOOL: true
@@ -88,139 +88,14 @@ export class CYPHERADDONS {
 		registerModuleSettings();
 
 		CYPHERADDONS.MODULE.WORLD = game.world.name;
+		this.getSettings();
+	};
+
+	static getSettings() {
 		for (let s in CYPHERADDONS.SETTINGS) CYPHERADDONS.SETTINGS[s] = game.settings.get(CYPHERADDONS.MODULE.NAME, s);
-	};
-};
-
-/**
- * @description The dialog used to show all the configurable options
- * @class cypherAddOnsConfigDialog
- * @extends {FormApplication}
- */
-class cypherAddOnsConfigDialog extends FormApplication {
-	static get defaultOptions() {
-		const defaults = super.defaultOptions,
-			overrides = {
-				width: 600,
-				height: "auto",
-				id: "cypher-add-ons-config",
-				template: `${CYPHERADDONS.MODULE.PATH}/templates/add_ons_config.html`,
-				title: CYPHERADDONS.MODULE.TITLE,
-				userId: game.userId,
-				closeOnSubmit: true
-			};
-
-		return foundry.utils.mergeObject(defaults, overrides);
-	};
-
-	getData(options) {
-		return this.reset ?
-			{
-				useGmIntrusion: true,
-				useAutoObfuscate: true,
-				useAutoRoll: true,
-				useTradeButton: true,
-				useSortItems: true,
-				useSentenceLink: true,
-				useCreationTool: true
-			} :
-			{
-				useGmIntrusion: SettingsForm.getUseGmIntrusion(),
-				useAutoObfuscate: SettingsForm.getUseAutoObfuscate(),
-				useAutoRoll: SettingsForm.getUseAutoRoll(),
-				useTradeButton: SettingsForm.getUseTradeButton(),
-				useSortItems: SettingsForm.getUseSortItems(),
-				useSentenceLink: SettingsForm.getUseSentenceLink(),
-				useCreationTool: SettingsForm.getUseCreationTool()
-			};
-	};
-
-	// resets values for custom sheet settings
-	activateListeners(html) {
-        super.activateListeners(html);
-        html.find('button[name="reset"]').click(this.onReset.bind(this));
-        this.reset = false;
-        
-        html.find('#mcg-accordion-card').click(function() {
-            let mcgStatement = $('#mcg-accordion-card .card-body');
-            $('#mcg-accordion-card .card-title .fas').toggleClass("arrow-down");
-
-            if(mcgStatement.css('display') == 'block') {
-                mcgStatement.slideUp();
-            } else {
-                $('.card-body').slideUp();
-                mcgStatement.slideDown();
-            }
-        });
-    };
-
-	onReset() {
-		this.reset = true;
-		this.render();
-	};
-
-	// gets data from HTML form
-	async _updateObject(e, formData) {
-		SettingsForm.setUseGmIntrusion(formData.useGmIntrusion);
-		SettingsForm.setUseAutoObfuscate(formData.useAutoObfuscate);
-		SettingsForm.setUseAutoRoll(formData.useAutoRoll);
-		SettingsForm.setUseTradeButton(formData.useTradeButton);
-		SettingsForm.setUseSortItems(formData.useSortItems);
-		SettingsForm.setUseSentenceLink(formData.useSentenceLink);
-		SettingsForm.setUseCreationTool(formData.useCreationTool);
-	};
-};
-
-class SettingsForm {
-	static getUseGmIntrusion() {
-		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[0]);
-	};
-	static setUseGmIntrusion(value) {
-		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[0], value);
-	}
-
-	static getUseAutoObfuscate() {
-		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[1]);
-	};
-	static setUseAutoObfuscate(value) {
-		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[1], value);
-	}
-
-	static getUseAutoRoll() {
-		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[2]);
-	};
-	static setUseAutoRoll(value) {
-		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[2], value);
-	}
-
-	static getUseTradeButton() {
-		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[3]);
-	};
-	static setUseTradeButton(value) {
-		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[3], value);
-	}
-
-	static getUseSortItems() {
-		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[4]);
-	};
-	static setUseSortItems(value) {
-		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[4], value);
-	}
-
-	static getUseSentenceLink() {
-		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[5]);
-	};
-	static setUseSentenceLink(value) {
-		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[5], value);
-	}
-
-	static getUseCreationTool() {
-		return game.settings.get(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[6]);
-	};
-	static setUseCreationTool(value) {
-		game.settings.set(CYPHERADDONS.MODULE.NAME, Object.keys(CYPHERADDONS.SETTINGS)[6], value);
 	}
 };
+
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------ Function(s) -------------------------------------------
@@ -229,28 +104,15 @@ class SettingsForm {
  * @description Register the module settings
  */
 function registerModuleSettings() {
-	// Settings menu
-	game.settings.registerMenu(CYPHERADDONS.MODULE.NAME, CYPHERADDONS.MODULE.NAME, {
-		name: game.i18n.localize('NICECYPHER.SettingsMenuTitle'),
-		label: game.i18n.localize('NICECYPHER.SettingsMenuLabel'),
-		hint: game.i18n.localize('NICECYPHER.SettingsMenuHint'),
-		icon: "fas fa-user-cog",
-		type: cypherAddOnsConfigDialog,
-		restricted: true
-	});
-
 	// Register all settings
 	Object.keys(CYPHERADDONS.SETTINGS).forEach(k => {
 		game.settings.register(CYPHERADDONS.MODULE.NAME, k, {
 			name: game.i18n.localize(`NICECYPHER.Settings${k}Title`),
 			hint: game.i18n.localize(`NICECYPHER.Settings${k}Hint`),
 			scope: 'world',
-			config: false,
+			config: true,
 			default: true,
-			type: Boolean,
-			onChange: () => setTimeout(() => {
-				location.reload();
-			}, 1000)
+			type: Boolean
 		});
 	});
 };
