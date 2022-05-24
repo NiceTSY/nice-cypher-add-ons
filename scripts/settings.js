@@ -92,10 +92,30 @@ export class CYPHERADDONS {
 	};
 
 	static getSettings() {
-		for (let s in CYPHERADDONS.SETTINGS) CYPHERADDONS.SETTINGS[s] = game.settings.get(CYPHERADDONS.MODULE.NAME, s);
+		for (let s in CYPHERADDONS.SETTINGS) 
+			CYPHERADDONS.SETTINGS[s] = game.settings.get(CYPHERADDONS.MODULE.NAME, s);
 	}
 };
 
+/**
+ * @description The dialog used to show the MCG Fan Use Policy
+ * @class cypherAddOnsConfigDialog
+ * @extends {FormApplication}
+ */
+ class cypherAddOnsMCGFUP extends FormApplication {
+	static get defaultOptions() {
+		const defaults = super.defaultOptions,
+			overrides = {
+				width: 600,
+				height: "auto",
+				id: "cypher-add-ons-MCG-FUP",
+				template: `${CYPHERADDONS.MODULE.PATH}/templates/add_ons_mcg_fup.html`,
+				title: CYPHERADDONS.MODULE.TITLE
+			};
+
+		return foundry.utils.mergeObject(defaults, overrides);
+	};
+};
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------ Function(s) -------------------------------------------
@@ -104,6 +124,14 @@ export class CYPHERADDONS {
  * @description Register the module settings
  */
 function registerModuleSettings() {
+	// Register the FAN USE POLICY
+	game.settings.registerMenu(CYPHERADDONS.MODULE.NAME, CYPHERADDONS.MODULE.NAME, {
+		label: "MCG Fan Use Policy - Abbreviated Statement",
+		icon: "	fas fa-book-open",
+		type: cypherAddOnsMCGFUP,
+		restricted: true
+	});
+
 	// Register all settings
 	Object.keys(CYPHERADDONS.SETTINGS).forEach(k => {
 		game.settings.register(CYPHERADDONS.MODULE.NAME, k, {
