@@ -20,8 +20,6 @@ If you need to speak about this module or about the Cypher System you can join <
 
 > <p align="justify"> This module follows the <a href="https://www.montecookgames.com/fan-use-policy/">Fan Use Policy</a> from Monte Cook Games, and therefore does not contains anything from the books. </p>
 
-> <p align="justify"> This module includes the following official image 'Numenera Discovery 20 <a href="https://artiglio.artstation.com/">Mirco Paganessi</a>' (also known as <a href="https://www.montecookgames.com/numenera-on-twitch-now-with-more-squicky-creatures/">'Kaliss, a Clever Jack who Works the Back Alleys'</a>), which is included in accordance with the preceding <b>Fan Use Policy</b>. </p>
-
 > <p align="justify"> This module includes some icons from Games-Icons, they are provided under the terms of the Creative Commons 3.0 BY license. Available on <a href="https://game-icons.net">https://game-icons.net</a>. </p>
 
 ## Installation
