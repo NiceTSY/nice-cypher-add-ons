@@ -130,7 +130,7 @@ class creationSkill {
 		this.skill = skill;
 		this.skill.flags = { [CYPHERADDONS.MODULE.NAME] : { 
 			[CYPHERADDONS.FLAGS.CREATIONITEM] : true,
-			[CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL] : skillLevels[level]
+			[CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL] : "None"
 		}};
 	};
 };
@@ -820,20 +820,19 @@ async function askForOptions(line, lines) {
 	const actor_auto_skills = actor.items.filter(i => 
 		(i.data.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.CREATIONITEM] && i.data.type === 'skill')),
 		existingSkills = actor.items.filter(i => i.data.type === 'skill');
-	for (const s of actor_auto_skills) if (s.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL] !== "") {
+	for (const s of actor_auto_skills) if (s.data.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL] !== "None") {
 		let skill = existingSkills.find(sk => sk.name === s.name).data;
 
-		skill = setSkillLevel(skill, skill.flags[CYPHERADDONS.MODULE.NAME][CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL], true);
+		skill = upSkillLevel(skill, skill.flags[CYPHERADDONS.MODULE.NAME][CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL], true);		
 		itemsToUpdate.push({_id: skill._id, flags: skill.flags});
 		itemsToUpdate.push({_id: skill._id, data: skill.data});
-
 	} else itemsToDelete.push(s.id);
 	for (const s of data.skills) 
 		if (s) 
 			if (existingSkills.find(sk => sk.name === s.name)) {
 				let skill = existingSkills.find(sk => sk.name === s.name).data;
 
-				skill = setSkillLevel(skill, s.skill.data.skillLevel);
+				skill = upSkillLevel(skill, s.skill.data.skillLevel);
 				itemsToUpdate.push({_id: skill._id, flags: skill.flags});
 				itemsToUpdate.push({_id: skill._id, data: skill.data});
 			} else itemsToCreate.push(s.skill);
@@ -975,7 +974,7 @@ function getObject(start, str) {
  * @param { String } level
  * @param { Boolean } [rollBack=false]
  */
-function setSkillLevel(skill, level, rollBack = false) {
+function upSkillLevel(skill, level, rollBack = false) {
 	
 	if (rollBack) {		
 		setProperty(skill, `flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.CREATIONITEM}`, false);
