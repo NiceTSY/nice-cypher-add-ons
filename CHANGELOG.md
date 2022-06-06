@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0]- 2022-06-06
+### Fixed
+- Fix creation tool always deleting items & inline the settings panel by @farling42 in https://github.com/NiceTSY/nice-cypher-add-ons/pull/16
+- Fix skill not updating properly when deleting a linked journal by @NiceTSY in https://github.com/NiceTSY/nice-cypher-add-ons/pull/22
+
+### Added
+- Add the MCG Fan Use Policy - Abbreviated Statement to the settings by @NiceTSY in https://github.com/NiceTSY/nice-cypher-add-ons/pull/19
+
 ## [0.4.1] - 2022-05-12
 ### Fixed
 - Fix the error "TypeError: Cannot read properties of undefined (reading 'descriptor')" when opening a Companion Sheet
