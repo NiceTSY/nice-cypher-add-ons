@@ -62,16 +62,22 @@ Hooks.once('ready', async () => {
 Hooks.once('setup', async () => {
 	game.socket.on(`module.${CYPHERADDONS.MODULE.NAME}`, packet => {
 		let data = packet.data;
-		let type = packet.type;
-		data.receiver = game.actors.get(packet.receiverId);
-		data.trader = game.actors.get(packet.traderId);
-		if (data.receiver.isOwner) {
-			if (game.user.character == packet.receiverId && type === 'requestTrade') receiveTrade(data);
-		}
-		else {
-			if (type === 'acceptTrade') endTrade(data);
-			if (type === 'refuseTrade') denyTrade(data);
-			if (type === 'possessItem') alreadyTrade(data);
+		data.receiver   = game.actors.get(packet.receiverId);
+		data.trader     = game.actors.get(packet.traderId);
+		data.originator = packet.originator;
+		switch (packet.type) {
+			case 'requestTrade':
+				if (packet.originator != game.user.id && data.receiver.isOwner && (!game.user.isGM || !data.receiver.hasPlayerOwner)) receiveTrade(data, packet.originator);
+				break;
+			case 'acceptTrade': 
+				if (packet.originator == game.user.id) endTrade(data);
+				break;
+			case 'refuseTrade':
+				if (packet.originator == game.user.id) denyTrade(data);
+				break;
+			case 'possessItem':
+				if (packet.originator == game.user.id) alreadyTrade(data);
+				break;
 		}
 	});
 });
@@ -88,7 +94,7 @@ Hooks.on('preCreateItem', async (data, item) => {
 	const object = data._source;
 
 	CYPHERADDONS.getSettings();
-	if (UTILITIES.doesArrayContains(item.type.toLowerCase(), CYPHERADDONS.NUMENERAITEMS)) {
+	if (CYPHERADDONS.NUMENERAITEMS.includes(item.type.toLowerCase())) {
 		if (CYPHERADDONS.SETTINGS.AUTOROLL) object.system.basic.level = rollLevelOfObject(object).toString();
 	};
 });

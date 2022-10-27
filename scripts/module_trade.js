@@ -82,14 +82,26 @@ function tradeItemHandler(e) {
  */
 async function tradeItem(itemId) {
 	const tradeActor = this;
-	const actors = UTILITIES.returnActorByPermission(CONST.ENTITY_PERMISSIONS.OBSERVER, false, tradeActor);
-	const item = tradeActor.items.find(i => i>id === itemId);
+	const item = tradeActor.items.find(i => i.id === itemId);
 
 	let maxQuantity = item.system.quantity;
 	if (maxQuantity <= 0 && maxQuantity != null) return ui.notifications.warn(game.i18n.localize('CYPHERSYSTEM.CannotMoveNotOwnedItem'));
 
+	// Get a list of actors whose owners are online
+	let actorOptions = []
+	game.actors.forEach(actor => {
+		Object.entries(actor.ownership).filter(e => {
+			let [userid, ownership] = e;
+			if (ownership == CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER && 
+				userid != game.user.id && userid != "default" && 
+				actor.type === 'pc' && actor.id != tradeActor.id && 
+				game.users.get(userid).active && !actorOptions.includes(actor))
+				actorOptions.push(actor);
+		});
+	});
+
 	const maxQuantityText = (maxQuantity != null) ? `${game.i18n.localize('CYPHERSYSTEM.Of')} ${maxQuantity}` : "";
-	const data = { actorOptions: actors, maxQuantityText: maxQuantityText };
+	const data = { actorOptions, maxQuantityText };
 
 	new Dialog({
 		title: game.i18n.format("CYPHERSYSTEM.MoveItem", { name: item.name }),
@@ -157,6 +169,7 @@ function emitTrade(html, tradeActor, item, quantity = 1) {
 
 	game.socket.emit(`module.${CYPHERADDONS.MODULE.NAME}`, {
 		data: { item, quantity },
+		originator: game.user.id,
 		receiverId: receiverId,
 		traderId: traderId,
 		type: 'requestTrade'
@@ -173,7 +186,7 @@ export function receiveTrade(data) {
 
 	new Dialog({
 		title: game.i18n.localize('NICECYPHER.TradeRequestTitle'),
-		content: game.i18n.format('NICECYPHER.TradeRequestContent', { actorName: trader.name, tradeOffer: `<p><b>x${data.quantity}</b> ${data.item.name}</p>` }),
+		content: game.i18n.format('NICECYPHER.TradeRequestContent', { actorName: trader.name, rxActorName: data.receiver.name, tradeOffer: `<p><b>x${data.quantity}</b> ${data.item.name}</p>` }),
 		buttons: {
 			accept: {
 				label: game.i18n.localize('CYPHERSYSTEM.Accept'),
@@ -200,7 +213,7 @@ export async function receiveItem({ item, quantity, receiver }) {
 	duplicatedItem.system.quantity = quantity;
 
 	const existingItem = receiver.items.find(i => i.name === duplicatedItem.name);
-	if (existingItem && UTILITIES.doesArrayContains(duplicatedItem.type, cypherObjectType))
+	if (existingItem && cypherObjectType.includes(duplicatedItem.type))
 		return true;
 
 	if (existingItem) {
@@ -236,7 +249,7 @@ export async function giveItem({ item, quantity, trader }) {
 		};
 
 		item.update(updateItem).then(() => {
-			if (parseInt(item.system.quantity) <= 0 || UTILITIES.doesArrayContains(item.type, cypherObjectType))
+			if (parseInt(item.system.quantity) <= 0 || cypherObjectType.includes(item.type))
 				item.delete();
 		});
 	} else {
@@ -292,6 +305,7 @@ function tradeConfirmed(data) {
 	const emitType = duplicate ? "acceptTrade" : "possessItem";	
 	game.socket.emit(`module.${CYPHERADDONS.MODULE.NAME}`, {
 		data: { item, quantity },
+		originator: data.originator,
 		receiverId: data.receiver.id,
 		traderId: data.trader.id,
 		type: emitType
@@ -308,6 +322,7 @@ function tradeDenied(data) {
 
 	game.socket.emit(`module.${CYPHERADDONS.MODULE.NAME}`, {
 		data: { item, quantity },
+		originator: data.originator,
 		receiverId: data.receiver.id,
 		traderId: data.trader.id,
 		type: "refuseTrade"

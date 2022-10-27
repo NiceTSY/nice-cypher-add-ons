@@ -23,7 +23,7 @@
 	
 	"NICECYPHER.Trade": "Trade",
 	"NICECYPHER.TradeRequestTitle": "Trade Request",	
-	"NICECYPHER.TradeRequestContent": "{actorName} is sending you: {tradeOffer}. Do you accept?",
+	"NICECYPHER.TradeRequestContent": "{actorName} is sending {rxActorName}: {tradeOffer}. Do you accept?",
 	"NICECYPHER.CannotTradeLessThanOneObject": "You cannot trade negative quantity.",
 
 	"NICECYPHER.CreationAlreadySentence": "The character already possess the following type: {type}",

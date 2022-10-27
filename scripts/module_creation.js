@@ -566,7 +566,7 @@ async function journalsReading(pages, actor, remove) {
 				other = (occurrences.length > 0) ? occurrences.pop() : false;
 
 			// Stats
-			if (UTILITIES.doesArrayContains(type, typeStatCheck)) {
+			if (typeStatCheck.includes(type)) {
 				const stat = type.substring(1),
 					value = l.match(/\d+/g),
 					operation = l.match(/[+\-](\.\d+|\d+(\.\d+)?)/g);
@@ -597,7 +597,7 @@ async function journalsReading(pages, actor, remove) {
 				};
 			}
 			// Abilities / Skills / Equipments
-			else if (UTILITIES.doesArrayContains(type, typeItemsCheck)) {
+			else if (typeItemsCheck.includes(type)) {
 				const id = object.match(/\[(.*?)\]/)[1],
 					compendium = id.split('.');
 
@@ -635,7 +635,7 @@ async function journalsReading(pages, actor, remove) {
 					const o = (optionType === `${quantifier}level` && option) ? UTILITIES.capitalizeFirstLetter(option.toLowerCase()) : skillLevels[2];
 					let skillLevel = 2;
 
-					if (UTILITIES.doesArrayContains(o, skillLevels)) {
+					if (skillLevels.includes(o)) {
 						skillLevel = skillLevels.indexOf(o) > 3
 							? skillLevels.indexOf(o) - 4
 							: skillLevels.indexOf(o);
@@ -724,7 +724,7 @@ async function journalsReading(pages, actor, remove) {
  */
 async function askForOptions(line, lines) {
 	if (optionsCreationsCheck.length > 0)
-		if (UTILITIES.doesArrayContains(line, optionsCreationsCheck))
+		if (optionsCreationsCheck.includes(line))
 			return false;
 	
 	optionsCreationsCheck = [line];
@@ -866,7 +866,7 @@ async function askForOptions(line, lines) {
  * @return {*} 
  */
 function pushLocalisationSkillLevel() {
-	if (UTILITIES.doesArrayContains(game.i18n.localize('CYPHERSYSTEM.Specialized'), skillLevels)) return;
+	if (skillLevels.includes(game.i18n.localize('CYPHERSYSTEM.Specialized'))) return;
 
 	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Specialized'));
 	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Trained'));
@@ -889,7 +889,7 @@ function returnArrayOfHtmlContent(page) {
  * @return { Boolean / String } 
  */
 function isGoodJournalType(type) {
-	if (!UTILITIES.doesArrayContains(type, typeSentenceCheck)) return false;
+	if (!typeSentenceCheck.includes(type)) return false;
 	return type;
 };
 
