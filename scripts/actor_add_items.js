@@ -79,15 +79,10 @@ function findSorting(description)
 }
 
 /**
- * @param {object}         actor        The actor on which the items are being created
- * @param {string}         embeddedName The name of the embedded Document type (e.g. "Item")
- * @param {Array.<object>} result       An Array of created data objects
- * @param {object}         options      Options which modified the creation operation
- * @param {string}         userId       The ID of the User who triggered the operation
+ * @param {object} item The document being added (item.parent is the Actor)
  */
-export function addItemsToActor(actor, embeddedName, result, options, userId)
+export function addItemToActor(item)
 {
-    // embeddedName should always be "Item"
     /*
     console.log(`actor   = '${actor.name}'`)
     console.log(`name    = ${embeddedName}`);
@@ -99,37 +94,26 @@ export function addItemsToActor(actor, embeddedName, result, options, userId)
     // Check each @sorting tag on each item.
     // If the value on the tag matches one of the defined skill or ability categories,
     // then set the sorting parameter to match that skill/ability category's number.
-    let skill_categories, ability_categories;
-    for (let item of result)
+    let categories;
+    if (item.type == 'skill')
+        categories = getSkillCategories(item.parent.system.settings.skills);
+    else if (item.type == 'ability')
+        categories = getAbilityCategories(item.parent.system.settings.abilities);
+    else
+        return;
+
+    console.log(`result has '${item.type}' going to look for any of ${categories}`);
+
+    for (const sorting of findSorting(item.system.description))
     {
-        let categories;
-        if (item.type == 'skill')
+        // Convert from Localized string to default string
+        let sort_flag = categories.get(sorting);
+        if (sort_flag)
         {
-            if (!skill_categories) skill_categories = getSkillCategories(actor.system.settings.skills);
-            categories = skill_categories;
-        }
-        else if (item.type == 'ability')
-        {
-            if (!ability_categories) ability_categories = getAbilityCategories(actor.system.settings.abilities);
-            categories = ability_categories;
-        }
-        else
-            continue;
-
-        console.log(`result has '${item.type}' going to look for any of ${categories}`);
-
-        for (const sorting of findSorting(item.system.description))
-        {
-            // Convert from Localized string to default string
-            let sort_flag = categories.get(sorting);
-            if (sort_flag)
-            {
-                // This isn't sticking on an F5 reload !!!
-                item.system.settings.general.sorting = sort_flag;
-                console.log(`result has '${item.name}' moved to '${sort_flag}'`);
-                break;
-            }
+            // This isn't sticking on an F5 reload !!!
+            item.updateSource({'system.settings.general.sorting': sort_flag});
+            console.log(`result has '${item.name}' moved to '${sort_flag}'`);
+            break;
         }
     }
-
 }

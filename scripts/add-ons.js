@@ -33,7 +33,7 @@ import { CYPHERADDONS } from "./settings.js";
 import { UTILITIES } from "./utilities.js";
 import { addTradeButton, receiveTrade, endTrade, denyTrade, alreadyTrade } from "./module_trade.js";
 import { checkJournalType, checkIfLinkedData } from "./module_creation.js";
-import { addItemsToActor } from "./actor_add_items.js";
+import { addItemToActor } from "./actor_add_items.js";
 import { libWrapper } from './libwrapper-shim.js';
 
 /*------------------------------------------------------------------------------------------------
@@ -43,19 +43,11 @@ import { libWrapper } from './libwrapper-shim.js';
 Hooks.once('init', () => {
 	// Register settings
 	CYPHERADDONS.init();
-
 });
 
-// Called when the world is ready
-Hooks.once('ready', async () => {
-	libWrapper.register(CYPHERADDONS.MODULE.NAME, 'Actor.prototype._preCreateEmbeddedDocuments',
-		function(wrapped, ...args) {
-			let result = wrapped(...args);
-			if (CYPHERADDONS.SETTINGS.SORTITEMS) addItemsToActor(this, ...args);
-			return result;
-		},
-	'WRAPPER');
-});
+Hooks.on('preCreateItem', async (document, data, options, userId) => {
+	if (document.parent instanceof Actor) addItemToActor(document);
+})
 
 // Called when the module is setup
 Hooks.once('setup', async () => {

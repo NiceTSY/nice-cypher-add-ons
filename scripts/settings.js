@@ -86,7 +86,7 @@ export class CYPHERADDONS {
 	static init() {
 		registerModuleSettings();
 
-		CYPHERADDONS.MODULE.WORLD = game.world.name;
+		CYPHERADDONS.MODULE.WORLD = game.world.id;
 		this.getSettings();
 	};
 
