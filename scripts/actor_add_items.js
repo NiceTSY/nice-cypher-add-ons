@@ -105,12 +105,12 @@ export function addItemsToActor(actor, embeddedName, result, options, userId)
         let categories;
         if (item.type == 'skill')
         {
-            if (!skill_categories) skill_categories = getSkillCategories(actor.data.data.settings.skills);
+            if (!skill_categories) skill_categories = getSkillCategories(actor.system.settings.skills);
             categories = skill_categories;
         }
         else if (item.type == 'ability')
         {
-            if (!ability_categories) ability_categories = getAbilityCategories(actor.data.data.settings.abilities);
+            if (!ability_categories) ability_categories = getAbilityCategories(actor.system.settings.abilities);
             categories = ability_categories;
         }
         else
@@ -118,14 +118,14 @@ export function addItemsToActor(actor, embeddedName, result, options, userId)
 
         console.log(`result has '${item.type}' going to look for any of ${categories}`);
 
-        for (const sorting of findSorting(item.data.description))
+        for (const sorting of findSorting(item.system.description))
         {
             // Convert from Localized string to default string
             let sort_flag = categories.get(sorting);
             if (sort_flag)
             {
-                item.data.sorting = sort_flag;
-                console.log(`result has '${item.name}' moved to '${item.data.sorting}'`);
+                item.system.sorting = sort_flag;
+                console.log(`result has '${item.name}' moved to '${item.system.sorting}'`);
                 break;
             }
         }

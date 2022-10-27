@@ -83,16 +83,16 @@ function tradeItemHandler(e) {
 async function tradeItem(itemId) {
 	const tradeActor = this;
 	const actors = UTILITIES.returnActorByPermission(CONST.ENTITY_PERMISSIONS.OBSERVER, false, tradeActor);
-	const item = tradeActor.items.find(i => i.data._id === itemId);
+	const item = tradeActor.items.find(i => i>id === itemId);
 
-	let maxQuantity = item.data.data.quantity;
+	let maxQuantity = item.system.quantity;
 	if (maxQuantity <= 0 && maxQuantity != null) return ui.notifications.warn(game.i18n.localize('CYPHERSYSTEM.CannotMoveNotOwnedItem'));
 
 	const maxQuantityText = (maxQuantity != null) ? `${game.i18n.localize('CYPHERSYSTEM.Of')} ${maxQuantity}` : "";
 	const data = { actorOptions: actors, maxQuantityText: maxQuantityText };
 
 	new Dialog({
-		title: game.i18n.format("CYPHERSYSTEM.MoveItem", { name: item.data.name }),
+		title: game.i18n.format("CYPHERSYSTEM.MoveItem", { name: item.name }),
 		content: await renderTemplate(`${CYPHERADDONS.MODULE.PATH}/templates/trade_dialogue.html`, data),
 		buttons: buttons(),
 		default: "move",
@@ -149,7 +149,7 @@ function emitTrade(html, tradeActor, item, quantity = 1) {
 	const receiverId = html.find(`select#playerTrade`)[0].value;
 	const traderId = tradeActor.id
 
-	quantity = (item.data.data.quantity != null && quantity > item.data.data.quantity) ? item.data.data.quantity : quantity;
+	quantity = (item.system.quantity != null && quantity > item.system.quantity) ? item.system.quantity : quantity;
 	if (quantity <= 0) {
 		tradeItem(item.id);
 		return ui.notifications.warn(game.i18n.localize('NICECYPHER.CannotTradeLessThanOneObject'));
@@ -197,23 +197,23 @@ export function receiveTrade(data) {
  */
 export async function receiveItem({ item, quantity, receiver }) {
 	const duplicatedItem = duplicate(item);
-	duplicatedItem.data.quantity = quantity;
+	duplicatedItem.system.quantity = quantity;
 
-	const existingItem = receiver.items.find(i => i.data.name === duplicatedItem.name);
+	const existingItem = receiver.items.find(i => i.name === duplicatedItem.name);
 	if (existingItem && UTILITIES.doesArrayContains(duplicatedItem.type, cypherObjectType))
 		return true;
 
 	if (existingItem) {
 		let updatedQuantity, updateItem;
 
-		updatedQuantity = parseInt(existingItem.data.data.quantity) + parseInt(quantity);
+		updatedQuantity = parseInt(existingItem.system.quantity) + parseInt(quantity);
 		updateItem = {
-			"data.quantity": updatedQuantity
+			"system.quantity": updatedQuantity
 		};
 
 		existingItem.update(updateItem);
 	} else {
-		item.data.quantity = quantity;
+		item.system.quantity = quantity;
 		await receiver.createEmbeddedDocuments("Item", [item]);
 		// Item.create(duplicatedItem, {parent: receiver});
 	}
@@ -227,16 +227,16 @@ export async function receiveItem({ item, quantity, receiver }) {
 export async function giveItem({ item, quantity, trader }) {
 	item = trader.items.getName(item.name);
 
-	if ("quantity" in item.data.data) {
+	if ("quantity" in item.system) {
 		let updatedQuantity, updateItem;
 
-		updatedQuantity = parseInt(item.data.data.quantity) - parseInt(quantity);
+		updatedQuantity = parseInt(item.system.quantity) - parseInt(quantity);
 		updateItem = {
 			"data.quantity": updatedQuantity
 		};
 
 		item.update(updateItem).then(() => {
-			if (parseInt(item.data.data.quantity) <= 0 || UTILITIES.doesArrayContains(item.data.type, cypherObjectType))
+			if (parseInt(item.system.quantity) <= 0 || UTILITIES.doesArrayContains(item.type, cypherObjectType))
 				item.delete();
 		});
 	} else {

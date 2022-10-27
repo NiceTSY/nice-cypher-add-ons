@@ -66,7 +66,7 @@ Hooks.once('setup', async () => {
 		data.receiver = game.actors.get(packet.receiverId);
 		data.trader = game.actors.get(packet.traderId);
 		if (data.receiver.isOwner) {
-			if (game.user.data.character == packet.receiverId && type === 'requestTrade') receiveTrade(data);
+			if (game.user.character == packet.receiverId && type === 'requestTrade') receiveTrade(data);
 		}
 		else {
 			if (type === 'acceptTrade') endTrade(data);
@@ -85,19 +85,19 @@ Hooks.on('renderTokenHUD', async (hud, html, token) => {
 
 // Called before a new item is created on character sheet
 Hooks.on('preCreateItem', async (data, item) => {
-	const object = data.data._source;
+	const object = data._source;
 
 	CYPHERADDONS.getSettings();
 	if (UTILITIES.doesArrayContains(item.type.toLowerCase(), CYPHERADDONS.NUMENERAITEMS)) {
-		if (CYPHERADDONS.SETTINGS.AUTOOBFUSCATE) object.data.identified = false;
-		if (CYPHERADDONS.SETTINGS.AUTOROLL) object.data.level = rollLevelOfObject(object.data).toString();
+		if (CYPHERADDONS.SETTINGS.AUTOOBFUSCATE) object.system.identified = false;
+		if (CYPHERADDONS.SETTINGS.AUTOROLL) object.system.level = rollLevelOfObject(object.data).toString();
 	};
 });
 
 // Called when dropping something on the character sheet
 Hooks.on('dropActorSheetData', async (actor, html, item) => {
 	CYPHERADDONS.getSettings();
-	if (item.type.toLowerCase() === 'journalentry' && actor.data.type === "PC")
+	if ((item.type.toLowerCase() === 'journalentry' || item.type.toLowerCase() === 'journalentrypage') && actor.type === "pc")
 		if (CYPHERADDONS.SETTINGS.SENTENCELINK) checkJournalType(actor, html, item);
 });
 
@@ -105,7 +105,7 @@ Hooks.on('dropActorSheetData', async (actor, html, item) => {
 Hooks.on('renderCypherActorSheet', (sheet, html) => {
 	CYPHERADDONS.getSettings();
 	if (CYPHERADDONS.SETTINGS.SHOWTRADE) addTradeButton(html, sheet.actor);
-	if (sheet.actor.data.type === "PC")
+	if (sheet.actor.type === "pc")
 		if (CYPHERADDONS.SETTINGS.SENTENCELINK) checkIfLinkedData(html, sheet.actor);
 });
 
@@ -120,7 +120,7 @@ Hooks.on('renderCypherActorSheet', (sheet, html) => {
 async function showHUDGmIntrusion(html, token) {
 	// Check if the token is a PC
 	let actor = game.actors.get(token.actorId);
-	if (!actor || actor.data.type.toLowerCase() != 'pc') return;
+	if (!actor || actor.type.toLowerCase() != 'pc') return;
 
 	// Get the new HUD button template
 	let gmiDisplay = await renderTemplate(`${CYPHERADDONS.MODULE.PATH}/templates/gmi_hud.html`);

@@ -61,17 +61,17 @@ export class UTILITIES {
 
 		if (withOwned) {
 			game.actors.forEach((a) => {
-				Object.entries(a.data.permission).filter(e => {
+				Object.entries(a.ownership).filter(e => {
 					let [id, perm] = e;
-					if (perm >= permission && id != game.user.id && id != "default" && a.data.type === 'PC' && !this.doesArrayContains(a.data, actors))
+					if (perm >= permission && id != game.user.id && id != "default" && a.type === 'PC' && !this.doesArrayContains(a.data, actors))
 						actors.push(a.data);
 				});
 			});
 		} else if (!withOwned && actor) {
 			game.actors.forEach((a) => {
-				Object.entries(a.data.permission).filter(e => {
+				Object.entries(a.ownership).filter(e => {
 					let [id, perm] = e;
-					if (perm >= permission && id != game.user.id && id != "default" && a.data.type === 'PC' && a.id != actor.id && !this.doesArrayContains(a.data, actors))
+					if (perm >= permission && id != game.user.id && id != "default" && a.type === 'PC' && a.id != actor.id && !this.doesArrayContains(a.data, actors))
 						actors.push(a.data);
 				});
 			});
