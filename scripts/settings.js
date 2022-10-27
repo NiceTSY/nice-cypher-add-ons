@@ -60,7 +60,6 @@ export class CYPHERADDONS {
 	// Module settings
 	static SETTINGS = {
 		GMINTRUSION: true,
-		AUTOOBFUSCATE: true,
 		AUTOROLL: true,
 		SHOWTRADE: true,
 		SORTITEMS: true,

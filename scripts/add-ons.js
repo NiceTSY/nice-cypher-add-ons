@@ -89,7 +89,6 @@ Hooks.on('preCreateItem', async (data, item) => {
 
 	CYPHERADDONS.getSettings();
 	if (UTILITIES.doesArrayContains(item.type.toLowerCase(), CYPHERADDONS.NUMENERAITEMS)) {
-		if (CYPHERADDONS.SETTINGS.AUTOOBFUSCATE) object.system.identified = false;
 		if (CYPHERADDONS.SETTINGS.AUTOROLL) object.system.basic.level = rollLevelOfObject(object).toString();
 	};
 });

@@ -7,8 +7,6 @@
 
 	"NICECYPHER.SettingsGMINTRUSIONTitle": "HUD : Intrusion du MJ",
 	"NICECYPHER.SettingsGMINTRUSIONHint": "Permet d'envoyer une intrusion à un des joueurs via l'HUD du token.",	
-	"NICECYPHER.SettingsAUTOOBFUSCATETitle": "Objet auto obfusqué",
-	"NICECYPHER.SettingsAUTOOBFUSCATEHint": "Marque comme non-identifié les cyphers et artefact lorsqu'ils sont glissés sur la feuille d'un personnage.",
 	"NICECYPHER.SettingsAUTOROLLTitle": "Calculer le niveau des objets",
 	"NICECYPHER.SettingsAUTOROLLHint": "Calcul automatiquement le niveau des cyphers et des artefacts lorsqu'ils sont glissés sur la feuille d'un personnage.",
 	"NICECYPHER.SettingsSHOWTRADETitle": "Button d'échange d'objets",

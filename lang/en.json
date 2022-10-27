@@ -7,8 +7,6 @@
 
 	"NICECYPHER.SettingsGMINTRUSIONTitle": "GM intrusion HUD",
 	"NICECYPHER.SettingsGMINTRUSIONHint": "Add an option on the token HUD to send an intrusion to player.",
-	"NICECYPHER.SettingsAUTOOBFUSCATETitle": "Object auto obfuscate",
-	"NICECYPHER.SettingsAUTOOBFUSCATEHint": "Automatically obfuscate Cypher and Artifact when dragged on a character sheet.",
 	"NICECYPHER.SettingsAUTOROLLTitle": "Object roll level",
 	"NICECYPHER.SettingsAUTOROLLHint": "Automatically roll the level of Cypher and Artifact when dragged on a character sheet.",
 	"NICECYPHER.SettingsSHOWTRADETitle": "Show trade button",
