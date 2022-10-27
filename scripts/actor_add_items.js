@@ -43,21 +43,21 @@ function addToMap(map,value,trkey,sortflag)
 function getSkillCategories(data)
 {
     let result = new Map();
-    addToMap(result, data.nameSkills,        "Skills",             "Skill");
-    addToMap(result, data.nameCategoryTwo,   "SkillCategoryTwo",   "SkillTwo");
-    addToMap(result, data.nameCategoryThree, "SkillCategoryThree", "SkillThree");
-    addToMap(result, data.nameCategoryFour,  "SkillCategoryFour",  "SkillFour");
+    addToMap(result, data.labelCategory1, "Skills",             "Skill");
+    addToMap(result, data.labelCategory2, "SkillCategoryTwo",   "SkillTwo");
+    addToMap(result, data.labelCategory3, "SkillCategoryThree", "SkillThree");
+    addToMap(result, data.labelCategory4, "SkillCategoryFour",  "SkillFour");
     return result;
 }
 
 function getAbilityCategories(data)
 {
     let result = new Map();
-    addToMap(result, data.nameAbilities,     "Abilities",            "Ability");
-    addToMap(result, data.nameCategoryTwo,   "AbilityCategoryTwo",   "AbilityTwo");
-    addToMap(result, data.nameCategoryThree, "AbilityCategoryThree", "AbilityThree");
-    addToMap(result, data.nameCategoryFour,  "AbilityCategoryFour",  "AbilityFour");
-    addToMap(result, data.nameSpells,        "Spells",               "Spell");
+    addToMap(result, data.labelCategory1, "Abilities",            "Ability");
+    addToMap(result, data.labelCategory2, "AbilityCategoryTwo",   "AbilityTwo");
+    addToMap(result, data.labelCategory3, "AbilityCategoryThree", "AbilityThree");
+    addToMap(result, data.labelCategory4, "AbilityCategoryFour",  "AbilityFour");
+    addToMap(result, data.nameSpells,     "Spells",               "Spell");
     return result;
 }
 
@@ -124,8 +124,9 @@ export function addItemsToActor(actor, embeddedName, result, options, userId)
             let sort_flag = categories.get(sorting);
             if (sort_flag)
             {
-                item.system.sorting = sort_flag;
-                console.log(`result has '${item.name}' moved to '${item.system.sorting}'`);
+                // This isn't sticking on an F5 reload !!!
+                item.system.settings.general.sorting = sort_flag;
+                console.log(`result has '${item.name}' moved to '${sort_flag}'`);
                 break;
             }
         }

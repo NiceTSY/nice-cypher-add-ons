@@ -48,11 +48,10 @@ Hooks.once('init', () => {
 
 // Called when the world is ready
 Hooks.once('ready', async () => {
-
-	libWrapper.register('nice-cypher-add-ons', 'Actor.prototype._preCreateEmbeddedDocuments',
+	libWrapper.register(CYPHERADDONS.MODULE.NAME, 'Actor.prototype._preCreateEmbeddedDocuments',
 		function(wrapped, ...args) {
-			if (CYPHERADDONS.SETTINGS.SORTITEMS) addItemsToActor(this, ...args);
 			let result = wrapped(...args);
+			if (CYPHERADDONS.SETTINGS.SORTITEMS) addItemsToActor(this, ...args);
 			return result;
 		},
 	'WRAPPER');
