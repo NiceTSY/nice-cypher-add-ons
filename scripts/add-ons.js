@@ -90,7 +90,7 @@ Hooks.on('preCreateItem', async (data, item) => {
 	CYPHERADDONS.getSettings();
 	if (UTILITIES.doesArrayContains(item.type.toLowerCase(), CYPHERADDONS.NUMENERAITEMS)) {
 		if (CYPHERADDONS.SETTINGS.AUTOOBFUSCATE) object.system.identified = false;
-		if (CYPHERADDONS.SETTINGS.AUTOROLL) object.system.level = rollLevelOfObject(object.data).toString();
+		if (CYPHERADDONS.SETTINGS.AUTOROLL) object.system.basic.level = rollLevelOfObject(object).toString();
 	};
 });
 
@@ -139,7 +139,7 @@ async function showHUDGmIntrusion(html, token) {
  */
 function rollLevelOfObject(obj) {
 	try {
-		const roll = new Roll(obj.level).evaluate({ async: false });
+		const roll = new Roll(obj.system.basic.level).evaluate({ async: false });
 		if (roll) return roll._total;
 	} catch (e) {
 		return obj.level;
