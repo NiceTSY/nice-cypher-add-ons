@@ -34,7 +34,6 @@ import { UTILITIES } from "./utilities.js";
 import { addTradeButton, receiveTrade, endTrade, denyTrade, alreadyTrade } from "./module_trade.js";
 import { checkJournalType, checkIfLinkedData } from "./module_creation.js";
 import { addItemToActor } from "./actor_add_items.js";
-import { libWrapper } from './libwrapper-shim.js';
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Handler(s) -------------------------------------------

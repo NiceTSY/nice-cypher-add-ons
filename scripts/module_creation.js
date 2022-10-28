@@ -159,7 +159,7 @@ class creationItem {
 		this.name = name;
 		this.quantity = quantity;
 		this.item = item;
-		this.item.flags = { [CYPHERADDONS.MODULE.NAME] : { 
+		this.item.system.flags = { [CYPHERADDONS.MODULE.NAME] : { 
 			[CYPHERADDONS.FLAGS.CREATIONITEM] : true,
 			[CYPHERADDONS.FLAGS.ORIGINALQUANTITY] : 0
 		}};
@@ -373,7 +373,7 @@ class creationData {
 			if (item.id == idOrName || item.name === idOrName) {
 				quantity = parseInt(quantity);
 
-				if ('quantity' in item.item.data) item.item.system.quantity = quantity;
+				if ('quantity' in item.item.system.basic) item.item.system.basic.quantity = quantity;
 				item.quantity = quantity;
 			};
 		};
@@ -602,20 +602,22 @@ async function journalsReading(pages, actor, remove) {
 					compendium = id.split('.');
 
 				let item;
-				if (compendium.length > 1) {
+				if (object.startsWith('@UUID['))
+					item = await fromUuid(id);
+				else if (compendium.length > 1) {
 					const pack = game.packs.find(p => p.metadata.name === compendium[1]),
 						index = pack.index.get(compendium[2]),
 						i = await pack.getDocument(index._id);
 					item = await game.items.fromCompendium(i);
 
-				} else item = await game.items.get(id).data;
+				} else item = await game.items.get(id);
 
 				const duplicatedItem = duplicate(item),
 					optionType = (other) ? getObject(other, l).toLowerCase() : false,
 					option = (other) ? l.substring(other + getObject(other, l).length + 1).replace(/ .*/, '') : false;
 				
 				// Check equipment
-				if ('quantity' in duplicatedItem.data) {
+				if ('quantity' in duplicatedItem.system.basic) {
 					const quantity = (optionType === `${quantifier}quantity` && option) ? parseInt(option) : 1;
 
 					let existingItem = creationActor.itemExists(duplicatedItem.name);
@@ -789,7 +791,7 @@ async function askForOptions(line, lines) {
 		updatedData = [
 			{ [`system.pools.${s}.value`]: data.stats[s].value },
 			{ [`system.pools.${s}.max`]: data.stats[s].value },
-			{ [`system.pools.${s}Edge`]: data.stats[s].edge }
+			{ [`system.pools.${s}.edge`]: data.stats[s].edge }
 		];
 
 		for (const d of updatedData) await actor.update(d)
@@ -800,7 +802,7 @@ async function askForOptions(line, lines) {
 		(i.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.CREATIONITEM] && i.type === 'skill')),
 		existingSkills = actor.items.filter(i => i.type === 'skill');
 	for (const s of actor_auto_skills) if (s.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL] !== "None") {
-		let skill = existingSkills.find(sk => sk.name === s.name).data;
+		let skill = existingSkills.find(sk => sk.name === s.name);
 
 		skill = upSkillLevel(skill, skill.flags[CYPHERADDONS.MODULE.NAME][CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL], true);		
 		itemsToUpdate.push({_id: skill._id, flags: skill.flags});
@@ -809,7 +811,7 @@ async function askForOptions(line, lines) {
 	for (const s of data.skills) 
 		if (s) 
 			if (existingSkills.find(sk => sk.name === s.name)) {
-				let skill = existingSkills.find(sk => sk.name === s.name).data;
+				let skill = existingSkills.find(sk => sk.name === s.name);
 
 				skill = upSkillLevel(skill, s.skill.system.skillLevel);
 				itemsToUpdate.push({_id: skill._id, flags: skill.flags});
@@ -834,23 +836,22 @@ async function askForOptions(line, lines) {
 	for (const i of data.items) 
 		if (i) 
 			if (i.item.type !== 'skill' && i.item.type !== 'ability') {
-				if (existingItems.find(it => it.name === i.name) && !itemsToDeleteCheck.includes(i.name)) {
-					let item = existingItems.find(it => it.name === i.name);
-					let q = existingItems.find(it => it.name === i.name).system.quantity;
-					let oq = existingItems.find(it => it.name === i.name).system.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.ORIGINALQUANTITY];
-					oq = oq ? oq : 0;
+				let item = existingItems.find(it => it.name === i.name);
+				if (item && !itemsToDeleteCheck.includes(i.name)) {
+					let q = item.system.basic.quantity;
+					let oq = item.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.ORIGINALQUANTITY] || 0;
 
 					if (oq > 0) {
 						setProperty(item, `system.flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALQUANTITY}`, 0);
-						setProperty(item, 'system.quantity', oq);
+						setProperty(item, 'system.basic.quantity', oq);
 					} else {
 						setProperty(item, `system.flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALQUANTITY}`, q);
-						setProperty(item, 'system.quantity', q + i.quantity);
+						setProperty(item, 'system.basic.quantity', q + i.quantity);
 					};
 					
 					itemsToUpdate.push({_id: item.id, system: item.system});
 				} else if (i.quantity > 0) {
-					i.item.system.quantity = i.quantity;
+					i.item.system.basic.quantity = i.quantity;
 					itemsToCreate.push(i.item);
 				};
 			};

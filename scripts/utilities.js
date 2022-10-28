@@ -62,7 +62,7 @@ export class UTILITIES {
 
 		do {
 			oldHtml = html;
-			html = html.replace(tagOrComment, '');
+			html = html.replaceAll('</p><p>','\n').replace(tagOrComment, '');
 		} while (html !== oldHtml);
 
 		return html.replace(/</g, '&lt;');
