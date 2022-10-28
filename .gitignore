@@ -2,3 +2,4 @@
 *.zip
 *.back*
 .vscode/*
+*.lock
