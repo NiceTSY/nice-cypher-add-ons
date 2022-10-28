@@ -46,7 +46,9 @@ Hooks.once('init', () => {
 });
 
 Hooks.on('preCreateItem', async (document, data, options, userId) => {
-	if (document.parent instanceof Actor) addItemToActor(document);
+	// Handling to do automatic sorting when adding Items to Actors.
+	CYPHERADDONS.getSettings();
+	if (CYPHERADDONS.SETTINGS.SORTITEMS && document.parent instanceof Actor) addItemToActor(document);
 })
 
 // Called when the module is setup
