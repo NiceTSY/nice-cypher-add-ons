@@ -36,13 +36,13 @@
 
 export class UTILITIES {
 	/**
-	 * @description Get ride of HTML tag in a string
+	 * @description Get ride of HTML tag in a string, and ensure paragraphs are separated by line breaks.
 	 * @static
 	 * @param 	{ String } html
 	 * @return 	{ String } 
 	 * @memberof UTILITIES
 	 */
-	static removeTags(html) {
+	static getLinesFromHtml(html) {
 		var oldHtml;
 
 		const tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
@@ -65,7 +65,7 @@ export class UTILITIES {
 			html = html.replaceAll('</p><p>','\n').replace(tagOrComment, '');
 		} while (html !== oldHtml);
 
-		return html.replace(/</g, '&lt;');
+		return html.replace(/</g, '&lt;').split('\n').filter(n => n);
 	};
 
 	/**

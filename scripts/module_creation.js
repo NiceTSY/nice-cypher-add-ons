@@ -282,8 +282,8 @@ class creationData {
 			if (skill.id == idOrName || skill.name === idOrName) {
 				level = parseInt(level);
 
-				skill.skill.system.skillLevel = skillLevels[level];
-				skill.skill.system.rollButton.skill = skillLevels[level];
+				skill.skill.system.basic.rating = skillLevels[level];
+				skill.skill.system.settings.rollButton.skill = skillLevels[level];
 				skill.level = level;
 			};
 		};
@@ -413,10 +413,7 @@ export async function checkIfLinkedData(html, actor) {
 	];
 
 	for (const name of nameCheck) {
-		if (!name || name === '') continue;
-
 		const jpage = await fromUuid(getJournalIdInName(name));
-
 		if (jpage) {
 			const content = returnArrayOfHtmlContent(jpage);
 			updateActorSheet(html, content[0].replace(/ .*/, '').toLowerCase(), jpage);
@@ -435,9 +432,8 @@ function updateActorSheet(html, toUpdate, journalpage) {
 		? 'additionalSentence'
 		: UTILITIES.sanitizeString(toUpdate);
 
-	const id = journalpage.id,
-		newNode = journalpage.toAnchor({classes: ["linkedButton"]}),
-		oldNode = html.find(`input[name="system.basic.${toUpdate}"`);
+	const newNode = journalpage.toAnchor({classes: ["linkedButton"]}),
+		  oldNode = html.find(`input[name="system.basic.${toUpdate}"`);
 	
 	oldNode.replaceWith(newNode);
 	html.find(`a.linkedButton[data-uuid='${journalpage.uuid}']`).click(async (e) => {
@@ -470,14 +466,14 @@ export async function checkJournalType(actor, html, droppedEntity) {
 	
 	html = html._element;
 	const buttons = Array.from(html.find('.linkedButton')),
-		page = await fromUuid(droppedEntity.uuid);
+		jpage = await fromUuid(droppedEntity.uuid);
 
-	const journalContent = returnArrayOfHtmlContent(page),
+	const journalContent = returnArrayOfHtmlContent(jpage),
 		journalType = journalContent[0].replace(/ .*/, '').toLowerCase();
 		
-	if (!isGoodJournalType(journalType)) {
+	if (!typeSentenceCheck.includes(journalType)) {
 		ui.notifications.warn(game.i18n.format('NICECYPHER.CreationNotGoodTypeOfJournal', 
-			{ name: `${page.name}` }));
+			{ name: `${jpage.name}` }));
 		return;
 	};
 	
@@ -485,13 +481,13 @@ export async function checkJournalType(actor, html, droppedEntity) {
 		for (const b of buttons) {
 			if (b.name === `system.basic.${UTILITIES.sanitizeString(journalType)}`) {
 				ui.notifications.warn(game.i18n.format('NICECYPHER.CreationAlreadySentence',
-					{ type: `${journalType.substring(1)} (${page.name})` }));
+					{ type: `${journalType.substring(1)} (${jpage.name})` }));
 				return;
 			};
 		};
 	};
 	
-	journalsToArray(page, html, actor);
+	journalsToArray(jpage, html, actor);
 };
 
 /**
@@ -530,17 +526,17 @@ async function journalsReading(pages, actor, remove) {
 		currentJournal = 0;
 	const removeJournal = (remove) ? pages.length - 1 : -1;
 
-	for (const page of pages) {
+	for (const jpage of pages) {
 		const del = (removeJournal == currentJournal) ? true : false,
-			lines = returnArrayOfHtmlContent(page),
-			checkFirstLine = isGoodJournalType(lines[0].toLowerCase());
+			lines = returnArrayOfHtmlContent(jpage),
+			firstLine = lines[0].toLowerCase();
+		if (!typeSentenceCheck.includes(firstLine)) continue;
 
-		if (!checkFirstLine) continue;
-		const s = (checkFirstLine === `${quantifier}additional` || checkFirstLine === `${quantifier}additionalsentence`)
+		const s = (firstLine === `${quantifier}additional` || firstLine === `${quantifier}additionalsentence`)
 			? 'additionalSentence'
-			: UTILITIES.sanitizeString(checkFirstLine);
+			: UTILITIES.sanitizeString(firstLine);
 		creationActor.changeSentence(s, (!del)
-			? `${page.name} {${page.uuid}}`
+			? `${jpage.name} {${jpage.uuid}}`
 			: '');
 
 		if (CYPHERADDONS.SETTINGS.CREATIONTOOL)
@@ -555,7 +551,7 @@ async function journalsReading(pages, actor, remove) {
 			 */
 
 			if (!l) continue;
-			if (l === checkFirstLine) continue;
+			if (l === firstLine) continue;
 			if (!l.startsWith(quantifier)) continue;
 
 			let occurrences = [];
@@ -651,13 +647,13 @@ async function journalsReading(pages, actor, remove) {
 								newLevel = Math.floor((parseInt(oldLevel) + parseInt(skillLevel)) / 2);
 
 							creationActor.setSkillLevel(existingSkill.id, newLevel);
-							allSkills.push({ id: allSkills.length, journal: page.name, skill: duplicatedItem.name, level: skillLevel });
+							allSkills.push({ id: allSkills.length, journal: jpage.name, skill: duplicatedItem.name, level: skillLevel });
 						} else {
 							const oldJournalSkill = allSkills.filter(s => s.skill === duplicatedItem.name);
 
 							if (oldJournalSkill.length > 1) {
 								let newLevel = 0;
-								for (const s of oldJournalSkill) if (s.journal != page.name) newLevel += s.level;
+								for (const s of oldJournalSkill) if (s.journal != jpage.name) newLevel += s.level;
 
 								newLevel = Math.floor(newLevel / (oldJournalSkill.length - 1));
 								creationActor.setSkillLevel(existingSkill.id, newLevel);
@@ -668,7 +664,7 @@ async function journalsReading(pages, actor, remove) {
 
 						creationActor.skills.push(newSkill);
 						creationActor.setSkillLevel(duplicatedItem._id, skillLevel);
-						allSkills.push({ id: allSkills.length, journal: page.name, skill: duplicatedItem.name, level: skillLevel });
+						allSkills.push({ id: allSkills.length, journal: jpage.name, skill: duplicatedItem.name, level: skillLevel });
 					};
 				}
 				// Check abilities
@@ -681,7 +677,7 @@ async function journalsReading(pages, actor, remove) {
 						const newAbility = new creationAbility(duplicatedItem._id, duplicatedItem.name, tierLevel, duplicatedItem);
 
 						creationActor.abilities.push(newAbility);
-						allAbilities.push({ id: allAbilities.length, journal: page.name, ability: duplicatedItem.name, tier: tierLevel });
+						allAbilities.push({ id: allAbilities.length, journal: jpage.name, ability: duplicatedItem.name, tier: tierLevel });
 					} else if (tierLevel <= actorTier && del) {
 						const oldJournalAbility = allAbilities.filter(s => s.ability === duplicatedItem.name);
 						if (oldJournalAbility.length == 1) delete creationActor.abilities[oldJournalAbility[0].id];
@@ -701,7 +697,7 @@ async function journalsReading(pages, actor, remove) {
 						};
 
 					} else {
-						allItems.push({ id: allItems.length, journal: page.name, item: duplicatedItem.name })
+						allItems.push({ id: allItems.length, journal: jpage.name, item: duplicatedItem.name })
 
 						// Only artifacts cannot exist two times
 						if (existingItem && duplicatedItem.type === 'artifact') continue;
@@ -873,21 +869,11 @@ function pushLocalisationSkillLevel() {
 
 /**
  * @description Return the content of an HTML in an array
- * @param { String } page
+ * @param { String } jpage
  * @return { Array<String> } 
  */
-function returnArrayOfHtmlContent(page) {
-	return UTILITIES.removeTags(page.text.content).split('\n').filter(n => n);
-};
-
-/**
- * @description Check if it is really a journal for the creation tool, return the type of the journal if so.
- * @param { String } type
- * @return { Boolean / String } 
- */
-function isGoodJournalType(type) {
-	if (!typeSentenceCheck.includes(type)) return false;
-	return type;
+function returnArrayOfHtmlContent(jpage) {
+	return UTILITIES.getLinesFromHtml(jpage.text.content);
 };
 
 /**
@@ -922,11 +908,11 @@ function upSkillLevel(skill, level, rollBack = false) {
 		setProperty(skill, `flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL}`, "");
 	} else {		
 		setProperty(skill, `flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.CREATIONITEM}`, true);
-		setProperty(skill, `flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL}`, skill.system.skillLevel);
+		setProperty(skill, `flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL}`, system.basic.rating);
 	};
 	
-	setProperty(skill, 'data.skillLevel', level);
-	setProperty(skill, 'data.rollButton.skill', level);
+	setProperty(skill, 'system.basic.rating', level);
+	setProperty(skill, 'system.settings.rollButton.skill', level);
 
 	return skill;
 };

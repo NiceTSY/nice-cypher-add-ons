@@ -69,7 +69,7 @@ function getAbilityCategories(data)
 function findSorting(description)
 {
     let result = [];
-    let lines = UTILITIES.removeTags(description).split('\n').filter(n => n);  // returnArrayOfHtmlContent
+    let lines = UTILITIES.getLinesFromHtml(description);  // returnArrayOfHtmlContent
     for (const line of lines)
     {
         if (!line.startsWith(sorting_marker)) continue;
