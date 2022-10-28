@@ -57,19 +57,19 @@ Hooks.once('setup', async () => {
 		let data = packet.data;
 		data.receiver   = game.actors.get(packet.receiverId);
 		data.trader     = game.actors.get(packet.traderId);
-		data.originator = packet.originator;
+		data.traderUserId = packet.traderUserId;
 		switch (packet.type) {
 			case 'requestTrade':
-				if (packet.originator != game.user.id && data.receiver.isOwner && (!game.user.isGM || !data.receiver.hasPlayerOwner)) receiveTrade(data, packet.originator);
+				if (packet.traderUserId != game.user.id && data.receiver.isOwner && (!game.user.isGM || !data.receiver.hasPlayerOwner)) receiveTrade(data, packet.traderUserId);
 				break;
 			case 'acceptTrade': 
-				if (packet.originator == game.user.id) endTrade(data);
+				if (packet.traderUserId == game.user.id) endTrade(data);
 				break;
 			case 'refuseTrade':
-				if (packet.originator == game.user.id) denyTrade(data);
+				if (packet.traderUserId == game.user.id) denyTrade(data);
 				break;
 			case 'possessItem':
-				if (packet.originator == game.user.id) alreadyTrade(data);
+				if (packet.traderUserId == game.user.id) alreadyTrade(data);
 				break;
 		}
 	});

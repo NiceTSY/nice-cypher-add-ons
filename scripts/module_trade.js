@@ -169,7 +169,7 @@ function emitTrade(html, tradeActor, item, quantity = 1) {
 
 	game.socket.emit(`module.${CYPHERADDONS.MODULE.NAME}`, {
 		data: { item, quantity },
-		originator: game.user.id,
+		traderUserId: game.user.id,
 		receiverId: receiverId,
 		traderId: traderId,
 		type: 'requestTrade'
@@ -305,7 +305,7 @@ function tradeConfirmed(data) {
 	const emitType = duplicate ? "acceptTrade" : "possessItem";	
 	game.socket.emit(`module.${CYPHERADDONS.MODULE.NAME}`, {
 		data: { item, quantity },
-		originator: data.originator,
+		traderUserId: data.traderUserId,
 		receiverId: data.receiver.id,
 		traderId: data.trader.id,
 		type: emitType
@@ -322,7 +322,7 @@ function tradeDenied(data) {
 
 	game.socket.emit(`module.${CYPHERADDONS.MODULE.NAME}`, {
 		data: { item, quantity },
-		originator: data.originator,
+		traderUserId: data.traderUserId,
 		receiverId: data.receiver.id,
 		traderId: data.trader.id,
 		type: "refuseTrade"
