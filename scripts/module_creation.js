@@ -166,6 +166,12 @@ class creationItem {
 	};
 };
 
+
+function matchIdOrName(doc, value)
+{
+	return doc && (doc.id == value || doc.name == value)
+}
+
 /**
  * @description Class to hold the data needed for the creation of the character
  * @class creationData
@@ -195,17 +201,6 @@ class creationData {
 	changeSentence(type, sentence) {
 		if (!type in this.sentence) return;
 		this.sentence[type] = sentence;
-	};
-
-	/**
-	 * @description Set the tier of the creation data
-	 * @param { Number } tier
-	 * @return {*} 
-	 * @memberof creationData
-	 */
-	setTier(tier) {
-		if (!Number.isInteger(tier)) return;
-		this.tier = tier;
 	};
 
 	/**
@@ -263,8 +258,7 @@ class creationData {
 	 */
 	skillExists(idOrName) {
 		for (const skill of this.skills)
-			if (skill) if (skill.id == idOrName || skill.name === idOrName) return skill;
-
+			if (matchIdOrName(skill, idOrName)) return skill;
 		return false;
 	};
 
@@ -278,10 +272,8 @@ class creationData {
 	setSkillLevel(idOrName, level) {
 		if (!Number.isInteger(level)) return;
 		for (const skill of this.skills) {
-			if (!skill) continue;
-			if (skill.id == idOrName || skill.name === idOrName) {
+			if (matchIdOrName(skill, idOrName)) {
 				level = parseInt(level);
-
 				skill.skill.system.basic.rating = skillLevels[level];
 				skill.skill.system.settings.rollButton.skill = skillLevels[level];
 				skill.level = level;
@@ -297,8 +289,7 @@ class creationData {
 	 */
 	getSkillLevel(idOrName) {
 		for (const skill of this.skills)
-			if (skill) if (skill.id == idOrName || skill.name === idOrName) return skill.level;
-
+			if (matchIdOrName(skill, idOrName)) return skill.level;
 		return false;
 	};
 
@@ -310,39 +301,7 @@ class creationData {
 	 */
 	abilityExists(idOrName) {
 		for (const ability of this.abilities)
-			if (ability) if (ability.id == idOrName || ability.name === idOrName) return ability;
-
-		return false;
-	};
-
-	/**
-	 * @description Set the tier of an ability
-	 * @param { String } idOrName
-	 * @param { Number } tier
-	 * @return {*} 
-	 * @memberof creationData
-	 */
-	setAbilityTier(idOrName, tier) {
-		if (!Number.isInteger(tier)) return;
-		if (parseInt(tier) > 6) return;
-		for (const ability of this.abilities) {
-			if (!ability) continue;
-			if (ability.id == idOrName || ability.name === idOrName) {
-				ability.tier = parseInt(tier);
-			};
-		};
-	};
-
-	/**
-	 * @description Get the tier of an ability
-	 * @param { String } idOrName
-	 * @return { Boolean / Number } 
-	 * @memberof creationData
-	 */
-	getAbilityTier(idOrName) {
-		for (const ability of this.abilities)
-			if (ability) if (ability.id == idOrName || ability.name === idOrName) return ability.tier;
-
+			if (matchIdOrName(ability, idOrName)) return ability;
 		return false;
 	};
 
@@ -354,8 +313,7 @@ class creationData {
 	 */
 	itemExists(idOrName) {
 		for (const item of this.items)
-			if (item) if (item.id == idOrName || item.name === idOrName) return item;
-
+			if (matchIdOrName(item, idOrName)) return item;
 		return false;
 	};
 
@@ -369,27 +327,12 @@ class creationData {
 	setItemQuantity(idOrName, quantity) {
 		if (!Number.isInteger(quantity)) return;
 		for (const item of this.items) {
-			if (!item) continue;
-			if (item.id == idOrName || item.name === idOrName) {
+			if (matchIdOrName(item, idOrName)) {
 				quantity = parseInt(quantity);
-
 				if ('quantity' in item.item.system.basic) item.item.system.basic.quantity = quantity;
 				item.quantity = quantity;
 			};
 		};
-	};
-
-	/**
-	 * @description Get the quantity of an item 
-	 * @param { String } idOrName
-	 * @return { Boolean / Number } 
-	 * @memberof creationData
-	 */
-	getItemQuantity(idOrName) {
-		for (const item of this.items)
-			if (item) if (item.id == idOrName || item.name === idOrName) return item.quantity;
-
-		return false;
 	};
 }
 
@@ -415,7 +358,7 @@ export async function checkIfLinkedData(html, actor) {
 	for (const name of nameCheck) {
 		const jpage = await fromUuid(getJournalIdInName(name));
 		if (jpage) {
-			const content = returnArrayOfHtmlContent(jpage);
+			const content = UTILITIES.getLinesFromHtml(jpage.text.content);
 			updateActorSheet(html, content[0].replace(/ .*/, '').toLowerCase(), jpage);
 		};
 	};
@@ -468,7 +411,7 @@ export async function checkJournalType(actor, html, droppedEntity) {
 	const buttons = Array.from(html.find('.linkedButton')),
 		jpage = await fromUuid(droppedEntity.uuid);
 
-	const journalContent = returnArrayOfHtmlContent(jpage),
+	const journalContent = UTILITIES.getLinesFromHtml(jpage.text.content),
 		journalType = journalContent[0].replace(/ .*/, '').toLowerCase();
 		
 	if (!typeSentenceCheck.includes(journalType)) {
@@ -528,7 +471,7 @@ async function journalsReading(pages, actor, remove) {
 
 	for (const jpage of pages) {
 		const del = (removeJournal == currentJournal) ? true : false,
-			lines = returnArrayOfHtmlContent(jpage),
+			lines = UTILITIES.getLinesFromHtml(jpage.text.content),
 			firstLine = lines[0].toLowerCase();
 		if (!typeSentenceCheck.includes(firstLine)) continue;
 
@@ -817,7 +760,7 @@ async function askForOptions(line, lines) {
 		(i.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.CREATIONITEM] && i.type === 'ability')),
 		existingAbilities = actor.items.filter(i => i.type === 'ability');
 	for (const a of actor_auto_abilities) itemsToDelete.push(a.id);
-	for (const crability of crdata.abilities) if (crability) if (!existingAbilities.includes(crability)) itemsToCreate.push(crability.ability);
+	for (const crability of crdata.abilities) if (crability && !existingAbilities.includes(crability)) itemsToCreate.push(crability.ability);
 
 	// Other
 	const actor_auto_items = actor.items.filter(i => 
@@ -865,15 +808,6 @@ function pushLocalisationSkillLevel() {
 	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Trained'));
 	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Practiced'));
 	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Inability'));
-};
-
-/**
- * @description Return the content of an HTML in an array
- * @param { String } jpage
- * @return { Array<String> } 
- */
-function returnArrayOfHtmlContent(jpage) {
-	return UTILITIES.getLinesFromHtml(jpage.text.content);
 };
 
 /**
