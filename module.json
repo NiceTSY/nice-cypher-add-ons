@@ -28,22 +28,22 @@
   "languages": [
     {
       "lang": "en",
-      "path": "/lang/en.json",
+      "path": "lang/en.json",
       "name": "",
       "flags": {}
     },
     {
       "lang": "fr",
-      "path": "/lang/fr.json",
+      "path": "lang/fr.json",
       "name": "",
       "flags": {}
     }
   ],
   "esmodules": [
-    "/scripts/add-ons.js"
+    "scripts/add-ons.js"
   ],
   "styles": [
-    "/styles/addons.css"
+    "styles/addons.css"
   ],
   "socket": true,
   "packs": [
@@ -56,12 +56,22 @@
       "flags": {}
     }
   ],
+  "relationships": {
+    "systems": [{
+      "id": "cyphersystem",
+      "type": "system",
+      "manifest": "https://raw.githubusercontent.com/mrkwnzl/cyphersystem-foundryvtt/v2.0.0-b3/system.json",
+      "compatibility": {
+        "verified": "2.0.0"
+      }
+    }]
+  },
   "url": "https://github.com/NiceTSY/nice-cypher-add-ons",
   "manifest": "https://github.com/NiceTSY/nice-cypher-add-ons/releases/latest/download/module.json",
   "download": "https://github.com/NiceTSY/nice-cypher-add-ons/releases/download/0.5.0/module.zip",
   "id": "nice-cypher-add-ons",
   "compatibility": {
     "minimum": "10",
-    "verified": "10"
+    "verified": "10.288"
   }
 }
