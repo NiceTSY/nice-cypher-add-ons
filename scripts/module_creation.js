@@ -159,7 +159,7 @@ class creationItem {
 		this.name = name;
 		this.quantity = quantity;
 		this.item = item;
-		this.item.system.flags = { [CYPHERADDONS.MODULE.NAME] : { 
+		this.item.flags = { [CYPHERADDONS.MODULE.NAME] : { 
 			[CYPHERADDONS.FLAGS.CREATIONITEM] : true,
 			[CYPHERADDONS.FLAGS.ORIGINALQUANTITY] : 0
 		}};
@@ -747,9 +747,9 @@ async function askForOptions(line, lines) {
 /**
  * @description Update the actor data according to the data sent. It will wip clean the character sheet before doing so.
  * @param { Object } actor
- * @param { creationData } data
+ * @param { creationData } crdata
  */
- async function updateActorData(actor, data) {
+ async function updateActorData(actor, crdata) {
 	let itemsToCreate = [],
 		itemsToDelete = [],
 		itemsToUpdate = [],
@@ -757,8 +757,8 @@ async function askForOptions(line, lines) {
 		updatedData;
 
 	// Sentence
-	for (const s in data.sentence) {
-		updatedData = { [`system.basic.${s}`]: data.sentence[s] };
+	for (const crsent in crdata.sentence) {
+		updatedData = { [`system.basic.${crsent}`]: crdata.sentence[crsent] };
 		await actor.update(updatedData);
 	};
 
@@ -766,32 +766,32 @@ async function askForOptions(line, lines) {
 	if (!CYPHERADDONS.SETTINGS.CREATIONTOOL) return;
 
 	// Effort
-	const checkEffortModificator = eval(data.effortModificator);
+	const checkEffortModificator = eval(crdata.effortModificator);
 	if (checkEffortModificator > 0) {
-		const newEffortValue = eval(`${data.effort}+${checkEffortModificator}`);
-		data.changeStat('effort', newEffortValue);
+		const newEffortValue = eval(`${crdata.effort}+${checkEffortModificator}`);
+		crdata.changeStat('effort', newEffortValue);
 	};
 
-	updatedData = { [`system.basic.effort`]: data.effort };
+	updatedData = { [`system.basic.effort`]: crdata.effort };
 	await actor.update(updatedData);
 
 	// Stats
-	for (const s in data.stats) {
-		const checkPoolModificator = eval(data.stats[s].poolModificator),
-			checkEdgeModificator = eval(data.stats[s].edgeModificator);
+	for (const crstat in crdata.stats) {
+		const checkPoolModificator = eval(crdata.stats[crstat].poolModificator),
+			checkEdgeModificator = eval(crdata.stats[crstat].edgeModificator);
 
 		if (checkPoolModificator > 0 || checkEdgeModificator > 0) {
-			const newPoolValue = eval(`${data.stats[s].value}+${checkPoolModificator}`),
-				newEdgeValue = eval(`${data.stats[s].edge}+${checkEdgeModificator}`),
+			const newPoolValue = eval(`${crdata.stats[crstat].value}+${checkPoolModificator}`),
+				newEdgeValue = eval(`${crdata.stats[crstat].edge}+${checkEdgeModificator}`),
 				statValue = new creationStat(parseInt(newPoolValue), parseInt(newEdgeValue));
 
-			data.changeStat(s, statValue);
+			crdata.changeStat(crstat, statValue);
 		};
 
 		updatedData = [
-			{ [`system.pools.${s}.value`]: data.stats[s].value },
-			{ [`system.pools.${s}.max`]: data.stats[s].value },
-			{ [`system.pools.${s}.edge`]: data.stats[s].edge }
+			{ [`system.pools.${crstat}.value`]: crdata.stats[crstat].value },
+			{ [`system.pools.${crstat}.max`]: crdata.stats[crstat].value },
+			{ [`system.pools.${crstat}.edge`]: crdata.stats[crstat].edge }
 		];
 
 		for (const d of updatedData) await actor.update(d)
@@ -805,25 +805,23 @@ async function askForOptions(line, lines) {
 		let skill = existingSkills.find(sk => sk.name === s.name);
 
 		skill = upSkillLevel(skill, skill.flags[CYPHERADDONS.MODULE.NAME][CYPHERADDONS.FLAGS.ORIGINALSKILLLEVEL], true);		
-		itemsToUpdate.push({_id: skill._id, flags: skill.flags});
-		itemsToUpdate.push({_id: skill._id, system: skill.system});
+		itemsToUpdate.push({_id: skill._id, system: skill.system, flags: skill.flags});
 	} else itemsToDelete.push(s.id);
-	for (const s of data.skills) 
-		if (s) 
-			if (existingSkills.find(sk => sk.name === s.name)) {
-				let skill = existingSkills.find(sk => sk.name === s.name);
+	for (const crskill of crdata.skills) 
+		if (crskill) 
+			if (existingSkills.find(sk => sk.name === crskill.name)) {
+				let skill = existingSkills.find(sk => sk.name === skill.name);
 
-				skill = upSkillLevel(skill, s.skill.system.skillLevel);
-				itemsToUpdate.push({_id: skill._id, flags: skill.flags});
-				itemsToUpdate.push({_id: skill._id, system: skill.system});
-			} else itemsToCreate.push(s.skill);
+				skill = upSkillLevel(skill, skill.skill.system.skillLevel);
+				itemsToUpdate.push({_id: skill._id, system: skill.system, flags: skill.flags});
+			} else itemsToCreate.push(crskill.skill);
 
 	// Abilities
 	const actor_auto_abilities = actor.items.filter(i => 
 		(i.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.CREATIONITEM] && i.type === 'ability')),
 		existingAbilities = actor.items.filter(i => i.type === 'ability');
 	for (const a of actor_auto_abilities) itemsToDelete.push(a.id);
-	for (const a of data.abilities) if (a) if (!existingAbilities.includes(a)) itemsToCreate.push(a.ability);
+	for (const crability of crdata.abilities) if (crability) if (!existingAbilities.includes(crability)) itemsToCreate.push(crability.ability);
 
 	// Other
 	const actor_auto_items = actor.items.filter(i => 
@@ -833,26 +831,24 @@ async function askForOptions(line, lines) {
 		itemsToDelete.push(i.id);
 		itemsToDeleteCheck.push(i.name);
 	};
-	for (const i of data.items) 
-		if (i) 
-			if (i.item.type !== 'skill' && i.item.type !== 'ability') {
-				let item = existingItems.find(it => it.name === i.name);
-				if (item && !itemsToDeleteCheck.includes(i.name)) {
-					let q = item.system.basic.quantity;
-					let oq = item.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.ORIGINALQUANTITY] || 0;
+	for (const critem of crdata.items) 
+			if (critem && critem.item.type !== 'skill' && critem.item.type !== 'ability') {
+				let item = existingItems.find(it => it.name === critem.name);
+				if (item && !itemsToDeleteCheck.includes(critem.name)) {
+					let q  = +item.system.basic.quantity;
+					let oq = +item.flags?.[CYPHERADDONS.MODULE.NAME]?.[CYPHERADDONS.FLAGS.ORIGINALQUANTITY] || 0;
 
 					if (oq > 0) {
-						setProperty(item, `system.flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALQUANTITY}`, 0);
+						setProperty(item, `flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALQUANTITY}`, 0);
 						setProperty(item, 'system.basic.quantity', oq);
 					} else {
-						setProperty(item, `system.flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALQUANTITY}`, q);
-						setProperty(item, 'system.basic.quantity', q + i.quantity);
-					};
-					
-					itemsToUpdate.push({_id: item.id, system: item.system});
-				} else if (i.quantity > 0) {
-					i.item.system.basic.quantity = i.quantity;
-					itemsToCreate.push(i.item);
+						setProperty(item, `flags.${CYPHERADDONS.MODULE.NAME}.${CYPHERADDONS.FLAGS.ORIGINALQUANTITY}`, q);
+						setProperty(item, 'system.basic.quantity', q + critem.quantity);
+					};					
+					itemsToUpdate.push({_id: item.id, system: item.system, flags: item.flags});
+				} else if (critem.quantity > 0) {
+					critem.item.system.basic.quantity = critem.quantity;
+					itemsToCreate.push(critem.item);
 				};
 			};
 
