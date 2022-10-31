@@ -356,11 +356,17 @@ export async function checkIfLinkedData(html, actor) {
 	];
 
 	for (const name of nameCheck) {
-		const jpage = await fromUuid(getJournalIdInName(name));
-		if (jpage) {
-			const content = UTILITIES.getLinesFromHtml(jpage.text.content);
-			updateActorSheet(html, content[0].replace(/ .*/, '').toLowerCase(), jpage);
-		};
+		// Name might be:  label {uuid}
+		let match = str.match(/{([^}]+)}/);
+		if (match) {
+			let jpage = await fromUuid(match[1]);
+			// Pick first page if the link is to a journal
+			if (jpage instanceof JournalEntry) jpage = jpage.pages.contents[0];
+			if (jpage) {
+				const content = UTILITIES.getLinesFromHtml(jpage.text.content);
+				updateActorSheet(html, content[0].replace(/ .*/, '').toLowerCase(), jpage);
+			};
+		}
 	};
 };
 
@@ -404,12 +410,11 @@ function updateActorSheet(html, toUpdate, journalpage) {
 export async function checkJournalType(actor, html, droppedEntity) {
 	pushLocalisationSkillLevel();
 
-	if (droppedEntity.type.toLowerCase() === 'journalentry')
-		droppedEntity = (await fromUuid(droppedEntity.uuid)).pages.contents[0];
+	let jpage = await fromUuid(droppedEntity.uuid);
+	if (jpage instanceof JournalEntry) jpage = jpage.pages.contents[0];
 	
 	html = html._element;
-	const buttons = Array.from(html.find('.linkedButton')),
-		jpage = await fromUuid(droppedEntity.uuid);
+	const buttons = Array.from(html.find('.linkedButton'));
 
 	const journalContent = UTILITIES.getLinesFromHtml(jpage.text.content),
 		journalType = journalContent[0].replace(/ .*/, '').toLowerCase();
@@ -808,15 +813,6 @@ function pushLocalisationSkillLevel() {
 	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Trained'));
 	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Practiced'));
 	skillLevels.push(game.i18n.localize('CYPHERSYSTEM.Inability'));
-};
-
-/**
- * @description Return the journal ID from its saved name
- * @param { String } str
- * @return { String } 
- */
-function getJournalIdInName(str) {
-	return (str.includes('{')) ? str.substring(str.indexOf("{") + 1, str.lastIndexOf("}")) : str;
 };
 
 /**
