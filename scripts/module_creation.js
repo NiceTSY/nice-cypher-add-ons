@@ -357,7 +357,7 @@ export async function checkIfLinkedData(html, actor) {
 
 	for (const name of nameCheck) {
 		// Name might be:  label {uuid}
-		let match = str.match(/{([^}]+)}/);
+		let match = name.match(/{([^}]+)}/);
 		if (match) {
 			let jpage = await fromUuid(match[1]);
 			// Pick first page if the link is to a journal
