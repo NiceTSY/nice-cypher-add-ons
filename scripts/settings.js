@@ -60,7 +60,6 @@ export class CYPHERADDONS {
 	// Module settings
 	static SETTINGS = {
 		GMINTRUSION: true,
-		AUTOOBFUSCATE: true,
 		AUTOROLL: true,
 		SHOWTRADE: true,
 		SORTITEMS: true,
@@ -87,7 +86,7 @@ export class CYPHERADDONS {
 	static init() {
 		registerModuleSettings();
 
-		CYPHERADDONS.MODULE.WORLD = game.world.name;
+		CYPHERADDONS.MODULE.WORLD = game.world.id;
 		this.getSettings();
 	};
 

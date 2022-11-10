@@ -7,8 +7,6 @@
 
 	"NICECYPHER.SettingsGMINTRUSIONTitle": "GM intrusion HUD",
 	"NICECYPHER.SettingsGMINTRUSIONHint": "Add an option on the token HUD to send an intrusion to player.",
-	"NICECYPHER.SettingsAUTOOBFUSCATETitle": "Object auto obfuscate",
-	"NICECYPHER.SettingsAUTOOBFUSCATEHint": "Automatically obfuscate Cypher and Artifact when dragged on a character sheet.",
 	"NICECYPHER.SettingsAUTOROLLTitle": "Object roll level",
 	"NICECYPHER.SettingsAUTOROLLHint": "Automatically roll the level of Cypher and Artifact when dragged on a character sheet.",
 	"NICECYPHER.SettingsSHOWTRADETitle": "Show trade button",
@@ -25,11 +23,11 @@
 	
 	"NICECYPHER.Trade": "Trade",
 	"NICECYPHER.TradeRequestTitle": "Trade Request",	
-	"NICECYPHER.TradeRequestContent": "{actorName} is sending you: {tradeOffer}. Do you accept?",
+	"NICECYPHER.TradeRequestContent": "{actorName} is sending {rxActorName}: {tradeOffer}. Do you accept?",
 	"NICECYPHER.CannotTradeLessThanOneObject": "You cannot trade negative quantity.",
 
 	"NICECYPHER.CreationAlreadySentence": "The character already possess the following type: {type}",
 	"NICECYPHER.CreationButtonHint": "Current {type} (alt-click to delete it)",
 
-	"NICECYPHER.CreationNotGoodTypeOfJournal": "The journal {name} is recognised by the Creation Tool."
+	"NICECYPHER.CreationNotGoodTypeOfJournal": "The journal {name} is not recognised by the Creation Tool."
 }

@@ -36,60 +36,13 @@
 
 export class UTILITIES {
 	/**
-	 * @description Check if something is contained inside a specified array.
-	 * @static
-	 * @param 	{*}		a		- The thing to find.
-	 * @param 	{ Object[] }	array		- The array to check.
-	 * @return 	{ Boolean }
-	 * @memberof UTILITIES
-	 */
-	static doesArrayContains(a, array) {
-		return (array.indexOf(a) > -1);
-	};
-
-	/**
-	 * @description Return actors according to specified permission.
-	 * @static
-	 * @param 	{ String }	permission	- The permission of which actors are needed.
-	 * @param 	{ Boolean }	withOwned	- If you need the current actor too.
-	 * @param 	{ Object }	actor		- The actor you do not want.
-	 * @return 	{ Object[] }
-	 * @memberof UTILITIES
-	 */
-	static returnActorByPermission(permission, withOwned = true, actor = null) {
-		let actors = []
-
-		if (withOwned) {
-			game.actors.forEach((a) => {
-				Object.entries(a.data.permission).filter(e => {
-					let [id, perm] = e;
-					if (perm >= permission && id != game.user.id && id != "default" && a.data.type === 'PC' && !this.doesArrayContains(a.data, actors))
-						actors.push(a.data);
-				});
-			});
-		} else if (!withOwned && actor) {
-			game.actors.forEach((a) => {
-				Object.entries(a.data.permission).filter(e => {
-					let [id, perm] = e;
-					if (perm >= permission && id != game.user.id && id != "default" && a.data.type === 'PC' && a.id != actor.id && !this.doesArrayContains(a.data, actors))
-						actors.push(a.data);
-				});
-			});
-		} else {
-			console.log("It seems you missed to pass an argument for the returnActorByPermission function. Please check.");
-		};
-
-		return actors;
-	};
-
-	/**
-	 * @description Get ride of HTML tag in a string
+	 * @description Get ride of HTML tag in a string, and ensure paragraphs are separated by line breaks.
 	 * @static
 	 * @param 	{ String } html
 	 * @return 	{ String } 
 	 * @memberof UTILITIES
 	 */
-	static removeTags(html) {
+	static getLinesFromHtml(html) {
 		var oldHtml;
 
 		const tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
@@ -109,10 +62,10 @@ export class UTILITIES {
 
 		do {
 			oldHtml = html;
-			html = html.replace(tagOrComment, '');
+			html = html.replaceAll('</p>','</p>\n').replace(tagOrComment, '');
 		} while (html !== oldHtml);
 
-		return html.replace(/</g, '&lt;');
+		return html.replace(/</g, '&lt;').split('\n').filter(n => n);
 	};
 
 	/**

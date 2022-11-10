@@ -33,8 +33,7 @@ import { CYPHERADDONS } from "./settings.js";
 import { UTILITIES } from "./utilities.js";
 import { addTradeButton, receiveTrade, endTrade, denyTrade, alreadyTrade } from "./module_trade.js";
 import { checkJournalType, checkIfLinkedData } from "./module_creation.js";
-import { addItemsToActor } from "./actor_add_items.js";
-import { libWrapper } from './libwrapper-shim.js';
+import { addItemToActor } from "./actor_add_items.js";
 
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------- Handler(s) -------------------------------------------
@@ -43,35 +42,34 @@ import { libWrapper } from './libwrapper-shim.js';
 Hooks.once('init', () => {
 	// Register settings
 	CYPHERADDONS.init();
-
 });
 
-// Called when the world is ready
-Hooks.once('ready', async () => {
-
-	libWrapper.register('nice-cypher-add-ons', 'Actor.prototype._preCreateEmbeddedDocuments',
-		function(wrapped, ...args) {
-			if (CYPHERADDONS.SETTINGS.SORTITEMS) addItemsToActor(this, ...args);
-			let result = wrapped(...args);
-			return result;
-		},
-	'WRAPPER');
-});
+Hooks.on('preCreateItem', async (document, data, options, userId) => {
+	// Handling to do automatic sorting when adding Items to Actors.
+	CYPHERADDONS.getSettings();
+	if (CYPHERADDONS.SETTINGS.SORTITEMS && document.parent instanceof Actor) addItemToActor(document);
+})
 
 // Called when the module is setup
 Hooks.once('setup', async () => {
 	game.socket.on(`module.${CYPHERADDONS.MODULE.NAME}`, packet => {
 		let data = packet.data;
-		let type = packet.type;
-		data.receiver = game.actors.get(packet.receiverId);
-		data.trader = game.actors.get(packet.traderId);
-		if (data.receiver.isOwner) {
-			if (game.user.data.character == packet.receiverId && type === 'requestTrade') receiveTrade(data);
-		}
-		else {
-			if (type === 'acceptTrade') endTrade(data);
-			if (type === 'refuseTrade') denyTrade(data);
-			if (type === 'possessItem') alreadyTrade(data);
+		data.receiver   = game.actors.get(packet.receiverId);
+		data.trader     = game.actors.get(packet.traderId);
+		data.traderUserId = packet.traderUserId;
+		switch (packet.type) {
+			case 'requestTrade':
+				if (packet.traderUserId != game.user.id && data.receiver.isOwner && (!game.user.isGM || !data.receiver.hasPlayerOwner)) receiveTrade(data, packet.traderUserId);
+				break;
+			case 'acceptTrade': 
+				if (packet.traderUserId == game.user.id) endTrade(data);
+				break;
+			case 'refuseTrade':
+				if (packet.traderUserId == game.user.id) denyTrade(data);
+				break;
+			case 'possessItem':
+				if (packet.traderUserId == game.user.id) alreadyTrade(data);
+				break;
 		}
 	});
 });
@@ -85,19 +83,18 @@ Hooks.on('renderTokenHUD', async (hud, html, token) => {
 
 // Called before a new item is created on character sheet
 Hooks.on('preCreateItem', async (data, item) => {
-	const object = data.data._source;
+	const object = data._source;
 
 	CYPHERADDONS.getSettings();
-	if (UTILITIES.doesArrayContains(item.type.toLowerCase(), CYPHERADDONS.NUMENERAITEMS)) {
-		if (CYPHERADDONS.SETTINGS.AUTOOBFUSCATE) object.data.identified = false;
-		if (CYPHERADDONS.SETTINGS.AUTOROLL) object.data.level = rollLevelOfObject(object.data).toString();
+	if (CYPHERADDONS.NUMENERAITEMS.includes(item.type.toLowerCase())) {
+		if (CYPHERADDONS.SETTINGS.AUTOROLL) object.system.basic.level = rollLevelOfObject(object).toString();
 	};
 });
 
 // Called when dropping something on the character sheet
 Hooks.on('dropActorSheetData', async (actor, html, item) => {
 	CYPHERADDONS.getSettings();
-	if (item.type.toLowerCase() === 'journalentry' && actor.data.type === "PC")
+	if ((item.type.toLowerCase() === 'journalentry' || item.type.toLowerCase() === 'journalentrypage') && actor.type === "pc")
 		if (CYPHERADDONS.SETTINGS.SENTENCELINK) checkJournalType(actor, html, item);
 });
 
@@ -105,7 +102,7 @@ Hooks.on('dropActorSheetData', async (actor, html, item) => {
 Hooks.on('renderCypherActorSheet', (sheet, html) => {
 	CYPHERADDONS.getSettings();
 	if (CYPHERADDONS.SETTINGS.SHOWTRADE) addTradeButton(html, sheet.actor);
-	if (sheet.actor.data.type === "PC")
+	if (sheet.actor.type === "pc")
 		if (CYPHERADDONS.SETTINGS.SENTENCELINK) checkIfLinkedData(html, sheet.actor);
 });
 
@@ -120,7 +117,7 @@ Hooks.on('renderCypherActorSheet', (sheet, html) => {
 async function showHUDGmIntrusion(html, token) {
 	// Check if the token is a PC
 	let actor = game.actors.get(token.actorId);
-	if (!actor || actor.data.type.toLowerCase() != 'pc') return;
+	if (!actor || actor.type.toLowerCase() != 'pc') return;
 
 	// Get the new HUD button template
 	let gmiDisplay = await renderTemplate(`${CYPHERADDONS.MODULE.PATH}/templates/gmi_hud.html`);
@@ -139,7 +136,7 @@ async function showHUDGmIntrusion(html, token) {
  */
 function rollLevelOfObject(obj) {
 	try {
-		const roll = new Roll(obj.level).evaluate({ async: false });
+		const roll = new Roll(obj.system.basic.level).evaluate({ async: false });
 		if (roll) return roll._total;
 	} catch (e) {
 		return obj.level;
