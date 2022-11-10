@@ -1,5 +1,5 @@
 # Nice(TSY) Cypher System Add-ons
-![](https://img.shields.io/badge/Foundry-v0.9-informational?style=flat-square)
+![](https://img.shields.io/badge/Foundry-v10-informational?style=flat-square)
 ![GitHub Latest Release](https://img.shields.io/github/release/NiceTSY/nice-cypher-add-ons?style=flat-square)
 ![Latest Release Download Count](https://img.shields.io/github/downloads/NiceTSY/nice-cypher-add-ons/latest/module.zip?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/NiceTSY/nice-cypher-add-ons?style=flat-square)
