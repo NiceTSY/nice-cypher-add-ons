@@ -339,6 +339,15 @@ class creationData {
 /*------------------------------------------------------------------------------------------------
 ------------------------------------------ Function(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/
+
+function patchLink(link) {
+	// Prior to Foundry V10 the link didn't include "Compendium." or "JournalEntry." prefix,
+	// so we need to patch those link strings.
+	let parts = link.split('.');
+	if (parts.length < 2 || parts[0] === 'Compendium' || CONST.DOCUMENT_TYPES.includes(parts[0])) return link;
+	return "Compendium." + link;
+}
+
 /**
  * @description Check if the actor possess any linked data (aka journal) for its sentences
  * @export
@@ -359,7 +368,7 @@ export async function checkIfLinkedData(html, actor) {
 		// Name might be:  label {uuid}
 		let match = name.match(/{([^}]+)}/);
 		if (match) {
-			let jpage = await fromUuid(match[1]);
+			let jpage = await fromUuid(patchLink(match[1]));
 			// Pick first page if the link is to a journal
 			if (jpage instanceof JournalEntry) jpage = jpage.pages.contents[0];
 			if (jpage) {
