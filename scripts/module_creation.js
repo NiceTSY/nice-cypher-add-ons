@@ -340,12 +340,28 @@ class creationData {
 ------------------------------------------ Function(s) -------------------------------------------
 ------------------------------------------------------------------------------------------------*/
 
-function patchLink(link) {
+async function getJournalEntry(link) {
 	// Prior to Foundry V10 the link didn't include "Compendium." or "JournalEntry." prefix,
 	// so we need to patch those link strings.
 	let parts = link.split('.');
-	if (parts.length < 2 || parts[0] === 'Compendium' || CONST.DOCUMENT_TYPES.includes(parts[0])) return link;
-	return "Compendium." + link;
+    let jpage;
+	if (parts.length < 2) { 
+	    jpage = await fromUuid(link);
+	} else {
+		let patchedLink;
+		if (parts[0] === 'Compendium' || CONST.DOCUMENT_TYPES.includes(parts[0])) {
+		    patchedLink = link;
+		} else {
+			parts.unshift("Compendium");
+			patchedLink = "Compendium." + link;
+		}
+		jpage = await fromUuid(patchedLink);
+		if (!jpage && parts.length > 4) {
+			patchedLink = parts.slice(0, 5).join(".")
+            jpage = await fromUuid(patchedLink);
+		}
+	}
+	return jpage;
 }
 
 /**
@@ -368,7 +384,7 @@ export async function checkIfLinkedData(html, actor) {
 		// Name might be:  label {uuid}
 		let match = name.match(/{([^}]+)}/);
 		if (match) {
-			let jpage = await fromUuid(patchLink(match[1]));
+			let jpage = await getJournalEntry(match[1]);
 			// Pick first page if the link is to a journal
 			if (jpage instanceof JournalEntry) jpage = jpage.pages.contents[0];
 			if (jpage) {
