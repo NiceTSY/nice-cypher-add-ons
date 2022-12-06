@@ -406,7 +406,7 @@ function updateActorSheet(html, toUpdate, journalpage) {
 		? 'additionalSentence'
 		: UTILITIES.sanitizeString(toUpdate);
 
-	const newNode = journalpage.toAnchor({classes: ["linkedButton"]}),
+	const newNode = translateAnchor(journalpage.toAnchor({classes: ["linkedButton"]})),
 		  oldNode = html.find(`input[name="system.basic.${toUpdate}"`);
 	
 	oldNode.replaceWith(newNode);
@@ -422,6 +422,18 @@ function updateActorSheet(html, toUpdate, journalpage) {
 			journalsToArray(page, html, actor, true);
 		};
 	});
+};
+
+function translateAnchor(anchor) {
+	let toTranslate = {name: anchor.innerText};
+	let pack = game.babele && game.babele.packs.find(pack => pack.translated && pack.hasTranslation(toTranslate));
+	if (pack) {		
+		let translation =  pack.translate(toTranslate, true);
+		if (translation && translation.name) {
+			anchor.innerHTML = anchor.innerHTML.replace(toTranslate.name, translation.name) ;
+		}
+	}
+	return anchor;
 };
 
 /**
