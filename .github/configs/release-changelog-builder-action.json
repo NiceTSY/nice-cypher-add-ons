@@ -20,7 +20,6 @@
     "template": "${{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>",
     "pr_template": "- ${{TITLE}} (${{AUTHOR}})\n   - ${{BODY}}\n   - PR: #${{NUMBER}}",
     "empty_template": "- no changes",
-    },
     "base_branches": [
       "main"
     ]
