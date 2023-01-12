@@ -20,13 +20,6 @@
     "template": "${{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>",
     "pr_template": "- ${{TITLE}} (${{AUTHOR}})\n   - ${{BODY}}\n   - PR: #${{NUMBER}}",
     "empty_template": "- no changes",
-    "max_pull_requests": 200,
-    "tag_resolver": {
-      "method": "semver",
-      "filter": {
-        "pattern": "api-(.+)",
-        "flags": "gu"
-      }
     },
     "base_branches": [
       "main"
