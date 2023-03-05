@@ -430,10 +430,19 @@ function translateAnchor(anchor) {
 	if (pack) {		
 		let translation =  pack.translate(toTranslate, true);
 		if (translation && translation.name) {
-			anchor.innerHTML = anchor.innerHTML.replace(toTranslate.name, translation.name) ;
+			anchor.innerHTML = anchor.innerHTML.replace(escapeHTML(toTranslate.name), escapeHTML(translation.name));
 		}
 	}
 	return anchor;
+};
+
+function escapeHTML(string) {
+	return string
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#39;");        
 };
 
 /**
