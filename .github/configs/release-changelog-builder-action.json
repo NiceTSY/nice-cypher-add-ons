@@ -17,8 +17,8 @@
         "order": "ASC",
         "on_property": "title"
     },
-    "template": "${{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>",
-    "pr_template": "- ${{TITLE}} (${{AUTHOR}})\n   - ${{BODY}}\n   - PR: #${{NUMBER}}",
+    "template": "${{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n\nFull Changelog: ${{RELEASE_DIFF}}\n</details>",
+    "pr_template": "- [#${{NUMBER}}] ${{TITLE}} (${{AUTHOR}})\n   - ${{BODY}}",
     "empty_template": "- no changes",
     "base_branches": [
       "main"
