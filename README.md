@@ -1,5 +1,7 @@
 > This module is currently on hold as I am working on the long-due and awaited v1.0 please only commit fixes if you found some in the current v0.6 as the whole code is facing multiple and big changes. Many thanks for using this module and for your understanding. I hope you enjoy it so far!
 
+![40%](https://progress-bar.dev/40?title=v1.0%20progress)
+
 # Nice(TSY) Cypher System Add-ons
 ![](https://img.shields.io/badge/Foundry-v10-informational?style=flat-square)
 ![GitHub Latest Release](https://img.shields.io/github/release/NiceTSY/nice-cypher-add-ons?style=flat-square)
