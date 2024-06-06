@@ -1,6 +1,6 @@
-> This module is currently on hold as I am working on the long-due and awaited v1.0 please only commit fixes if you found some in the current v0.6 as the whole code is facing multiple and big changes. Many thanks for using this module and for your understanding. I hope you enjoy it so far!
+> This project, unfortunately, has falled behind me which mean it will probably not be updated for long time and is currently only FoundryVTT v10 compliant. The "big" update I was planning took too much of my time and my free-will, so I sort of lost interest in it. Moreover, I did not have time to play any TTRPG in the last few months.
 
-![40%](https://progress-bar.dev/40?title=v1.0%20progress)
+> If you think you have fixed or updates to make to this module, please feel free to make a pull request. I will definitely look at them and merge/update the module with them.
 
 # Nice(TSY) Cypher System Add-ons
 ![](https://img.shields.io/badge/Foundry-v10-informational?style=flat-square)
